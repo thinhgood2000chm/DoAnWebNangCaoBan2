@@ -26,7 +26,7 @@ exports.loginGG= (req,res)=>{
         if(payload.email.includes('@student.tdtu.edu.vn')){// gặp tk đúng yêu cầu thì thêm tk sau đó trả về true
             var checkArr = []
                accountStudent.find({},(err,doc)=>{
-                console.log("vao ");
+                //console.log("vao ");
                     if(doc.length===0){
                         console.log("dã vao day null ");
                         let newAccountStudent = new accountStudent({
@@ -39,14 +39,15 @@ exports.loginGG= (req,res)=>{
                             family_name: payload.family_name,
                             })
                             newAccountStudent.save()
+                            return true
                             //.then(()=>console.log("thêm tài khoản sv thành công ")).catch(e=>console.log(e))
                     }
                     else if(doc.length>0){
                         
                         for(var i =0;i<doc.length;i++){
-                           console.log(i);
+                           //console.log(i);
                             if(doc[i].email===payload.email){
-                            //console.log("doc",doc);
+                            console.log("doc",doc);
                            console.log("da co email");
                              checkArr.push(1)
                            // return true
@@ -65,11 +66,11 @@ exports.loginGG= (req,res)=>{
                         if(checkArr[j]===1){
                             count = count +1
                         }
-                        else count =count
+                        //else count =count
 
                     }
                     console.log(count);
-                    if(count ===1){
+                    if(count >=1){
                         return true
                     }
                     else {

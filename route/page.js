@@ -15,7 +15,8 @@ const client = new OAuth2Client(CLIENT_ID);
 router.get("/",checkAuthen,(req,res)=>{
     let user = req.user
 
-    post.find({},(err, doc)=>{
+    post.find({}).sort({createdAt:-1}).limit(10).exec((err, doc)=>{
+        // sort ở đây lấy theo thời gian tạo đi từ tạo sau thì chạy lên đầu ( thời gian tạo gân nhất thì suất hiện đầu tiên ) là trừ 1 , giới hạn là 10 bái
         if(err)
             console.log(err);
         else 
