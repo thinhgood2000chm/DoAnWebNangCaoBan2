@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>CatSocial</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    
+    <link rel="stylesheet" href= "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="icon" href="/assets/img/favicons/favicon.ico">
+    <link rel="canonical" href="https://icons.getbootstrap.com/icons/image/">
+    <link href="/public/stylesheets.css" rel="stylesheet">
+    <script src="/public/main.js"></script>
+</head>
+<body>
+    <%-include("header")%>
+    <main class="container p-0">
+        
+        <div class="container-fluid p-0">
+            <!--icon bar-->
+             <a class="icon-bar" href="/"><i class="fa fa-home"></i></a>
+            <h1 class="h3 mb-3">Settings</h1>
+
+            <div class="row">
+                <div class="col-md-3 col-xl-2">
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">Profile Settings</h5>
+                        </div>
+
+                        <div class="list-group list-group-flush" role="tablist">
+                            <a class="list-group-item list-group-item-action active" id="linkOfChangeProfile"data-toggle="list" href="#account" role="tab" aria-selected="true">
+                            Account
+                            </a>
+                            <a class="list-group-item list-group-item-action" id="linlkChangePass" data-toggle="list" href="#password" role="tab" aria-selected="false">
+                            Password
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-9 col-xl-10">
+                    <div class="tab-content">
+                        <div class="tab-pane fade active show" id="account" role="tabpanel">
+                            <!--Phần setting tài khoàn public info-->
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-title mb-0">Public info</h5>
+                                </div>
+                                <div class="card-body">
+                                    <form action ="/changeProfile1" method="post"enctype="multipart/form-data">
+                                        <div class="row">
+                                            <div class="col-md-8">
+                                                <input type ="hidden" id="emailOfChaneProfile"value="<%=doc.email%>" name ="email">
+                                                <div class="form-group">
+                                                    <label for="inputUsername">Username</label>
+                                                    <input type="text" class="form-control" id="inputUsername" name = "username" value="<%=doc.fullname%>">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="inputUsername">Biography</label>
+                                                    <textarea rows="2" name="biography" class="form-control" id="inputBio" placeholder="Tell something about yourself"><%=doc.biography%></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="text-center">   
+                                                    <img alt="Chris Wood" src="<%=doc.picture%>" width="128" height="128">
+                                                    <div class="mt-2">
+                                                        <!-- lồng 2 button thành 1 -->
+                                                        <!--<input type="button" class=" btn btn-primary" id="my-button" value="Upload image">class="d-none"  -->
+                                                        <input type="file"  name="image" id="my-file" accept=".jpg, .jpeg, .png" >
+                                                    </div>
+                                                    <small>For best results, use an image at least 128px by 128px in .jpg format</small>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <button type="submit" class="btn btn-primary">Save changes</button>
+                                    </form>
+
+                                </div>
+                            </div>
+                            <!--Phần setting tài khoàn private info-->
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-title mb-0">Private info</h5>
+                                </div>
+                                <div class="card-body">
+                                    <form action= "/changeProfile2" method="post">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label for="inputFirstName">First name</label>
+                                                <input type="text" class="form-control" id="inputFirstName" value="<%=doc.given_name%>" name="firstname">
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="inputLastName">Last name</label>
+                                                <input type="text" class="form-control" id="inputLastName" value="<%=doc.family_name%>"name="lastname">
+                                            </div>
+                                        </div>
+                                        <!--<div class="form-group">
+                                            <label for="inputEmail4">   </label>-->
+                                            <input type="hidden" class="form-control" id="inputEmail" value="<%=doc.email%>" name="email">
+                                        <!--</div>-->
+                                        <div class="form-group">
+                                            <label for="inputAddress">Class</label>
+                                            <input type="text" class="form-control" id="inputClass" placeholder="18050401" value="<%=doc.className%>"name="className">
+                                        </div>
+                                        <div class="form-group ">
+                                            <label for="inputState">faculty</label>
+                                            <select id="inputState" class="form-control" name = "faculty" >
+                                                <option selected="">Choose...</option>  
+                                                <option>Khoa Luật</option>
+                                                <option>Khoa Mỹ thuật công nghiệp</option>
+                                                <option>Khoa Điện-Điện tử</option>
+                                                <option>Khoa Công nghệ thông tin</option>
+                                                <option>Khoa Quản trị kinh doanh</option>
+                                                <option>Khoa Môi trường và bảo hộ lao động</option>
+                                                <option>Khoa Lao động công đoàn</option>
+                                                <option>Khoa giáo dục quốc tế</option>
+                                                <option>Khoa Tài chính ngân hàng</option>
+                                            </select>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Save changes</button>
+                                    </form>
+
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="tab-pane fade" id="password" role="tabpanel">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Password</h5>
+
+                                    <form action="/changePassword" method = "post">
+                                        <input type="hidden" name ="emailHidden" value = "<%=doc.email%>">
+                                        <div class="form-group">
+                                            <label for="inputPasswordCurrent">Current password</label>
+                                            <input type="password" name = "password" class="form-control" id="inputPasswordCurrent">
+                                            <small><a href="#">Forgot your password?</a></small>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="inputPasswordNew">New password</label>
+                                            <input type="password"  name = "newPassword" class="form-control" id="inputPasswordNew">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="inputPasswordNew2">Verify password</label>
+                                            <input type="password" name ="newPasswordConfirm" class="form-control" id="inputPasswordNew2">
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Save changes</button>
+                                    </form>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+</body>
+</html>

@@ -1,0 +1,15 @@
+{
+    "_id" : ObjectId("6082939acd331f46344c2968"),
+    "iss" : "accounts.google.com",
+    "hd" : "student.tdtu.edu.vn",
+    "fullname" : "Ngô Hồng Xinh",
+    "email" : "51800328@student.tdtu.edu.vn",
+    "picture" : "https://lh6.googleusercontent.com/-w19zbsOU1EY/AAAAAAAAAAI/AAAAAAAAAAA/AMZuuck30NBJs47NMk8j3MwvhdEuhBYqKQ/s96-c/photo.jpg",
+    "given_name" : "Ngô",
+    "family_name" : "Hồng Xinh",
+    "createdAt" : ISODate("2021-04-23T09:30:02.590Z"),
+    "updatedAt" : ISODate("2021-04-23T09:30:02.590Z"),
+    "__v" : 0
+}
+
+  <%for(var i = doc.length; i=0; i--){%>
