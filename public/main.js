@@ -1,5 +1,139 @@
 
+ // hàm dùng đẻ tạo nhiều attribute trong 1 lần 
+ function setAttributes(el, attrs) {
+  for(var key in attrs) {
+    el.setAttribute(key, attrs[key]);
+  }
+}
 
+ function commentPost(event){
+  //console.log(event);
+  //var classComment =document.getElementById("classCommentId")
+ // classComment.addEventListener("keyup", function(event) {
+    console.log(event);
+  
+  //if (event.keyCode === 13) {
+    console.log("đã bấm enter");
+    //event.preventDefault();
+    var comment 
+   var contentComment= document.getElementsByClassName("classComment")
+   //var btn = event.target
+   //var id = btn.dataset.id
+   var id = event.getAttribute("data-id")
+   console.log(id);
+  for ( var i =0;i <contentComment.length;i++){
+    if(contentComment[i].value!==""){
+     comment=contentComment[i].value
+  
+     var imageUserComment = document.getElementById("hiddenPicture").value
+     var emailUserComment = document.getElementById("hiddenEmailOfPost").value
+     var nameUserComment = document.getElementById("hiddenFullname").value
+     //console.log(comment,imageUserComment,nameUserComment,emailUserComment);
+    
+     var data={
+      id:id,
+      imageUserComment:imageUserComment,
+      emailUserComment:emailUserComment,
+      nameUserComment:nameUserComment,
+      comment:comment
+     }
+     contentComment[i].value=""
+     $.ajax({
+      url: 'http://localhost:3000/commentPost',
+      type: 'POST',
+      dataType: 'JSON',
+      data:data
+    
+      }).done(ketqua=>{
+        if(ketqua.code===0){
+          var emailUCommentFS = ketqua.data.emailUComment
+          var imageUserCommentFS= ketqua.data.imageUserComment
+          var nameUserCommentFS= ketqua.data.nameUserComment
+          var content= ketqua.data.content
+          var id = ketqua.data.id
+          console.log(id,imageUserCommentFS,nameUserCommentFS,content);
+          
+          // ảnh đại diện của người comment
+         
+          var parentDiv = document.getElementById("addComment-"+id)
+          var divComment= document.createElement("div")
+          setAttributes(divComment,{"class":"media mt3"})
+          var aTag = document.createElement("a")
+          setAttributes(aTag,{"class":"pr-2"})
+          var pictureComment=document.createElement("img")
+          setAttributes(pictureComment,{"src":imageUserCommentFS,"width":"36", "height":"36", "class":"rounded-circle mr-2"})
+          aTag.appendChild(pictureComment)
+          divComment.appendChild(aTag)
+          parentDiv.appendChild(document.createElement("br"))
+         
+
+          // nội dung tin comment
+          var divOfComment = document.createElement("div")
+          setAttributes(divOfComment,{"class":"media-body UpdateDelete"})
+          var pTagOfcomment = document.createElement("p")
+          setAttributes(pTagOfcomment,{"class":"text-muted"})
+          var nodeContentComment = document.createTextNode(content)
+         // console.log("nodeContentComment",nodeContentComment);
+         var emailUCommentToCheck = document.createElement("input")
+         setAttributes(emailUCommentToCheck,{"type":"hidden", "value":emailUCommentFS,"class":"emailUCommentId"})
+          var strongOfP = document.createElement("strong")
+          var nodeStrongOfP = document.createTextNode(nameUserCommentFS)
+          strongOfP.appendChild(nodeStrongOfP)
+          pTagOfcomment.appendChild(strongOfP)
+          pTagOfcomment.appendChild(document.createTextNode(": "))
+          pTagOfcomment.appendChild(nodeContentComment)
+          pTagOfcomment.appendChild(emailUCommentToCheck)
+        
+          // đây là div của phần name và content
+          divOfComment.appendChild(pTagOfcomment)
+          // đây là div tổng của toàn bộ phần comment 
+          divComment.appendChild(divOfComment)
+
+
+          parentDiv.appendChild(divComment)
+
+   
+          /*var UpdateDelete = document.getElementsByClassName("UpdateDelete")
+    var emailUCommentId= document.getElementsByClassName("emailUCommentId")
+   //console.log(UpdateDelete.length,emailUCommentId.length);
+    for(var i =UpdateDelete.length-1;i>=0;i--){
+ 
+     
+      var emailCurrentUser = document.getElementById("hiddenEmailOfPost").value
+     
+        if(emailUCommentId[i].value===emailCurrentUser){
+          console.log(emailUCommentId,emailCurrentUser);
+          console.log("da vao day");
+        var UpdateLink = document.createElement("a")
+        setAttributes(UpdateLink,{"class":"text-comment"})
+        var nodeUpdateLink = document.createTextNode("chỉnh sửa")
+        UpdateLink.appendChild(nodeUpdateLink)
+        var deleteLink = document.createElement("a")
+        setAttributes(deleteLink,{"class":"text-comment"})
+        var nodeDeleteLink = document.createTextNode("xóa")
+        deleteLink.appendChild(nodeDeleteLink)
+  
+        //
+        
+       
+      
+      UpdateDelete[i].appendChild(UpdateLink)
+      UpdateDelete[i].appendChild(deleteLink)
+    
+      }
+      break
+      
+    }*/
+        }
+        
+      })
+
+      }
+    }
+
+   
+  //}
+}
 
 
 function onSignIn(googleUser) {
@@ -34,140 +168,168 @@ console.log('User signed out.');
 
 
 $(document).ready(function(){
-
+  var start=0
   window.addEventListener('scroll',()=>{
     //console.log("you scrool tyto the end pge");
         // fetch api to get scroll
        
-        if($(window).scrollTop() + $(window).height() >= $('#listCard').height()){
-          console.log("da vai day");
-      
+    console.log("start bên trên", start);
+    
+     
+        if($(window).scrollTop() + $(window).height() >= $('#listCard').height() ){
+          console.log($(window).scrollTop() + $(window).height());
+          console.log($('#listCard').height() );
+          start = start +1
+          console.log("start sau khi cộng",start);
+          var hiddenpicture = document.getElementById("hiddenpicture").value
+          var data= {
+            start:start, 
+            hiddenpicture: hiddenpicture
+          }
           fetch('http://localhost:3000/loadWindowScroll',{
-            method: "POST"
+            method: "POST",
+            headers:{
+              'content-type':'application/json'
+            },
+            body:JSON.stringify(data)
           })
           .then(res=>res.json())
           .then(json=>{
-            console.log(json);
-            for(var i =0;i<json.data.length;i++){
-              console.log("da vao i ");
-              for(var j =0;j<json.data[i].image.length;j++){
-                console.log("dav vao j ");
-                for(var z =0;z<json.data[i].comment.length;z++){
-                  console.log("da vao z");
-                  console.log(json.data[i].comment[z].content);
-                    console.log("123",`${json.data[i].image[j]}`);
-                  /*
-                    z ko có nên nó ko chạy vào z 
-                  */ 
-                   var htmlLoad=$(
-                     `<div class="card" >
-                   <div class="card-body h-100">
-                       <div class="media">
-                     
-                       
-                           <img src="${json.data[i].imageUser}" width="56" height="56" class="rounded-circle mr-3" alt="Ashley Briggs">
-                           <div class="media-body" >
-                             <div id="${json.data[i]._id}">
-                               <p class="mb-2"><strong>${json.data[i].name}</strong></p>
-                               <p>${json.data[i].message}</p>
-                                 <!--hình ảnh được upload-->
-                               <div class="row no-gutters mt-1">
-                           
-                                   <div class="col-6">
-                                       <img src="${json.data[i].image[j]}" class="img-fluid pr-1" alt="Unsplash" >
-                                   </div>
-                             
-                               </div>
-       
-                               <small class="text-muted">${json.data[i].updatedAt}</small><br><!--time real dòng trạng thái-->
-                               <!--nút like-->
-                               <a href="#" class="btn btn-sm btn-danger mt-1"><i class="fa fa-heart-o"></i>Like</a>
-                               
-                               <!--nút bình luận-->
-                                 <a href="#comment" class="btn btn-sm btn-danger mt-1"><i class="fa fa-comments-o"></i> comment</a>
-                               <!--dòng bình luận-->
-                           
-                               <div class="media mt-3" id="${json.data[i]._id}">
-                               
-                                   <a class="pr-2" href="#">
-                                   <img src="${json.data[i].comment[z].imageUserComment}" width="36" height="36" class="rounded-circle mr-2" alt="Stacie Hall">
-                                   </a>
-                                  
-                 
-                                   <div class="media-body UpdateDelete" ><!--id ở đây dùng để xóa comment ko cần load lại trang -->
-                                       <p class="text-muted textComment" >
-                                           <strong>">${json.data[i].comment[z].nameUserComment}</strong>: ${json.data[i].comment[z].content}
-                                           <input type="hidden" value="<%=c.emailUComment%>" class="emailUCommentId">
-                                       </p>
-                                       <a href="#comment" data-index="${i}" data-id="${json.data[i].comment[z]._id}"data-comment=" ${json.data[i].comment[z].content}" data-userCurrent="${json.data[i].comment[z].emailUComment}" class="text-comment updateComment">chỉnh sửa</a>
-                                       <a  data-id="${json.data[i]._id}"data-idComment="${json.data[i].comment[z]._id}" class="text-comment deleteComment" data-userCurrent="${json.data[i].comment[z].emailUComment}">xóa</a>
-                                   </div>
-                               </div>
-                   
-                             </div>
-                               <hr>
-                               <!--dòng comment line trang tin-->
-                               <div class="row">
-                                 <div class="col-auto">
-               
-                                   <!-- Avatar -->
-                                   <div class="avatar avatar-sm">
-                                   
-                                     <img src="${json.data[i].picture}" width="36" height="36" class="rounded-circle mr-2" alt="Stacie Hall">
-                                   </div>
-               
-                                 </div>
-                                 <div class="col ml-n2">
-               
-                                   <!-- Input -->
-                                   <div class="mt-1" id="parentComment">
-                                     <label class="sr-only">Leave a comment...</label>
-                                     <textarea data-id ="${json.data[i]._id}" id="comment"class="form-control form-control-flush classComment" data-toggle="autosize" rows="1" placeholder="Leave a comment" ></textarea>
-                                   <button><i class="fa fa-send"></i> </button>
-                                   </div>
-                                   
-                               
-                                 </div>
-                                 
-                                 <div class="col-auto align-self-end">
-               
-                                   <!-- Icons input file phần bình luân -->
-                                   <div class="input-container mb-2">
-                                     <a class="text-reset mr-3" href="#!" type="file" data-toggle="tooltip" title="" data-original-title="Add photo">
-                                       <i class="fa fa-camera"></i>
-                                     </a>
-                                     <a class="text-reset mr-3" href="#!" data-toggle="tooltip" title="" data-original-title="Attach file">
-                                       <i class="fa fa-paperclip"></i>
-                                     </a>
-                                     
-                                   </div>
-               
-                                 </div>
-                           
-                               </div>
-                               <hr>
-                           </div>
-                         
-                       </div>
-                     </div>
-                   </div>`)
-                  
-                   $("#listCard").append(htmlLoad)
            
-
-                }
-              }
-            }
-       
-            
+              if(json.code===0){
+             
+                console.log(json);
+                for(var i =0;i<json.data.length;i++){
+                  console.log(`${json.data[i].imageUser}`);
+                  console.log("da vao i ");
+                       var htmlLoad=$(
+                         `<div class="card" >
+                          <div class="card-body h-100">
+                           <div class="media">
+                           <input type = "hidden" id="idNews" value="${json.data[i._id]}">
+                           
+                               <img src="${json.data[i].imageUser}" width="56" height="56" class="rounded-circle mr-3" alt="Ashley Briggs">
+                               <div class="media-body" >
+                               <div id="addComment-${json.data[i]._id}">
+                                 <div id="${json.data[i]._id}">
+                                   <p class="mb-2"><strong>${json.data[i].name}</strong></p>
+                                   <p>${json.data[i].message}</p>
+                                     <!--hình ảnh được upload-->
+                                   <div class="row no-gutters mt-1">
+                               
+                                       <div class="col-6 " id="img-${json.data[i]._id}">
+                                
     
-           //var html =$(`<p>q2we</p>`)
-        
-           //$("#listCard").append(html)
+                                       </div>
+                                 
+                                   </div>
+           
+                                   <small class="text-muted">${json.data[i].updatedAt}</small><br><!--time real dòng trạng thái-->
+                                   <!--nút like-->
+                                   <a href="#" class="btn btn-sm btn-danger mt-1"><i class="fa fa-heart-o"></i>Like</a>
+                                   
+                                   <!--nút bình luận-->
+                                     <a href="#comment" class="btn btn-sm btn-danger mt-1"><i class="fa fa-comments-o"></i> comment</a>
+                                   <!--dòng bình luận-->
+                               
+                                   <div  id="comment-${json.data[i]._id}">
+                                   
+                                  
+                                   </div>
+                       
+                               
+                                   <hr>
+                                   <!--dòng comment line trang tin-->
+                                   <div class="row">
+                                     <div class="col-auto">
+                   
+                                       <!-- Avatar -->
+                                       <div class="avatar avatar-sm">
+                                       
+                                         <img src="${json.data2.hiddenpicture}" width="36" height="36" class="rounded-circle mr-2" alt="Stacie Hall">
+                                       </div>
+                   
+                                     </div>
+                                     <div class="col ml-n2">
+                   
+                                       <!-- Input -->
+                                       <div class="mt-1" id="parentComment">
+                                         <label class="sr-only">Leave a comment...</label>
+                                         <textarea data-id ="${json.data[i]._id}" id="comment"class="form-control form-control-flush classComment" data-toggle="autosize" rows="1" placeholder="Leave a comment" ></textarea>
+                                         <button data-id ="${json.data[i]._id}" onclick="commentPost(this)">click</button>
+                                       </div>
+                                       
+                                   
+                                     </div>
+                                     
+                                     <div class="col-auto align-self-end">
+                   
+                                       <!-- Icons input file phần bình luân -->
+                                       <div class="input-container mb-2">
+                                         <a class="text-reset mr-3" href="#!" type="file" data-toggle="tooltip" title="" data-original-title="Add photo">
+                                           <i class="fa fa-camera"></i>
+                                         </a>
+                                         <a class="text-reset mr-3" href="#!" data-toggle="tooltip" title="" data-original-title="Attach file">
+                                           <i class="fa fa-paperclip"></i>
+                                         </a>
+                                         
+                                       </div>
+                   
+                                     </div>
+                               
+                                   </div>
+                                   <hr>
+                               </div>
+                             
+                           </div>
+                         </div>
+                       </div>`)
+                       $(".listCard").append(htmlLoad)   
+
+                       for(var j =0;j<json.data[i].image.length;j++){
+                        console.log('i,j',i,j);
+                        console.log(`${json.data[i].image[j]}`);
+                         ChildeJ=$(`<img src="${json.data[i].image[j]}" class="img-fluid pr-1" alt="Unsplash" >`)
+                         $(`#img-${json.data[i]._id}`).append(ChildeJ) 
+                         
+                       }
+                      
+                       
+                       for(var z =0;z<json.data[i].comment.length;z++){
+                         console.log(`${json.data[i].comment[z].imageUserComment}`);
+                         ChildZ=$(`  
+                         <div class="media mt-3" id="${json.data[i].comment[z]._id}">
+                                        
+                            <a class="pr-2" href="#">
+                            <img src="${json.data[i].comment[z].imageUserComment}" width="36" height="36" class="rounded-circle mr-2" alt="Stacie Hall">
+                            </a>
+                            
+          
+                            <div class="media-body UpdateDelete" ><!--id ở đây dùng để xóa comment ko cần load lại trang -->
+                                <p class="text-muted textComment" >
+                                    <strong>${json.data[i].comment[z].nameUserComment}</strong>:${json.data[i].comment[z].content}
+                                    <input type="hidden" value="${json.data[i].comment[z].emailUComment}" class="emailUCommentId">
+                                </p>
+                                <a href="#comment" data-index="${i}" data-id="${json.data[i].comment[z]._id}"data-comment="${json.data[i].comment[z].content}" data-userCurrent="${json.data[i].comment[z].emailUComment}" class="text-comment updateComment">chỉnh sửa</a>
+                                <a  data-id="${json.data[i]._id}"data-idComment="${json.data[i].comment[z]._id}" class="text-comment deleteComment" data-userCurrent="${json.data[i].comment[z].emailUComment}">xóa</a>
+                            </div>
+                        </div>
+                         `)
+                         $(`#comment-${json.data[i]._id}`).append(ChildZ)
+                       }
+                    
+                      }
+              
+                  }
+    
+           
+           
           })
    
-    
     }
+    
+    
+  
   })
 
   // js chạy select muti trong sign up
@@ -202,12 +364,7 @@ $(document).ready(function(){
   
   })
   
-    // hàm dùng đẻ tạo nhiều attribute trong 1 lần 
-    function setAttributes(el, attrs) {
-        for(var key in attrs) {
-          el.setAttribute(key, attrs[key]);
-        }
-      }
+   
 // thêm bài viết mới
     $("#btnPosted").click((e)=>{
         
@@ -535,128 +692,11 @@ $("#btnChange").click(e=>{
 })
 
 // comment bài viêt
-$(".classComment").keyup(event=>{
-  //console.log(event);
-  if (event.keyCode === 13) {
-    event.preventDefault();
-    var comment 
-   var contentComment= document.getElementsByClassName("classComment")
-   var btn = event.target
-   var id = btn.dataset.id
-   console.log(id);
-  for ( var i =0;i <contentComment.length;i++){
-    if(contentComment[i].value!==""){
-     comment=contentComment[i].value
-  
-     var imageUserComment = document.getElementById("hiddenPicture").value
-     var emailUserComment = document.getElementById("hiddenEmailOfPost").value
-     var nameUserComment = document.getElementById("hiddenFullname").value
-     //console.log(comment,imageUserComment,nameUserComment,emailUserComment);
-    
-     var data={
-      id:id,
-      imageUserComment:imageUserComment,
-      emailUserComment:emailUserComment,
-      nameUserComment:nameUserComment,
-      comment:comment
-     }
-     contentComment[i].value=""
-     $.ajax({
-      url: 'http://localhost:3000/commentPost',
-      type: 'POST',
-      dataType: 'JSON',
-      data:data
-    
-      }).done(ketqua=>{
-        if(ketqua.code===0){
-          var emailUCommentFS = ketqua.data.emailUComment
-          var imageUserCommentFS= ketqua.data.imageUserComment
-          var nameUserCommentFS= ketqua.data.nameUserComment
-          var content= ketqua.data.content
-          var id = ketqua.data.id
-          console.log(imageUserCommentFS,nameUserCommentFS,content);
-          
-          // ảnh đại diện của người comment
-         
-          var parentDiv = document.getElementById(id)
-          var divComment= document.createElement("div")
-          setAttributes(divComment,{"class":"media mt3"})
-          var aTag = document.createElement("a")
-          setAttributes(aTag,{"class":"pr-2"})
-          var pictureComment=document.createElement("img")
-          setAttributes(pictureComment,{"src":imageUserCommentFS,"width":"36", "height":"36", "class":"rounded-circle mr-2"})
-          aTag.appendChild(pictureComment)
-          divComment.appendChild(aTag)
-          parentDiv.appendChild(document.createElement("br"))
-         
-
-          // nội dung tin comment
-          var divOfComment = document.createElement("div")
-          setAttributes(divOfComment,{"class":"media-body UpdateDelete"})
-          var pTagOfcomment = document.createElement("p")
-          setAttributes(pTagOfcomment,{"class":"text-muted"})
-          var nodeContentComment = document.createTextNode(content)
-         // console.log("nodeContentComment",nodeContentComment);
-         var emailUCommentToCheck = document.createElement("input")
-         setAttributes(emailUCommentToCheck,{"type":"hidden", "value":emailUCommentFS,"class":"emailUCommentId"})
-          var strongOfP = document.createElement("strong")
-          var nodeStrongOfP = document.createTextNode(nameUserCommentFS)
-          strongOfP.appendChild(nodeStrongOfP)
-          pTagOfcomment.appendChild(strongOfP)
-          pTagOfcomment.appendChild(document.createTextNode(": "))
-          pTagOfcomment.appendChild(nodeContentComment)
-          pTagOfcomment.appendChild(emailUCommentToCheck)
-        
-          // đây là div của phần name và content
-          divOfComment.appendChild(pTagOfcomment)
-          // đây là div tổng của toàn bộ phần comment 
-          divComment.appendChild(divOfComment)
-
-
-          parentDiv.appendChild(divComment)
-
-   
-          /*var UpdateDelete = document.getElementsByClassName("UpdateDelete")
-    var emailUCommentId= document.getElementsByClassName("emailUCommentId")
-   //console.log(UpdateDelete.length,emailUCommentId.length);
-    for(var i =UpdateDelete.length-1;i>=0;i--){
+//$(".classComment").keyup(event=>{
  
-     
-      var emailCurrentUser = document.getElementById("hiddenEmailOfPost").value
-     
-        if(emailUCommentId[i].value===emailCurrentUser){
-          console.log(emailUCommentId,emailCurrentUser);
-          console.log("da vao day");
-        var UpdateLink = document.createElement("a")
-        setAttributes(UpdateLink,{"class":"text-comment"})
-        var nodeUpdateLink = document.createTextNode("chỉnh sửa")
-        UpdateLink.appendChild(nodeUpdateLink)
-        var deleteLink = document.createElement("a")
-        setAttributes(deleteLink,{"class":"text-comment"})
-        var nodeDeleteLink = document.createTextNode("xóa")
-        deleteLink.appendChild(nodeDeleteLink)
-  
-        //
-        
-       
-      
-      UpdateDelete[i].appendChild(UpdateLink)
-      UpdateDelete[i].appendChild(deleteLink)
-    
-      }
-      break
-      
-    }*/
-        }
-        
-      })
 
-      }
-    }
 
-   
-  }
-})
+
 // xóa comment bài viết
   $(".deleteComment").click(e=>{
     var btn = e.target

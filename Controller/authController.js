@@ -552,8 +552,26 @@ exports.updateNoti=(req,res)=>{
     })
     .catch(e=>console.log(e))
 }
+
+
+
 exports.loadWindowScroll= (req,res)=>{
-    post.find({},(err, doc)=>{
-        res.json({code:0, data:doc})
+    var {start,hiddenpicture}= req.body
+    console.log('start',start); 
+    console.log('hiddenpicture',hiddenpicture); 
+    skip = Number(start)*5
+    console.log(skip);
+    post.find({}).sort({createdAt:-1}).skip(skip).limit(5).exec((err, doc)=>{
+        if(!doc){
+            console.log(" đã vào null");
+            res.json({code:1})
+        }
+      
+        else {
+            console.log(" đã vào đây");
+         
+           // console.log(doc);
+        res.json({code:0, data:doc,data2:{hiddenpicture,hiddenpicture}})
+        }
     })
 }

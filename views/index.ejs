@@ -71,6 +71,7 @@
                       <input type="hidden" value="<%=docs.email%>" id="hiddenEmailOfPost">
                       <input type="hidden" value="<%=docs.picture%>" id="hiddenPicture">
                       <input type="hidden" value="<%=docs.fullname%>" id="hiddenFullname">
+                      <input type="hidden" value="<%=docs.picture%>" id="hiddenpicture">
                       <!---=---------------------------------------------->
                       <div class="form-group">
                         <label for="recipient-name" class="col-form-label">Recipient:</label>
@@ -114,10 +115,10 @@
           </div>
         </div>
         <!--media objects (dòng trạng thái)-->
-        <div class="container">
+        <div class="container" id="scroll">
           <div class="container-fluid container-fluid p-0">
             <div class="row">
-              <div class="col-12 col-lg-8" id="listCard">
+              <div class="col-12 col-lg-8 listCard" id="listCard">
                 <div id="parentOfCard"></div>
                   <div class="card">
                       <div class="card-body h-100">
@@ -221,7 +222,7 @@
                                 
                                     <img src="<%=doc[i].imageUser%>" width="56" height="56" class="rounded-circle mr-3" alt="Ashley Briggs">
                                     <div class="media-body" >
-                                      <div id="<%=doc[i]._id%>">
+                                      <div id="addComment-<%=doc[i]._id%>">
                                         <p class="mb-2"><strong><%=doc[i].name%></strong></p>
                                         <p><%=doc[i].message%></p>
                                           <!--hình ảnh được upload-->
@@ -254,7 +255,7 @@
                                                     <input type="hidden" value="<%=c.emailUComment%>" class="emailUCommentId">
                                                 </p>
                                                 <a href="#comment" data-index="<%=i%>" data-id="<%=c._id%>"data-comment="<%=c.content%>" data-userCurrent="<%=c.emailUComment%>" class="text-comment updateComment">chỉnh sửa</a>
-                                                <a  data-id="<%=doc[i]._id%>"data-idComment="<%=c._id%>" class="text-comment deleteComment" data-userCurrent="<%=c.emailUComment%>">xóa</a>
+                                                <a  data-id="<%=doc[i]._id%>"data-idComment="<%=c._id%>" class="text-comment deleteComment" data-userCurrent="<%=c.emailUComment%>" >xóa</a>
                                             </div>
                                         </div>
                                     
@@ -277,8 +278,8 @@
                                             <!-- Input -->
                                             <div class="mt-1" id="parentComment">
                                               <label class="sr-only">Leave a comment...</label>
-                                              <textarea data-id ="<%=doc[i]._id%>" id="comment"class="form-control form-control-flush classComment" data-toggle="autosize" rows="1" placeholder="Leave a comment" ></textarea>
-                                            <button><i class="fa fa-send"></i> </button>
+                                              <textarea  data-id ="<%=doc[i]._id%>" id="comment"class="form-control form-control-flush classComment" data-toggle="autosize" rows="1" placeholder="Leave a comment" ></textarea>
+                                         <button data-id ="<%=doc[i]._id%>" onclick="commentPost(this)">click</button>
                                             </div>
                                             
                                         
@@ -399,9 +400,6 @@
                           <hr>
                     
                           <!--hết trang tin-->
-                   
-                    
-
                       </div>
               
                       <!--kết thúc conatiner-->
