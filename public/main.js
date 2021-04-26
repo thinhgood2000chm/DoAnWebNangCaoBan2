@@ -6,6 +6,10 @@
   }
 }
 
+
+//phair theem id cho cái riêng của từng comment vào chỗ cần xóa là xong 
+
+
  function commentPost(event){
   //console.log(event);
   //var classComment =document.getElementById("classCommentId")
@@ -51,8 +55,9 @@
           var nameUserCommentFS= ketqua.data.nameUserComment
           var content= ketqua.data.content
           var id = ketqua.data.id
+          var commentId = ketqua.data.commentId
           console.log(id,imageUserCommentFS,nameUserCommentFS,content);
-          
+          console.log("commentId",commentId);
           // ảnh đại diện của người comment
          
           var parentDiv = document.getElementById("addComment-"+id)
@@ -85,15 +90,21 @@
           pTagOfcomment.appendChild(emailUCommentToCheck)
           
           aTagUpdateComment=document.createElement("a")
-          nodeUpdateComment= document.createTextNode("chỉnh sửa")
+          setAttributes(aTagUpdateComment,{ "class":"text-comment updateComment"})
+          nodeUpdateComment= document.createTextNode("chỉnh sửa ")
          aTagUpdateComment.appendChild(nodeUpdateComment)
+
          aTagDeleteComment=document.createElement("a")
-         setAttributes(aTagDeleteComment,{"data-id":id,"data-idComment":"<%=c._id%>" ,"class":"text-comment deleteComment", "data-userCurrent":emailUCommentFS})
-         nodeDeleteComment= document.createTextNode("xóa")
-          
+         setAttributes(aTagDeleteComment,{"data-id":id,"data-idComment":commentId ,"class":"text-comment deleteComment", "data-userCurrent":emailUCommentFS})
+         nodeDeleteComment= document.createTextNode(" xóa")
+          aTagDeleteComment.appendChild(nodeDeleteComment)
+          aTagDeleteComment.setAttribute("onclick", "deleteComment(this)")
+         
           // đây là div của phần name và content
           
           divOfComment.appendChild(pTagOfcomment)
+          divOfComment.appendChild(aTagUpdateComment)
+          divOfComment.appendChild(aTagDeleteComment)
           // đây là div tổng của toàn bộ phần comment 
           divComment.appendChild(divOfComment)
 
@@ -143,6 +154,39 @@
   //}
 }
 
+// xóa comment bài viết
+//$(".deleteComment").click(e=>{
+  function deleteComment(event){
+ /*var btn = e.target
+  var id= btn.dataset.id
+  var idComment = btn.dataset.idcomment
+  var userCurrentInComment= btn.dataset.usercurrent*/
+  var id = event.getAttribute("data-id")
+  var idComment = event.getAttribute("data-idComment")
+  var userCurrentInComment= event.getAttribute("data-userCurrent")
+  console.log("data lays dduwocj sau khi bam xoa",id, idComment, userCurrentInComment);
+  $.ajax({
+    url:"http://localhost:3000/deleteComment",
+    type:"POST",
+    dataType:"JSON",
+    data:{
+      id:id,
+      idComment:idComment,
+      userCurrentInComment: userCurrentInComment
+    }
+  })
+  .done(ketqua=>{
+    //console.log(ketqua);
+
+    if(ketqua.code===0){
+      console.log();
+      document.getElementById(ketqua.data.id).remove()
+    }
+    else if(ketqua.code===1){
+      alert(ketqua.message)
+    }
+  })
+}
 
 function onSignIn(googleUser) {
     var id_token = googleUser.getAuthResponse().id_token;
@@ -705,35 +749,7 @@ $("#btnChange").click(e=>{
 
 
 
-// xóa comment bài viết
-  $(".deleteComment").click(e=>{
-    var btn = e.target
-    var id= btn.dataset.id
-    var idComment = btn.dataset.idcomment
-    var userCurrentInComment= btn.dataset.usercurrent
-    console.log(id, idComment, userCurrentInComment);
-    $.ajax({
-      url:"http://localhost:3000/deleteComment",
-      type:"POST",
-      dataType:"JSON",
-      data:{
-        id:id,
-        idComment:idComment,
-        userCurrentInComment: userCurrentInComment
-      }
-    })
-    .done(ketqua=>{
-      //console.log(ketqua);
 
-      if(ketqua.code===0){
-        console.log();
-        document.getElementById(ketqua.data.id).remove()
-      }
-      else if(ketqua.code===1){
-        alert(ketqua.message)
-      }
-    })
-  })
  /* $(".updateComment").click(e=>{
     var btn = e.target
     // console.log(e);

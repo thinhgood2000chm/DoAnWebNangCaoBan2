@@ -388,6 +388,8 @@ exports.updatePost=(req,res)=>{
 }
 
 // comment 
+const arrDataIdComment=[]
+var commentId=""
 exports.commentPost=(req,res)=>{
     var{id,imageUserComment,emailUserComment,nameUserComment,comment}= req.body
     //console.log(imageUserComment,emailUserComment,nameUserComment,comment);
@@ -406,20 +408,27 @@ exports.commentPost=(req,res)=>{
     post.findById(id)
     .then((doc)=>{
         console.log("doc.comment[doc.comment.length]._id",doc.comment[doc.comment.length-1]._id);
-       
+ 
+       commentId=doc.comment[doc.comment.length-1]._id
+       res.setHeader("Content-Type","application/json")
+       res.send({
+           code:0,
+           data:{
+            commentId: commentId,
+               emailUComment: emailUserComment,
+               imageUserComment: imageUserComment,
+               nameUserComment: nameUserComment,
+               content: comment,
+               id:id
+           }
+       })
     })
-    res.setHeader("Content-Type","application/json")
-        res.send({
-            code:0,
-            data:{
-                emailUComment: emailUserComment,
-                imageUserComment: imageUserComment,
-                nameUserComment: nameUserComment,
-                content: comment,
-                id:id
-            }
-        })
+    
+    //console.log("comment",commentId);
+    //console.log("arrDataIdComment",arrDataIdComment);
+  
 }
+
 
 /*exports.updateComment=(req,res)=>{
     var {  idComment, userCurrentInComment,content}= req.body
