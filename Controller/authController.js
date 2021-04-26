@@ -403,17 +403,22 @@ exports.commentPost=(req,res)=>{
     })
     .catch(e=>console.log(e))
 
-    res.setHeader("Content-Type","application/json")
-    res.send({
-        code:0,
-        data:{
-            emailUComment: emailUserComment,
-            imageUserComment: imageUserComment,
-            nameUserComment: nameUserComment,
-            content: comment,
-            id:id
-        }
+    post.findById(id)
+    .then((doc)=>{
+        console.log("doc.comment[doc.comment.length]._id",doc.comment[doc.comment.length-1]._id);
+       
     })
+    res.setHeader("Content-Type","application/json")
+        res.send({
+            code:0,
+            data:{
+                emailUComment: emailUserComment,
+                imageUserComment: imageUserComment,
+                nameUserComment: nameUserComment,
+                content: comment,
+                id:id
+            }
+        })
 }
 
 /*exports.updateComment=(req,res)=>{
@@ -559,9 +564,9 @@ exports.loadWindowScroll= (req,res)=>{
     var {start,hiddenpicture}= req.body
     console.log('start',start); 
     console.log('hiddenpicture',hiddenpicture); 
-    skip = Number(start)*5
+    skip = Number(start)*10
     console.log(skip);
-    post.find({}).sort({createdAt:-1}).skip(skip).limit(5).exec((err, doc)=>{
+    post.find({}).sort({createdAt:-1}).skip(skip).limit(10).exec((err, doc)=>{
         if(!doc){
             console.log(" đã vào null");
             res.json({code:1})

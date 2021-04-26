@@ -13,14 +13,14 @@
     console.log(event);
   
   //if (event.keyCode === 13) {
-    console.log("đã bấm enter");
+   
     //event.preventDefault();
     var comment 
    var contentComment= document.getElementsByClassName("classComment")
    //var btn = event.target
    //var id = btn.dataset.id
    var id = event.getAttribute("data-id")
-   console.log(id);
+   //console.log(id);
   for ( var i =0;i <contentComment.length;i++){
     if(contentComment[i].value!==""){
      comment=contentComment[i].value
@@ -83,8 +83,16 @@
           pTagOfcomment.appendChild(document.createTextNode(": "))
           pTagOfcomment.appendChild(nodeContentComment)
           pTagOfcomment.appendChild(emailUCommentToCheck)
-        
+          
+          aTagUpdateComment=document.createElement("a")
+          nodeUpdateComment= document.createTextNode("chỉnh sửa")
+         aTagUpdateComment.appendChild(nodeUpdateComment)
+         aTagDeleteComment=document.createElement("a")
+         setAttributes(aTagDeleteComment,{"data-id":id,"data-idComment":"<%=c._id%>" ,"class":"text-comment deleteComment", "data-userCurrent":emailUCommentFS})
+         nodeDeleteComment= document.createTextNode("xóa")
+          
           // đây là div của phần name và content
+          
           divOfComment.appendChild(pTagOfcomment)
           // đây là div tổng của toàn bộ phần comment 
           divComment.appendChild(divOfComment)
@@ -211,7 +219,7 @@ $(document).ready(function(){
                                <img src="${json.data[i].imageUser}" width="56" height="56" class="rounded-circle mr-3" alt="Ashley Briggs">
                                <div class="media-body" >
                                <div id="addComment-${json.data[i]._id}">
-                                 <div id="${json.data[i]._id}">
+                               
                                    <p class="mb-2"><strong>${json.data[i].name}</strong></p>
                                    <p>${json.data[i].message}</p>
                                      <!--hình ảnh được upload-->
@@ -237,7 +245,7 @@ $(document).ready(function(){
                                   
                                    </div>
                        
-                               
+                               </div>
                                    <hr>
                                    <!--dòng comment line trang tin-->
                                    <div class="row">
@@ -253,11 +261,11 @@ $(document).ready(function(){
                                      <div class="col ml-n2">
                    
                                        <!-- Input -->
-                                       <div class="mt-1" id="parentComment">
-                                         <label class="sr-only">Leave a comment...</label>
-                                         <textarea data-id ="${json.data[i]._id}" id="comment"class="form-control form-control-flush classComment" data-toggle="autosize" rows="1" placeholder="Leave a comment" ></textarea>
-                                         <button data-id ="${json.data[i]._id}" onclick="commentPost(this)">click</button>
-                                       </div>
+                                        <div class="mt-1" id="parentComment">
+                                          <label class="sr-only">Leave a comment...</label>
+                                          <textarea data-id ="${json.data[i]._id}" id="comment"class="form-control form-control-flush classComment" data-toggle="autosize" rows="1" placeholder="Leave a comment" ></textarea>
+                                          <button data-id ="${json.data[i]._id}" onclick="commentPost(this)">click</button>
+                                        </div>
                                        
                                    
                                      </div>
@@ -279,7 +287,7 @@ $(document).ready(function(){
                                
                                    </div>
                                    <hr>
-                               </div>
+
                              
                            </div>
                          </div>
