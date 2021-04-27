@@ -12,7 +12,8 @@ const postSchema = new Schema({
         imageUserComment: String,
         nameUserComment: String,
         content: String,
-    }]
+    }],
+    videoUpload: String
 },{timestamps:true})
 const post = mongoose.model("post",postSchema,"post")
 

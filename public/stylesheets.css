@@ -420,3 +420,6 @@ overflow: hidden; overflow-wrap: break-word; height: 50px;
  vertical-align: inherit
 }
 
+.btn-sm{
+  margin-right: 5px;
+}

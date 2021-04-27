@@ -287,7 +287,7 @@ exports.changePassword=(req,res)=>{
 // tạo bài viết ( thêm dữ liệu vào database)
 exports.insertPost=(req,res)=>{
 
-    var {hiddenPicture, nameUser,hiddenEmailOfPost, messageText}= req.body
+    var {hiddenPicture, nameUser,hiddenEmailOfPost, messageText,videoUpload}= req.body
     console.log("cái đang cân",nameUser,messageText,hiddenEmailOfPost);
     images = req.files;// file đối với single , files đối với multi
     //console.log("image",images);
@@ -307,6 +307,7 @@ exports.insertPost=(req,res)=>{
         email: hiddenEmailOfPost,
         name: nameUser,
         message:messageText,
+        videoUpload:videoUpload
 
     })
     newPost.save()
@@ -328,6 +329,7 @@ exports.insertPost=(req,res)=>{
             image:JSON.stringify(image),
             message:messageText,
             imageUser: hiddenPicture,
+            videoUpload:videoUpload
          
 
         }

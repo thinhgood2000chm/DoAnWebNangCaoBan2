@@ -7,7 +7,7 @@
 }
 
 
-//phair theem id cho cái riêng của từng comment vào chỗ cần xóa là xong 
+
 
 
  function commentPost(event){
@@ -62,7 +62,7 @@
          
           var parentDiv = document.getElementById("addComment-"+id)
           var divComment= document.createElement("div")
-          setAttributes(divComment,{"class":"media mt3"})
+          setAttributes(divComment,{"class":"media mt3", "id":commentId})
           var aTag = document.createElement("a")
           setAttributes(aTag,{"class":"pr-2"})
           var pictureComment=document.createElement("img")
@@ -428,9 +428,9 @@ $(document).ready(function(){
         // dòng 119 index.ejs
         var messageText= document.getElementById("message-text").value
         var hiddenEmailOfPost= document.getElementById("hiddenEmailOfPost").value
-        
+        var videoUpload= document.getElementById("videoUpload").value
         var inputImage = document.getElementById("image_uploads") 
-       
+        
         // ảnh người dùng đăng lên
         var file = inputImage.files;
         var formData = new FormData();
@@ -438,6 +438,7 @@ $(document).ready(function(){
         formData.append("hiddenPicture",hiddenPicture)
         formData.append("messageText",messageText)
         formData.append("hiddenEmailOfPost",hiddenEmailOfPost)
+        formData.append("videoUpload",videoUpload)
         //formData.append("file",$("#image_uploads")[0].files[0]) single upload
         for (var i =0;i<=file.length;i++){
           formData.append("file",file[i])
@@ -457,10 +458,11 @@ $(document).ready(function(){
             processData: false,
             data: formData
         }).done(function(ketqua) {
-
+          var post =[]
            // console.log("ketqua",ketqua.data);
             if(ketqua.code===0){
                 console.log(" da vao day ");
+                console.log(ketqua.data.videoUpload);
                 var parentOfCard= document.getElementById("parentOfCard")
                 var card = document.createElement('div')
                 setAttributes(card,{"class":"card"})
@@ -525,10 +527,25 @@ $(document).ready(function(){
                 setAttributes(aTag,{"href":"#","class":"btn btn-sm btn-danger mt-1"})
                 var iTagIconLike = document.createElement("i")
                 setAttributes(iTagIconLike,{"class":"fa fa-heart-o"})
-          
+            
+         
                 aTag.appendChild(iTagIconLike)
                 aTag.appendChild(nodeATag)
                 parentMediaBody.appendChild(aTag)
+                
+                // khoảng cách 
+          
+          
+        
+                // nút comment
+                var aTagCommentButton = document.createElement("a")
+                var aTagNodeCommentButton = document.createTextNode("comment")
+                setAttributes(aTagCommentButton,{"href":"#comment", "class":"btn btn-sm btn-danger mt-1"})
+                var iTagIconComment= document.createElement("i")
+                setAttributes(iTagIconComment,{ "class":"fa fa-comments-o"})
+                aTagCommentButton.appendChild(iTagIconComment)
+                aTagCommentButton.appendChild(aTagNodeCommentButton)
+                parentMediaBody.appendChild(aTagCommentButton)
                 
                 //dòng bình luận
                 /*var mediaComment= document.getElementById("mediaComment")
@@ -611,8 +628,10 @@ $(document).ready(function(){
                 cardBody.appendChild(parentMedia)
                 card.appendChild(cardBody)
                 parentOfCard.appendChild(card)
-        
+                  post.push(parentOfCard)
+                  console.log(parentOfCard);
             }
+          
         });
         
     });
