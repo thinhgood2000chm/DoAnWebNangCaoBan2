@@ -190,7 +190,25 @@ router.get('/createNotification',checkAuthen,(req,res)=>{
 // chỉnh sửa thông báo
 //router.get("/deleteNoti/:id",authController.deleteNoti)
 
-
+router.get("/profile/:email",(req,res)=>{
+    var email= req.params.email
+    console.log( email);
+    if(email.includes("@student.tdtu.edu.vn")){
+        post.find({email},(err,docs)=>{
+            accountStudent.findOne({email},(err,doc)=>{
+                res.render('profile',{doc,docs})
+            })
+        })
+    }
+    else {
+        post.find({email},(err,docs)=>{
+            accountF.findOne(email,(err,doc)=>{
+                res.render('profile',{doc,docs})
+            })
+        })
+    }
+    
+})
 
 
 router.get('/notification',checkAuthen,(req,res)=>{

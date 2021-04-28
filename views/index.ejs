@@ -223,7 +223,7 @@
                                     <img src="<%=doc[i].imageUser%>" width="56" height="56" class="rounded-circle mr-3" alt="Ashley Briggs">
                                     <div class="media-body" >
                                       <div id="addComment-<%=doc[i]._id%>">
-                                        <p class="mb-2"><strong><%=doc[i].name%></strong></p>
+                                        <p class="mb-2"><strong><a href="profile/<%=doc[i].email%>"> <%=doc[i].name%></a></strong></p>
                                         <p><%=doc[i].message%></p>
                                           <!--hình ảnh được upload-->
                                         <div class="row no-gutters mt-1">
@@ -233,10 +233,11 @@
                                             </div>
                                         <%}%>
                                         <div class="col-6">
+                                          <%if(doc[i].videoUpload){%>
                                           <iframe width="400" height="300"
                                              src="<%=doc[i].videoUpload%>">
                                           </iframe>
-                                           
+                                        <%}%>
                                         </div>
                                         </div>
                                         <!--video upload-->

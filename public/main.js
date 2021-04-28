@@ -254,7 +254,7 @@ $(document).ready(function(){
              
                 console.log(json);
                 for(var i =0;i<json.data.length;i++){
-                  console.log(`${json.data[i].imageUser}`);
+                  console.log(`${json.data[i].email}`);
                   console.log("da vao i ");
                        var htmlLoad=$(
                          `<div class="card" >
@@ -266,7 +266,7 @@ $(document).ready(function(){
                                <div class="media-body" >
                                <div id="addComment-${json.data[i]._id}">
                                
-                                   <p class="mb-2"><strong>${json.data[i].name}</strong></p>
+                                   <p class="mb-2"><strong><a href="profile/${json.data[i].email}">${json.data[i].name}</a></strong></p>
                                    <p>${json.data[i].message}</p>
                                      <!--hình ảnh được upload-->
                                    <div class="row no-gutters mt-1">
