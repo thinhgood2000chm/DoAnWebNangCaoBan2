@@ -6,6 +6,8 @@
   }
 }
 
+// chuyển trang khi người dùng ko có quyền truy cập vào signup hoặc create notify
+
 
 
 
@@ -511,7 +513,13 @@ $(document).ready(function(){
                     divTagsubParentImage.appendChild(divTagChild)
                     parentMediaBody.appendChild(divTagsubParentImage)
                     }
-                    
+                  var divOfvideo = document.createElement("div")
+                  setAttributes(divOfvideo,{"class":"col-6"})
+                  var iframe= document.createElement("iframe")
+                  setAttributes(iframe,{"width":"400", "height":"300","src":ketqua.data.videoUpload})
+                  divOfvideo.appendChild(iframe)
+                  divTagsubParentImage.appendChild(divOfvideo)
+                  parentMediaBody.appendChild(divTagsubParentImage)
                 //thời gian tạo bài đăng
                 var smallTag = document.createElement("small")
                 setAttributes(smallTag,{"class":"text-muted"})

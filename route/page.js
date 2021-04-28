@@ -59,7 +59,14 @@ router.get("/",checkAuthen,(req,res)=>{
   
 })
 router.get('/signup',(req,res)=>{
-    res.render('signup')
+    var token = req.cookies.account
+    if(token.includes("admin752")){
+        res.render('signup')
+    }
+    else {
+        res.redirect('/')
+    }
+    //res.render("signup")
 })
 router.get("/login",(req,res)=>{
     res.render("login")

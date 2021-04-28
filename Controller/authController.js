@@ -158,7 +158,7 @@ exports.login=(req,res,next)=>{
                     })
                 }
                 if(result){
-                    console.log("đã đúngg mk");
+                    console.log("đã đúng mk");
                     let token = jwt.sign({id: account._id},JWT_SECRET,{expiresIn:'1h'})
                     res.cookie('jwt', token)
                     res.cookie('account',account.email)
@@ -290,6 +290,8 @@ exports.insertPost=(req,res)=>{
     var {hiddenPicture, nameUser,hiddenEmailOfPost, messageText,videoUpload}= req.body
     console.log("cái đang cân",nameUser,messageText,hiddenEmailOfPost);
     images = req.files;// file đối với single , files đối với multi
+    videoUploadNew =videoUpload.replace(videoUpload.slice(24,32),"embed/") 
+    console.log(videoUploadNew);
     //console.log("image",images);
     var pathImage=[]
     var image=[]
@@ -307,7 +309,7 @@ exports.insertPost=(req,res)=>{
         email: hiddenEmailOfPost,
         name: nameUser,
         message:messageText,
-        videoUpload:videoUpload
+        videoUpload:videoUploadNew
 
     })
     newPost.save()
@@ -329,7 +331,7 @@ exports.insertPost=(req,res)=>{
             image:JSON.stringify(image),
             message:messageText,
             imageUser: hiddenPicture,
-            videoUpload:videoUpload
+            videoUpload:videoUploadNew
          
 
         }
