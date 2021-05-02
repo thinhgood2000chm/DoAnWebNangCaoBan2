@@ -6,7 +6,15 @@
   }
 }
 
-// chuyển trang khi người dùng ko có quyền truy cập vào signup hoặc create notify
+function openNav() {
+  document.getElementById("mySidenav").style.width = "300px";
+  document.getElementById("main").style.marginLeft = "300px";
+}
+
+function closeNav() {
+  document.getElementById("mySidenav").style.width = "0";
+  document.getElementById("main").style.marginLeft= "0";
+}
 
 
 
@@ -235,10 +243,12 @@ $(document).ready(function(){
           console.log($('#listCard').height() );
           start = start +1
           console.log("start sau khi cộng",start);
+          console.log(window.location);
           var hiddenpicture = document.getElementById("hiddenpicture").value
           var data= {
             start:start, 
-            hiddenpicture: hiddenpicture
+            hiddenpicture: hiddenpicture,
+            pathname:window.location.pathname
           }
           fetch('http://localhost:3000/loadWindowScroll',{
             method: "POST",
@@ -310,7 +320,6 @@ $(document).ready(function(){
                                         <div class="mt-1" id="parentComment">
                                           <label class="sr-only">Leave a comment...</label>
                                           <textarea data-id ="${json.data[i]._id}" id="comment"class="form-control form-control-flush classComment" data-toggle="autosize" rows="1" placeholder="Leave a comment" ></textarea>
-                                          <button data-id ="${json.data[i]._id}" onclick="commentPost(this)">click</button>
                                         </div>
                                        
                                    
@@ -320,12 +329,14 @@ $(document).ready(function(){
                    
                                        <!-- Icons input file phần bình luân -->
                                        <div class="input-container mb-2">
-                                         <a class="text-reset mr-3" href="#!" type="file" data-toggle="tooltip" title="" data-original-title="Add photo">
-                                           <i class="fa fa-camera"></i>
-                                         </a>
-                                         <a class="text-reset mr-3" href="#!" data-toggle="tooltip" title="" data-original-title="Attach file">
-                                           <i class="fa fa-paperclip"></i>
-                                         </a>
+                                          <button class="btn btn-primary float-left" data-id ="${json.data[i]._id}" onclick="commentPost(this)"><i class="fa fa-arrow-right"></i></button>
+
+                                        <!--<a class="text-reset mr-3" href="#!" type="file" data-toggle="tooltip" title="" data-original-title="Add photo">
+                                        //    <i class="fa fa-camera"></i>
+                                        //  </a>
+                                        //  <a class="text-reset mr-3" href="#!" data-toggle="tooltip" title="" data-original-title="Attach file">
+                                        //    <i class="fa fa-paperclip"></i>
+                                        //  </a>-->
                                          
                                        </div>
                    
@@ -515,9 +526,15 @@ $(document).ready(function(){
                     }
                   var divOfvideo = document.createElement("div")
                   setAttributes(divOfvideo,{"class":"col-6"})
+
+                  console.log(ketqua.data.videoUpload);
+                  if(ketqua.data.videoUpload !=='embed/'){
+                  
                   var iframe= document.createElement("iframe")
                   setAttributes(iframe,{"width":"400", "height":"300","src":ketqua.data.videoUpload})
+                  
                   divOfvideo.appendChild(iframe)
+                  }
                   divTagsubParentImage.appendChild(divOfvideo)
                   parentMediaBody.appendChild(divTagsubParentImage)
                 //thời gian tạo bài đăng
@@ -770,7 +787,107 @@ $("#btnChange").click(e=>{
 })
 })
 
-// comment bài viêt
+
+
+    $(function () {
+        'use strict'
+  
+        $('[data-toggle="offcanvas"]').on('click', function () {
+          $('.offcanvas-collapse').toggleClass('open')
+        })
+      })
+
+
+    $('#my-button').click(function(){
+        $('#my-file').click();
+    });
+    $('#my-button2').click(function(){
+        $('#my-file2').click();
+    });
+
+
+    $(".btnDeleteNoti").click(e=>{
+      console.log("vao delete");
+      var btn = e.target
+      var id = btn.dataset.id
+      console.log(id);
+      fetch('http://localhost:3000/deleteNoti',{
+        method:"post",
+        headers:{
+          'content-type':'application/json'
+        },
+        body:JSON.stringify({id:id})
+      })
+      .then(res=>res.json())
+      .then(json=>{
+        console.log(json);
+        if(json.code===0){
+          id= json.data.id
+          document.getElementById(id).remove()
+       
+          // alert thông báo xóa thành công 
+          $("#response").animate({height: '+=72px' }, 300);
+      
+      $('<div class="alert alert-success">' +
+        '<button type="button" class="close" data-dismiss="alert">' +
+        '&times;</button>"xóa thông báo thành công"</div>').hide().appendTo('#response').fadeIn(1000);
+        
+        $(".alert").delay(2000).fadeOut("normal",function(){
+          $(this).remove();
+          });
+          $("#response").delay(2000).animate({
+            height: '-=72px'
+        }, 300);
+        }
+
+      })
+
+    })
+
+
+ 
+   
+    // upload thông bao
+    $(".btnUpdateNoti").click(e=>{
+      var btn = e.target
+      var id= btn.dataset.id
+      var titleNoti = btn.dataset.title
+      var contentNoti= btn.dataset.content
+
+      $("#myModalUpdate").show()
+      $(".close").click(()=>{
+        $("#myModalUpdate").hide()
+      })
+      var idUpdateNoti= document.getElementById("idUpdateNoti")
+      idUpdateNoti.value=id
+      var title = document.getElementById("title-text-update")
+      var content= document.getElementById("message-text-update")
+      title.value=titleNoti
+      content.value=contentNoti
+
+    })
+
+
+    // thiết lập file edit account ( phân quyền đổi tài khoản hoặc mật khẩu )
+    if( $("#emailOfChaneProfile").val().includes("@student.tdtu.edu.vn")){
+      var addNewClass = document.getElementById("linlkChangePass")
+      addNewClass.classList.add("disabled")
+    }
+    else {
+       var addNewClass = document.getElementById("linkOfChangeProfile")
+       var addNewClassPass = document.getElementById("linlkChangePass")
+       addNewClass.classList.add("disabled")
+       addNewClass.classList.remove("active")
+       addNewClassPass.classList.add("active")
+    }
+   
+
+
+    /*$('#my-button').click(function(){
+        $('#my-file').click();
+    });*/
+
+    // comment bài viêt
 //$(".classComment").keyup(event=>{
  
 
@@ -810,115 +927,5 @@ $("#btnChange").click(e=>{
     })*/
     
  // })
-
-    $(function () {
-        'use strict'
-  
-        $('[data-toggle="offcanvas"]').on('click', function () {
-          $('.offcanvas-collapse').toggleClass('open')
-        })
-      })
-
-
-    $('#my-button').click(function(){
-        $('#my-file').click();
-    });
-    $('#my-button2').click(function(){
-        $('#my-file2').click();
-    });
-
-
-    $('#openNav').click(()=>{
-      document.getElementById("mySidenav").style.width = "300px";
-      document.getElementById("main").style.marginLeft = "300px";
-    })
-
-    // thiết lập file edit account ( phân quyền đổi tài khoản hoặc mật khẩu )
-    if( $("#emailOfChaneProfile").val().includes("@student.tdtu.edu.vn")){
-      var addNewClass = document.getElementById("linlkChangePass")
-      addNewClass.classList.add("disabled")
-    }
-    else {
-       var addNewClass = document.getElementById("linkOfChangeProfile")
-       var addNewClassPass = document.getElementById("linlkChangePass")
-       addNewClass.classList.add("disabled")
-       addNewClass.classList.remove("active")
-       addNewClassPass.classList.add("active")
-    }
-    
-    
-
-      $('#closeNav').click(()=>{
-      document.getElementById("mySidenav").style.width = "0";
-      document.getElementById("main").style.marginLeft= "0";
-    })
-
-    $(".btnDeleteNoti").click(e=>{
-   
-      var btn = e.target
-      var id = btn.dataset.id
-      console.log(id);
-      fetch('http://localhost:3000/deleteNoti',{
-        method:"post",
-        headers:{
-          'content-type':'application/json'
-        },
-        body:JSON.stringify({id:id})
-      })
-      .then(res=>res.json())
-      .then(json=>{
-        console.log(json);
-        if(json.code===0){
-          id= json.data.id
-          document.getElementById(id).remove()
-       
-          // alert thông báo xóa thành công 
-          $("#response").animate({height: '+=72px' }, 300);
-      
-      $('<div class="alert alert-success">' +
-        '<button type="button" class="close" data-dismiss="alert">' +
-        '&times;</button>"xóa thông báo thành công"</div>').hide().appendTo('#response').fadeIn(1000);
-        
-        $(".alert").delay(2000).fadeOut("normal",function(){
-          $(this).remove();
-          });
-          $("#response").delay(2000).animate({
-            height: '-=72px'
-        }, 300);
-        }
-
-      })
-
-    })
-   
-    // upload thông bao
-    $(".btnUpdateNoti").click(e=>{
-      var btn = e.target
-      var id= btn.dataset.id
-      var titleNoti = btn.dataset.title
-      var contentNoti= btn.dataset.content
-
-      $("#myModalUpdate").show()
-      $(".close").click(()=>{
-        $("#myModalUpdate").hide()
-      })
-      var idUpdateNoti= document.getElementById("idUpdateNoti")
-      idUpdateNoti.value=id
-      var title = document.getElementById("title-text-update")
-      var content= document.getElementById("message-text-update")
-      title.value=titleNoti
-      content.value=contentNoti
-
-    })
-
-
-   
-
-
-    /*$('#my-button').click(function(){
-        $('#my-file').click();
-    });*/
-
-    
   
 })

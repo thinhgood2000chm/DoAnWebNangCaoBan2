@@ -16,9 +16,10 @@
     <script src="/public/main.js"></script>
 </head>
 <body>
+
   <%-include("header")%>
     <div id="mySidenav" class="sidebar">
-        <button href="javascript:void(0)" class="closebtn" id="closeNav">&times;</button>
+        <button href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</button>
         <h1 class="text-siderbar">Notified by department</h1>
         <a href="/CTHSSV" data-id="Phòng Công tác học sinh sinh viên (CTHSSV)" class="navlink-siderbar">Phòng Công tác học sinh sinh viên (CTHSSV)</a>
         <a href="/PhongDaiHoc" data-id="Phòng Đại học" class="navlink-siderbar">Phòng Đại học</a>
@@ -44,19 +45,56 @@
         <a href="KhoaTCNH" data-id="Khoa Tài chính ngân hàng" class="navlink-siderbar">Khoa Tài chính ngân hàng</a>
     </div>
     <div id="main">
-       <button id="openNav" class="openbtn">&#9776;</button>
+       <button onclick="openNav()" class="openbtn">&#9776;</button>
         <!--icon bar-->
         <a class="icon-bar" href="/"><i class="fa fa-home"></i></a>
         <h3><%=locals.faculty%></h3>
         <%doc.forEach(d=>{%>
        <div class="card">
-
-        
         <div class="card-body">
           <h4><a href="/detailNotify" id="styleFont"><%=d.title%></a></h4>
         </div>
       <%})%>
       </div>
+      <nav aria-label="Page navigation">
+        <ul class="pagination">
+          <li class="page-item">
+            <a class="page-link" href="#" aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+    
+
+          <%if(locals.docs){%>
+       
+              <%if(Number(docs.length/10)>parseInt(docs.length/10)){%>
+                <%for( var i =0; i<=(Number(docs.length)/10);i++){%>
+                <li class="page-item"><a class="page-link" href="/notification/<%=Number(i)+1%>"><%=Number(i)+1%></a></li>
+                <%}%>
+              <%}else if(Number(docs.length/10)===parseInt(docs.length/10)){%>
+                <%for( var i =0; i<(Number(docs.length)/10);i++){%>
+                  <li class="page-item"><a class="page-link" href="/notification/<%=Number(i)+1%>"><%=Number(i)+1%></a></li>
+                <%}%>
+                <%}%>
+                
+          <%}else if(locals.result){%>
+            <%if(Number(result.length/10)>parseInt(result.length/10)){%>
+              <%for( var i =0; i<=(Number(result.length)/10);i++){%>
+              <li class="page-item"><a class="page-link" href="/<%=locals.pathname%>/notification/<%=Number(i)+1%>"><%=Number(i)+1%></a></li>
+              <%}%>
+            <%}else if(Number(result.length/10)===parseInt(result.length/10)){%>
+              <%for( var i =0; i<(Number(result.length)/10);i++){%>
+                <li class="page-item"><a class="page-link" href="/<%=locals.pathname%>/notification/<%=Number(i)+1%>"><%=Number(i)+1%></a></li>
+              <%}%>
+              <%}%>
+            <%}%>
+          <li class="page-item">
+            <a class="page-link" href="#" aria-label="Next">
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
     </div>
 </body>
 

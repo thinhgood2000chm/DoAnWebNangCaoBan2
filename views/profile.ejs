@@ -54,7 +54,7 @@
           </div>
 
           
-            <div class="card bg-light">
+            <div class="card bg-light listCard" id="listCard">
                 <div class="card-body h-100">
                     <div class="header">
                       
@@ -144,7 +144,7 @@
                       </div>
 
                 </div>
-                <%for(var i = docs.length-1; i>=0; i--){%>
+                <%for(var i = 0;i<docs.length;i++){%>
                  
                     <div class="card" id="<%=docs[i]._id%>">
                       <div class="cart-header">
@@ -181,7 +181,7 @@
                                         </div>
                                         <%}%>
                                         <div class="col-6">
-                                          <%if(docs[i].videoUpload){%>
+                                          <%if(docs[i].videoUpload!=="embed/"){%>
                                           <iframe width="400" height="300"
                                              src="<%=docs[i].videoUpload%>">
                                           </iframe>
@@ -208,7 +208,7 @@
                                         
                                         <div class="media-body UpdateDelete">
                                             <p class="text-muted textComment">
-                                                <strong><%=c.emailUComment%></strong>: <%=c.content%>
+                                                <strong><%=c.nameUserComment%></strong>: <%=c.content%>
                                                 <input type="hidden" value="<%=c.emailUComment%>" class="emailUCommentId">
                                               </p>
                                               <a href="#comment" data-index="<%=i%>" data-id="<%=c._id%>"data-comment="<%=c.content%>" data-userCurrent="<%=c.emailUComment%>" class="text-comment updateComment">chỉnh sửa</a>
@@ -244,12 +244,14 @@
                     
                                         <!-- Icons input file phần bình luân -->
                                         <div class="input-container mb-2">
-                                          <a class="text-reset mr-3" href="#!" type="file" data-toggle="tooltip" title="" data-original-title="Add photo">
+                                          <button class="btn btn-primary float-left" data-id ="<%=docs[i]._id%>" onclick="commentPost(this)"><i class="fa fa-arrow-right"></i></button>
+
+                                          <!-- <a class="text-reset mr-3" href="#!" type="file" data-toggle="tooltip" title="" data-original-title="Add photo">
                                             <i class="fa fa-camera"></i>
                                           </a>
                                           <a class="text-reset mr-3" href="#!" data-toggle="tooltip" title="" data-original-title="Attach file">
                                             <i class="fa fa-paperclip"></i>
-                                          </a>
+                                          </a> -->
                                           
                                         </div>
                     
@@ -267,13 +269,14 @@
                     </div>
                     
                     <%}%>
-                    <div class="media-body">
-                      <img src="https://cdn1.iconfinder.com/data/icons/animals-95/300/cat-delete-animal-pet-wild-domestic-256.png" width="56" height="56" class="mr-3" alt="Ashley Briggs">
-                      <h5 class="text-center lh-100">You have watched all the news</h5>
-                      
-                    </div>
-                    <hr>
+                  
                 </div>
+                <div class="media-body">
+                  <img src="https://cdn1.iconfinder.com/data/icons/animals-95/300/cat-delete-animal-pet-wild-domestic-256.png" width="56" height="56" class="mr-3" alt="Ashley Briggs">
+                  <h5 class="text-center lh-100">You have watched all the news</h5>
+                  
+                </div>
+                <hr>
                 </div>
 
                 <!--modal update-->

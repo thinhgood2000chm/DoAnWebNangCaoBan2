@@ -233,7 +233,7 @@
                                             </div>
                                         <%}%>
                                         <div class="col-6">
-                                          <%if(doc[i].videoUpload){%>
+                                          <%if(doc[i].videoUpload!=="embed/"){%>
                                           <iframe width="400" height="300"
                                              src="<%=doc[i].videoUpload%>">
                                           </iframe>
@@ -293,7 +293,7 @@
                                             <div class="mt-1" id="parentComment">
                                               <label class="sr-only">Leave a comment...</label>
                                               <textarea  data-id ="<%=doc[i]._id%>" id="comment"class="form-control form-control-flush classComment" data-toggle="autosize" rows="1" placeholder="Leave a comment" ></textarea>
-                                         <button data-id ="<%=doc[i]._id%>" onclick="commentPost(this)">click</button>
+                                              <!-- <button class="btn btn-primary float-left" data-id ="<%=doc[i]._id%>" onclick="commentPost(this)">click</button> -->
                                             </div>
                                             
                                         
@@ -303,12 +303,13 @@
                         
                                             <!-- Icons input file phần bình luân -->
                                             <div class="input-container mb-2">
-                                              <a class="text-reset mr-3" href="#!" type="file" data-toggle="tooltip" title="" data-original-title="Add photo">
+                                              <button class="btn btn-primary float-left" data-id ="<%=doc[i]._id%>" onclick="commentPost(this)"><i class="fa fa-arrow-right"></i></button>
+                                              <!-- <a class="text-reset mr-3" href="#!" type="file" data-toggle="tooltip" title="" data-original-title="Add photo">
                                                 <i class="fa fa-camera"></i>
                                               </a>
                                               <a class="text-reset mr-3" href="#!" data-toggle="tooltip" title="" data-original-title="Attach file">
                                                 <i class="fa fa-paperclip"></i>
-                                              </a>
+                                              </a> -->
                                               
                                             </div>
                         

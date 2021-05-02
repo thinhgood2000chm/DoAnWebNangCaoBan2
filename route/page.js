@@ -78,9 +78,7 @@ router.get('/logout',(req,res)=>{
     res.clearCookie('account')
     res.redirect('/login')
 })
-router.get('/admin',checkAuthen,(req,res)=>{
-    res.render("admin")
-})
+
 
 router.get('/error-page',(req,res)=>{
     let user = req.user
@@ -108,7 +106,7 @@ router.get('/profile',checkAuthen,(req,res)=>{
          
            accountStudent.findOne({email: user.email},(err, doc)=>{
             //console.log(user.email);
-               post.find({email:user.email},(error,docs)=>{
+               post.find({email:user.email}).sort({createdAt:-1}).limit(10).exec((error,docs)=>{
                   // console.log("doc,",docs.image.length);
                    if(error){
                        console.log(error);
@@ -187,9 +185,11 @@ router.get('/createNotification',checkAuthen,(req,res)=>{
     else res.redirect('/')
     
 })
+
 // chỉnh sửa thông báo
 //router.get("/deleteNoti/:id",authController.deleteNoti)
 
+// xem thông tin profile 
 router.get("/profile/:email",(req,res)=>{
     var email= req.params.email
     console.log( email);
@@ -212,10 +212,11 @@ router.get("/profile/:email",(req,res)=>{
 
 
 router.get('/notification',checkAuthen,(req,res)=>{
-    notification.find({},(err, doc)=>{
-        res.render('department-notfication',{doc})
+    notification.find({}).sort({createdAt:-1}).exec((err, docs)=>{// dòng trên này dùng để hiển thị có bao nhiêu nút bấm 
+        notification.find({}).sort({createdAt:-1}).limit(10).exec((err, doc)=>{// dòng dưới này dùng đểload 10 data
+            res.render('department-notfication',{doc,docs})
+        })
     })
-
 })
 
 router.get('/CTHSSV',checkAuthen,(req,res)=>{
@@ -225,17 +226,30 @@ router.get('/CTHSSV',checkAuthen,(req,res)=>{
     })
 })
 
-router.get('/KhoaCntt',checkAuthen,(req,res)=>{
-    
-    notification.find({faculty:"Khoa Công nghệ thông tin"},(err,doc)=>{
-        res.render("department-notfication",{doc,faculty:"Khoa Công nghệ thông tin"})
+
+router.get('/KhoaCntt',checkAuthen,(req,res)=>{   
+    notification.find({faculty:"Khoa Công nghệ thông tin"}).sort({createdAt:-1}).exec((err, result)=>{
+        notification.find({faculty:"Khoa Công nghệ thông tin"}).sort({createdAt:-1}).limit(10).exec((err,doc)=>{
+            res.render("department-notfication",{doc,faculty:"Khoa Công nghệ thông tin", result,pathname:"KhoaCntt"})
+        })
+    })
+})
+router.get('/KhoaCntt/notification/:number',checkAuthen,(req,res)=>{
+    var {number}=req.params
+    console.log(number);
+    var skip = 10*(number-1)
+    notification.find({faculty:"Khoa Công nghệ thông tin"}).sort({createdAt:-1}).exec((err, result)=>{
+        notification.find({faculty:"Khoa Công nghệ thông tin"}).sort({createdAt:-1}).skip(skip).limit(10).exec((err,doc)=>{
+            res.render("department-notfication",{doc,result,faculty:"Khoa Công nghệ thông tin",pathname:"KhoaCntt"})
+        })
     })
 })
 
 router.get('/TTTH',checkAuthen,(req,res)=>{
-    
-    notification.find({faculty:"Trung tâm tin học"},(err,doc)=>{
-        res.render("department-notfication",{doc,faculty:"Trung tâm tin học"})
+    notification.find({}).sort({createdAt:-1}).exec((err, docs)=>{
+        notification.find({faculty:"Trung tâm tin học"},(err,doc)=>{
+            res.render("department-notfication",{doc,faculty:"Trung tâm tin học"})
+        })
     })
 })
 
@@ -372,6 +386,16 @@ router.get('/PhongLC',checkAuthen,(req,res)=>{
     })
 })
 
-
+router.get('/notification/:number',(req,res)=>{
+    var {number}=req.params
+    console.log(number);
+    var skip = 10*(number-1)
+    console.log(skip);
+    notification.find({}).sort({createdAt:-1}).exec((err, docs)=>{
+    notification.find({}).sort({createdAt:-1}).limit(10).skip(skip).exec((err,doc)=>{
+        res.render("department-notfication",{doc,docs})
+    })
+})
+})
 
  module.exports= router

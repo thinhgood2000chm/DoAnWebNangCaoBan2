@@ -8,7 +8,6 @@ const {JWT_SECRET}=process.env
 const post = require("../models/post")
 const CLIENT_ID='100847206415-rbdoqmgsbdvlik3s3nmukildi3mbpivg.apps.googleusercontent.com'
 const client = new OAuth2Client(CLIENT_ID);
-
 const checkAuthen = require('../middleWare/checkAuthenGG');
 const notification = require('../models/notification');
 
@@ -291,7 +290,7 @@ exports.insertPost=(req,res)=>{
     console.log("cái đang cân",nameUser,messageText,hiddenEmailOfPost);
     images = req.files;// file đối với single , files đối với multi
     videoUploadNew =videoUpload.replace(videoUpload.slice(24,32),"embed/") 
-    console.log(videoUploadNew);
+    console.log("videoUploadNew",videoUploadNew);
     //console.log("image",images);
     var pathImage=[]
     var image=[]
@@ -572,24 +571,55 @@ exports.updateNoti=(req,res)=>{
 }
 
 
-
+// load trang khi lăn con trở 
 exports.loadWindowScroll= (req,res)=>{
-    var {start,hiddenpicture}= req.body
-    console.log('start',start); 
-    console.log('hiddenpicture',hiddenpicture); 
+
+    var {start,hiddenpicture, pathname}= req.body
+   
     skip = Number(start)*10
     console.log(skip);
-    post.find({}).sort({createdAt:-1}).skip(skip).limit(10).exec((err, doc)=>{
-        if(!doc){
-            console.log(" đã vào null");
-            res.json({code:1})
+  
+    if(pathname==='/profile'){
+        console.log("di vao profile");
+        let token = req.cookies['session-token']
+        if(token!==undefined){
+        let user = {}
+         async function verify() {
+             const ticket = await client.verifyIdToken({
+                 idToken: token,
+                 audience: CLIENT_ID,  
+             });
+             const payload = ticket.getPayload();
+                 user.email= payload.email;
+           }
+           verify().then(()=>{
+            post.find({email:user.email}).sort({createdAt:-1}).skip(skip).limit(10).exec((err, doc)=>{
+                return res.json({code:0, data:doc,data2:{hiddenpicture,hiddenpicture}})
+           })
+        })
         }
-      
         else {
-            console.log(" đã vào đây");
-         
-           // console.log(doc);
-        res.json({code:0, data:doc,data2:{hiddenpicture,hiddenpicture}})
+      
+            let email= req.cookies.account;
+            post.find({email}).sort({createdAt:-1}).skip(skip).limit(10).exec((err, doc)=>{
+                return res.json({code:0, data:doc,data2:{hiddenpicture,hiddenpicture}})
+            })
         }
-    })
+    }
+    else{
+
+        post.find({}).sort({createdAt:-1}).skip(skip).limit(10).exec((err, doc)=>{
+            if(!doc){
+                console.log(" đã vào null");
+                res.json({code:1})
+            }
+        
+            else {
+                console.log(" đã vào đây");
+            
+            // console.log(doc);
+            res.json({code:0, data:doc,data2:{hiddenpicture,hiddenpicture}})
+            }
+        })
+    }
 }

@@ -177,6 +177,7 @@ textarea.form-control {
   overflow-x: hidden;
   transition: 0.5s;
   padding-top: 60px;
+  margin-top: 120px;
 }
 
 .sidebar a {
@@ -208,9 +209,10 @@ textarea.form-control {
   background-color: #111;
   color: white;
   padding: 10px 15px;
-  margin-top: 0;
+
   border: none;
   margin: 10px;
+  margin-top: 55px;
 }
 
 .openbtn:hover {
@@ -423,3 +425,4 @@ overflow: hidden; overflow-wrap: break-word; height: 50px;
 .btn-sm{
   margin-right: 5px;
 }
+
