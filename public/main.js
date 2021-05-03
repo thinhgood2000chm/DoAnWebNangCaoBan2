@@ -1,4 +1,43 @@
 
+let socket 
+
+  console.log("server  đã sẵn sàng hoạt dộng")
+  socket= io()
+  socket.on('connect',()=>{
+  console.log("đã kết nối socket thành công id= ",socket.id)
+  socket.on("dataWhenFPostNoti",(data)=>{
+    /*var facultyAlert = document.getElementById("facultyAlert")
+    var messNoti= document.getElementById("messNoti")
+    messNoti.innerHTML=data.titlePostNoti
+    //console.log(data);
+    facultyAlert.innerHTML=data.faculty
+    var onlineNotification = document.getElementById("online-notification")
+    onlineNotification.classList.toggle('show')*/
+    $('#alertNoti').append(`   
+    <div id="snackbar" class="alert alert-success" >
+      
+
+    <strong id="facultyAlert"><a href="/">${data.faculty}</strong> vừa đăng thông báo : <strong id="messNoti">${data.titlePostNoti}</strong>
+    </div>
+    `)
+  })
+  })
+
+  function postNoti(){
+    var faculty = document.getElementById("selectFaculty").value
+    var titlePostNoti = document.getElementById("title-text").value
+    console.log("faculty",faculty, titlePostNoti);
+    data={
+      faculty: faculty,
+      titlePostNoti:titlePostNoti
+    }
+    socket.emit('info',data )
+  }
+
+
+
+
+
  // hàm dùng đẻ tạo nhiều attribute trong 1 lần 
  function setAttributes(el, attrs) {
   for(var key in attrs) {
@@ -867,6 +906,9 @@ $("#btnChange").click(e=>{
 
     })
 
+    // thiết lập hide show thông báo alert khi khoa đăng bài
+
+    //$("#snackbar").fadeTo(10,0)//ẩn thông báo dưới góc màn hinh
 
     // thiết lập file edit account ( phân quyền đổi tài khoản hoặc mật khẩu )
     if( $("#emailOfChaneProfile").val().includes("@student.tdtu.edu.vn")){

@@ -174,10 +174,34 @@ router.get('/createNotification',checkAuthen,(req,res)=>{
         var email = req.cookies.account
         console.log("email",email);
         accountF.findOne({email: email},(err, info)=>{
-            notification.find({email:email},(err, infoNoti)=>{
+            notification.find({email:email}).exec((err, docs)=>{
+                notification.find({email:email}).limit(10).sort({createdAt:-1}).exec((err,infoNoti)=>{
                 console.log(info.faculty);
-                res.render('create-notfication',{info, infoNoti})
+                res.render('create-notfication',{info, infoNoti,docs})
             })
+        })
+         
+        })
+
+    }
+    else res.redirect('/')
+    
+})
+router.get('/createNotification/:number',checkAuthen,(req,res)=>{
+    var {number}=req.params
+    console.log(number);
+    var skip = 10*(number-1)
+    var token =  req.cookies.jwt;
+    if(token){
+        var email = req.cookies.account
+        console.log("email",email);
+        accountF.findOne({email: email},(err, info)=>{
+            notification.find({email:email}).exec((err, docs)=>{
+                notification.find({email:email}).skip(skip).limit(10).sort({createdAt:-1}).exec((err,infoNoti)=>{
+                console.log(info.faculty);
+                res.render('create-notfication',{info, infoNoti,docs})
+            })
+        })
          
         })
 
@@ -221,8 +245,20 @@ router.get('/notification',checkAuthen,(req,res)=>{
 
 router.get('/CTHSSV',checkAuthen,(req,res)=>{
     
-    notification.find({faculty:"Phòng Công tác học sinh sinh viên (CTHSSV)"},(err,doc)=>{
-        res.render("department-notfication",{doc,faculty:"Phòng Công tác học sinh sinh viên (CTHSSV)"})
+    notification.find({faculty:"Phòng Công tác học sinh sinh viên (CTHSSV)"}).sort({createdAt:-1}).exec((err, result)=>{
+        notification.find({faculty:"Phòng Công tác học sinh sinh viên (CTHSSV)"}).sort({createdAt:-1}).limit(10).exec((err,doc)=>{
+        res.render("department-notfication",{doc,faculty:"Phòng Công tác học sinh sinh viên (CTHSSV)",result,pathname:"CTHSSV"})
+    })
+})
+})
+router.get('/CTHSSV/notification/:number',checkAuthen,(req,res)=>{
+    var {number}=req.params
+    console.log(number);
+    var skip = 10*(number-1)
+    notification.find({faculty:"Phòng Công tác học sinh sinh viên (CTHSSV)"}).sort({createdAt:-1}).exec((err, result)=>{
+        notification.find({faculty:"Phòng Công tác học sinh sinh viên (CTHSSV)"}).sort({createdAt:-1}).skip(skip).limit(10).exec((err,doc)=>{
+            res.render("department-notfication",{doc,result,faculty:"Phòng Công tác học sinh sinh viên (CTHSSV)",pathname:"CTHSSV"})
+        })
     })
 })
 
@@ -246,144 +282,381 @@ router.get('/KhoaCntt/notification/:number',checkAuthen,(req,res)=>{
 })
 
 router.get('/TTTH',checkAuthen,(req,res)=>{
-    notification.find({}).sort({createdAt:-1}).exec((err, docs)=>{
-        notification.find({faculty:"Trung tâm tin học"},(err,doc)=>{
-            res.render("department-notfication",{doc,faculty:"Trung tâm tin học"})
+    notification.find({faculty:"Trung tâm tin học"}).sort({createdAt:-1}).exec((err, result)=>{
+        notification.find({faculty:"Trung tâm tin học"}).sort({createdAt:-1}).limit(10).exec((err,doc)=>{
+            res.render("department-notfication",{doc,faculty:"Trung tâm tin học",pathname:"TTTH",result})
+        })
+    })
+})
+router.get('/TTTH/notification/:number',checkAuthen,(req,res)=>{
+    var {number}=req.params
+    console.log(number);
+    var skip = 10*(number-1)
+    notification.find({faculty:"Trung tâm tin học"}).sort({createdAt:-1}).exec((err, result)=>{
+        notification.find({faculty:"Trung tâm tin học"}).sort({createdAt:-1}).skip(skip).limit(10).exec((err,doc)=>{
+            res.render("department-notfication",{doc,result,faculty:"Trung tâm tin học",pathname:"TTTH"})
         })
     })
 })
 
 router.get('/SDTC',checkAuthen,(req,res)=>{
     
-    notification.find({faculty:"Trung tâm đào tạo phát triển xã hội (SDTC)"},(err,doc)=>{
-        res.render("department-notfication",{doc,faculty:"Trung tâm đào tạo phát triển xã hội (SDTC)"})
+    notification.find({faculty:"Trung tâm đào tạo phát triển xã hội (SDTC)"}).sort({createdAt:-1}).exec((err, result)=>{
+        notification.find({faculty:"Trung tâm đào tạo phát triển xã hội (SDTC)"}).sort({createdAt:-1}).limit(10).exec((err,doc)=>{
+        res.render("department-notfication",{doc,faculty:"Trung tâm đào tạo phát triển xã hội (SDTC)",result,pathname:"SDTC"})
+    })
+})
+})
+router.get('/SDTC/notification/:number',checkAuthen,(req,res)=>{
+    var {number}=req.params
+    console.log(number);
+    var skip = 10*(number-1)
+    notification.find({faculty:"Trung tâm đào tạo phát triển xã hội (SDTC)"}).sort({createdAt:-1}).exec((err, result)=>{
+        notification.find({faculty:"Trung tâm đào tạo phát triển xã hội (SDTC)"}).sort({createdAt:-1}).skip(skip).limit(10).exec((err,doc)=>{
+            res.render("department-notfication",{doc,result,faculty:"Trung tâm đào tạo phát triển xã hội (SDTC)",pathname:"SDTC"})
+        })
     })
 })
 
 router.get('/ATEM',checkAuthen,(req,res)=>{
     
-    notification.find({faculty:"Trung tâm phát triển Khoa học quản lý và Ứng dụng công nghệ (ATEM)"},(err,doc)=>{
-        res.render("department-notfication",{doc,faculty:"Trung tâm phát triển Khoa học quản lý và Ứng dụng công nghệ (ATEM)"})
+    notification.find({faculty:"Trung tâm phát triển Khoa học quản lý và Ứng dụng công nghệ (ATEM)"}).sort({createdAt:-1}).exec((err, result)=>{
+        notification.find({faculty:"Trung tâm phát triển Khoa học quản lý và Ứng dụng công nghệ (ATEM)"}).sort({createdAt:-1}).limit(10).exec((err,doc)=>{
+        res.render("department-notfication",{doc,faculty:"Trung tâm phát triển Khoa học quản lý và Ứng dụng công nghệ (ATEM)",result,pathname:"ATEM"})
+    })
+})
+})
+router.get('/ATEM/notification/:number',checkAuthen,(req,res)=>{
+    var {number}=req.params
+    console.log(number);
+    var skip = 10*(number-1)
+    notification.find({faculty:"Trung tâm phát triển Khoa học quản lý và Ứng dụng công nghệ (ATEM)"}).sort({createdAt:-1}).exec((err, result)=>{
+        notification.find({faculty:"Trung tâm phát triển Khoa học quản lý và Ứng dụng công nghệ (ATEM)"}).sort({createdAt:-1}).skip(skip).limit(10).exec((err,doc)=>{
+            res.render("department-notfication",{doc,result,faculty:"Trung tâm phát triển Khoa học quản lý và Ứng dụng công nghệ (ATEM)",pathname:"ATEM"})
+        })
     })
 })
 
 router.get('/TTHTDN',checkAuthen,(req,res)=>{
     
-    notification.find({faculty:"Trung tâm hợp tác doanh nghiệp và cựu sinh viên"},(err,doc)=>{
-        res.render("department-notfication",{doc,faculty:"Trung tâm hợp tác doanh nghiệp và cựu sinh viên"})
+    notification.find({faculty:"Trung tâm hợp tác doanh nghiệp và cựu sinh viên"}).sort({createdAt:-1}).exec((err, result)=>{
+        notification.find({faculty:"Trung tâm hợp tác doanh nghiệp và cựu sinh viên"}).sort({createdAt:-1}).limit(10).exec((err,doc)=>{
+        res.render("department-notfication",{doc,faculty:"Trung tâm hợp tác doanh nghiệp và cựu sinh viên",result,pathname:"TTHTDN"})
+    })
+})
+})
+router.get('/TTHTDN/notification/:number',checkAuthen,(req,res)=>{
+    var {number}=req.params
+    console.log(number);
+    var skip = 10*(number-1)
+    notification.find({faculty:"Trung tâm hợp tác doanh nghiệp và cựu sinh viên"}).sort({createdAt:-1}).exec((err, result)=>{
+        notification.find({faculty:"Trung tâm hợp tác doanh nghiệp và cựu sinh viên"}).sort({createdAt:-1}).skip(skip).limit(10).exec((err,doc)=>{
+            res.render("department-notfication",{doc,result,faculty:"Trung tâm hợp tác doanh nghiệp và cựu sinh viên",pathname:"TTHTDN"})
+        })
     })
 })
 
 router.get('/TTNNTH',checkAuthen,(req,res)=>{
     
-    notification.find({faculty:"Trung tâm ngoại ngữ - tin học – bồi dưỡng văn hóa"},(err,doc)=>{
-        res.render("department-notfication",{doc,faculty:"Trung tâm ngoại ngữ - tin học – bồi dưỡng văn hóa"})
+    notification.find({faculty:"Trung tâm ngoại ngữ - tin học – bồi dưỡng văn hóa"}).sort({createdAt:-1}).exec((err, result)=>{
+        notification.find({faculty:"Trung tâm ngoại ngữ - tin học – bồi dưỡng văn hóa"}).sort({createdAt:-1}).limit(10).exec((err,doc)=>{
+        res.render("department-notfication",{doc,faculty:"Trung tâm ngoại ngữ - tin học – bồi dưỡng văn hóa",result,pathname:"TTNNTH"})
+    })
+})
+})
+router.get('/TTNNTH/notification/:number',checkAuthen,(req,res)=>{
+    var {number}=req.params
+    console.log(number);
+    var skip = 10*(number-1)
+    notification.find({faculty:"Trung tâm ngoại ngữ - tin học – bồi dưỡng văn hóa"}).sort({createdAt:-1}).exec((err, result)=>{
+        notification.find({faculty:"Trung tâm ngoại ngữ - tin học – bồi dưỡng văn hóa"}).sort({createdAt:-1}).skip(skip).limit(10).exec((err,doc)=>{
+            res.render("department-notfication",{doc,result,faculty:"Trung tâm ngoại ngữ - tin học – bồi dưỡng văn hóa",pathname:"TTNNTH"})
+        })
     })
 })
 
 router.get('/VCS',checkAuthen,(req,res)=>{
     
-    notification.find({faculty:"Viện chính sách kinh tế và kinh doanh"},(err,doc)=>{
-        res.render("department-notfication",{doc,faculty:"Viện chính sách kinh tế và kinh doanh"})
+    notification.find({faculty:"Viện chính sách kinh tế và kinh doanh"}).sort({createdAt:-1}).exec((err, result)=>{
+        notification.find({faculty:"Viện chính sách kinh tế và kinh doanh"}).sort({createdAt:-1}).limit(10).exec((err,doc)=>{
+        res.render("department-notfication",{doc,faculty:"Viện chính sách kinh tế và kinh doanh",result,pathname:"VCS"})
+    })
+})
+})
+router.get('/VCS/notification/:number',checkAuthen,(req,res)=>{
+    var {number}=req.params
+    console.log(number);
+    var skip = 10*(number-1)
+    notification.find({faculty:"Viện chính sách kinh tế và kinh doanh"}).sort({createdAt:-1}).exec((err, result)=>{
+        notification.find({faculty:"Viện chính sách kinh tế và kinh doanh"}).sort({createdAt:-1}).skip(skip).limit(10).exec((err,doc)=>{
+            res.render("department-notfication",{doc,result,faculty:"Viện chính sách kinh tế và kinh doanh",pathname:"VCS"})
+        })
     })
 })
 
-router.get('/Khoa luật',checkAuthen,(req,res)=>{
+router.get('/KhoaLuat',checkAuthen,(req,res)=>{
     
-    notification.find({faculty:"Khoa luật"},(err,doc)=>{
-        res.render("department-notfication",{doc,faculty:"Khoa luật"})
+    notification.find({faculty:"Khoa luật"}).sort({createdAt:-1}).exec((err, result)=>{
+        notification.find({faculty:"Khoa luật"}).sort({createdAt:-1}).limit(10).exec((err,doc)=>{
+        res.render("department-notfication",{doc,faculty:"Khoa luật",result,pathname:"KhoaLuat"})
+    })
+})
+})
+router.get('/KhoaLuat/notification/:number',checkAuthen,(req,res)=>{
+    var {number}=req.params
+    console.log(number);
+    var skip = 10*(number-1)
+    notification.find({faculty:"Khoa luật"}).sort({createdAt:-1}).exec((err, result)=>{
+        notification.find({faculty:"Khoa luật"}).sort({createdAt:-1}).skip(skip).limit(10).exec((err,doc)=>{
+            res.render("department-notfication",{doc,result,faculty:"Khoa luật",pathname:"KhoaLuat"})
+        })
     })
 })
 
 router.get('/KhoaMyThuatCongNgiep',checkAuthen,(req,res)=>{
     
-    notification.find({faculty:"Khoa Mỹ thuật công nghiệp"},(err,doc)=>{
-        res.render("department-notfication",{doc,faculty:"Khoa Mỹ thuật công nghiệp"})
+    notification.find({faculty:"Khoa Mỹ thuật công nghiệp"}).sort({createdAt:-1}).exec((err, result)=>{
+        notification.find({faculty:"Khoa Mỹ thuật công nghiệp"}).sort({createdAt:-1}).limit(10).exec((err,doc)=>{
+        res.render("department-notfication",{doc,faculty:"Khoa Mỹ thuật công nghiệp",result,pathname:"KhoaMyThuatCongNgiep"})
+    })
+})
+})
+router.get('/KhoaMyThuatCongNgiep/notification/:number',checkAuthen,(req,res)=>{
+    var {number}=req.params
+    console.log(number);
+    var skip = 10*(number-1)
+    notification.find({faculty:"Khoa Mỹ thuật công nghiệp"}).sort({createdAt:-1}).exec((err, result)=>{
+        notification.find({faculty:"Khoa Mỹ thuật công nghiệp"}).sort({createdAt:-1}).skip(skip).limit(10).exec((err,doc)=>{
+            res.render("department-notfication",{doc,result,faculty:"Khoa Mỹ thuật công nghiệp",pathname:"KhoaMyThuatCongNgiep"})
+        })
     })
 })
 
 router.get('/KhoaDien',checkAuthen,(req,res)=>{
     
-    notification.find({faculty:"Khoa Điện-điện tử"},(err,doc)=>{
-        res.render("department-notfication",{doc,faculty:"Khoa Điện-điện tử"})
+    notification.find({faculty:"Khoa Điện-điện tử"}).sort({createdAt:-1}).exec((err, result)=>{
+        notification.find({faculty:"Khoa Điện-điện tử"}).sort({createdAt:-1}).limit(10).exec((err,doc)=>{
+        res.render("department-notfication",{doc,faculty:"Khoa Điện-điện tử",result,pathname:"KhoaDien"})
+    })
+})
+})
+router.get('/KhoaDien/notification/:number',checkAuthen,(req,res)=>{
+    var {number}=req.params
+    console.log(number);
+    var skip = 10*(number-1)
+    notification.find({faculty:"Khoa Điện-điện tử"}).sort({createdAt:-1}).exec((err, result)=>{
+        notification.find({faculty:"Khoa Điện-điện tử"}).sort({createdAt:-1}).skip(skip).limit(10).exec((err,doc)=>{
+            res.render("department-notfication",{doc,result,faculty:"Khoa Điện-điện tử",pathname:"KhoaDien"})
+        })
     })
 })
 
 router.get('/KhoaQTKD',checkAuthen,(req,res)=>{
-    
-    notification.find({faculty:"Khoa Quản trị kinh doanh"},(err,doc)=>{
-        res.render("department-notfication",{doc,faculty:"Khoa Quản trị kinh doanh"})
+    notification.find({faculty:"Khoa Quản trị kinh doanh"}).sort({createdAt:-1}).exec((err, result)=>{
+        notification.find({faculty:"Khoa Quản trị kinh doanh"}).sort({createdAt:-1}).limit(10).exec((err,doc)=>{
+        res.render("department-notfication",{doc,faculty:"Khoa Quản trị kinh doanh",result,pathname:"KhoaQTKD"})
+    })
+})
+})
+router.get('/KhoaQTKD/notification/:number',checkAuthen,(req,res)=>{
+    var {number}=req.params
+    console.log(number);
+    var skip = 10*(number-1)
+    notification.find({faculty:"Khoa Quản trị kinh doanh"}).sort({createdAt:-1}).exec((err, result)=>{
+        notification.find({faculty:"Khoa Quản trị kinh doanh"}).sort({createdAt:-1}).skip(skip).limit(10).exec((err,doc)=>{
+            res.render("department-notfication",{doc,result,faculty:"Khoa Quản trị kinh doanh",pathname:"KhoaQTKD"})
+        })
     })
 })
 
 router.get('/KhoaMoiTruong',checkAuthen,(req,res)=>{
-    
-    notification.find({faculty:"Khoa Môi trường và bảo hộ lao động"},(err,doc)=>{
-        res.render("department-notfication",{doc,faculty:"Khoa Môi trường và bảo hộ lao động"})
+    notification.find({faculty:"Khoa Môi trường và bảo hộ lao động"}).sort({createdAt:-1}).exec((err, result)=>{
+        notification.find({faculty:"Khoa Môi trường và bảo hộ lao động"}).sort({createdAt:-1}).limit(10).exec((err,doc)=>{
+        res.render("department-notfication",{doc,faculty:"Khoa Môi trường và bảo hộ lao động",result,pathname:"KhoaMoiTruong"})
+    })
+})
+})
+router.get('/KhoaMoiTruong/notification/:number',checkAuthen,(req,res)=>{
+    var {number}=req.params
+    console.log(number);
+    var skip = 10*(number-1)
+    notification.find({faculty:"Khoa Môi trường và bảo hộ lao động"}).sort({createdAt:-1}).exec((err, result)=>{
+        notification.find({faculty:"Khoa Môi trường và bảo hộ lao động"}).sort({createdAt:-1}).skip(skip).limit(10).exec((err,doc)=>{
+            res.render("department-notfication",{doc,result,faculty:"Khoa Môi trường và bảo hộ lao động",pathname:"KhoaMoiTruong"})
+        })
     })
 })
 
 router.get('/KhoaLDCD',checkAuthen,(req,res)=>{
     
-    notification.find({faculty:"Khoa Lao động công đoàn"},(err,doc)=>{
-        res.render("department-notfication",{doc,faculty:"Khoa Lao động công đoàn"})
+    notification.find({faculty:"Khoa Lao động công đoàn"}).sort({createdAt:-1}).exec((err, result)=>{
+        notification.find({faculty:"Khoa Lao động công đoàn"}).sort({createdAt:-1}).limit(10).exec((err,doc)=>{
+        res.render("department-notfication",{doc,faculty:"Khoa Lao động công đoàn",result,pathname:"KhoaLDCD"})
+    })
+})
+})
+router.get('/KhoaLDCD/notification/:number',checkAuthen,(req,res)=>{
+    var {number}=req.params
+    console.log(number);
+    var skip = 10*(number-1)
+    notification.find({faculty:"Khoa Lao động công đoàn"}).sort({createdAt:-1}).exec((err, result)=>{
+        notification.find({faculty:"Khoa Lao động công đoàn"}).sort({createdAt:-1}).skip(skip).limit(10).exec((err,doc)=>{
+            res.render("department-notfication",{doc,result,faculty:"Khoa Lao động công đoàn",pathname:"KhoaLDCD"})
+        })
     })
 })
 
 router.get('/KhoaGDQT',checkAuthen,(req,res)=>{
     
-    notification.find({faculty:"Khoa giáo dục quốc tế"},(err,doc)=>{
-        res.render("department-notfication",{doc,faculty:"Khoa giáo dục quốc tế"})
+    notification.find({faculty:"Khoa giáo dục quốc tế"}).sort({createdAt:-1}).exec((err, result)=>{
+        notification.find({faculty:"Khoa giáo dục quốc tế"}).sort({createdAt:-1}).limit(10).exec((err,doc)=>{
+        res.render("department-notfication",{doc,faculty:"Khoa giáo dục quốc tế",result,pathname:"KhoaGDQT"})
+    })
+})
+})
+router.get('/KhoaGDQT/notification/:number',checkAuthen,(req,res)=>{
+    var {number}=req.params
+    console.log(number);
+    var skip = 10*(number-1)
+    notification.find({faculty:"Khoa giáo dục quốc tế"}).sort({createdAt:-1}).exec((err, result)=>{
+        notification.find({faculty:"Khoa giáo dục quốc tế"}).sort({createdAt:-1}).skip(skip).limit(10).exec((err,doc)=>{
+            res.render("department-notfication",{doc,result,faculty:"Khoa giáo dục quốc tế",pathname:"KhoaGDQT"})
+        })
     })
 })
 
 router.get('/KhoaTCNH',checkAuthen,(req,res)=>{
     
-    notification.find({faculty:"Khoa Tài chính ngân hàng"},(err,doc)=>{
-        res.render("department-notfication",{doc,faculty:"Khoa Tài chính ngân hàng"})
+    notification.find({faculty:"Khoa Tài chính ngân hàng"}).sort({createdAt:-1}).exec((err, result)=>{
+        notification.find({faculty:"Khoa Tài chính ngân hàng"}).sort({createdAt:-1}).limit(10).exec((err,doc)=>{
+        res.render("department-notfication",{doc,faculty:"Khoa Tài chính ngân hàng",result,pathname:"KhoaTCNH"})
+    })
+})
+})
+router.get('/KhoaTCNH/notification/:number',checkAuthen,(req,res)=>{
+    var {number}=req.params
+    console.log(number);
+    var skip = 10*(number-1)
+    notification.find({faculty:"Khoa Tài chính ngân hàng"}).sort({createdAt:-1}).exec((err, result)=>{
+        notification.find({faculty:"Khoa Tài chính ngân hàng"}).sort({createdAt:-1}).skip(skip).limit(10).exec((err,doc)=>{
+            res.render("department-notfication",{doc,result,faculty:"Khoa Tài chính ngân hàng",pathname:"KhoaTCNH"})
+        })
     })
 })
 
 router.get('/PhongDaiHoc',checkAuthen,(req,res)=>{
     
-    notification.find({faculty:"Phòng Đại học"},(err,doc)=>{
-        res.render("department-notfication",{doc,faculty:"Phòng Đại học"})
+    notification.find({faculty:"Phòng Đại học"}).sort({createdAt:-1}).exec((err, result)=>{
+        notification.find({faculty:"Phòng Đại học"}).sort({createdAt:-1}).limit(10).exec((err,doc)=>{
+        res.render("department-notfication",{doc,faculty:"Phòng Đại học",result,pathname:"PhongDaiHoc"})
+    })
+})
+})
+router.get('/PhongDaiHoc/notification/:number',checkAuthen,(req,res)=>{
+    var {number}=req.params
+    console.log(number);
+    var skip = 10*(number-1)
+    notification.find({faculty:"Phòng Đại học"}).sort({createdAt:-1}).exec((err, result)=>{
+        notification.find({faculty:"Phòng Đại học"}).sort({createdAt:-1}).skip(skip).limit(10).exec((err,doc)=>{
+            res.render("department-notfication",{doc,result,faculty:"Phòng Đại học",pathname:"PhongDaiHoc"})
+        })
     })
 })
 
 router.get('/PhongSauDaiHoc',checkAuthen,(req,res)=>{
     
-    notification.find({faculty:"Phòng Sau đại học"},(err,doc)=>{
-        res.render("department-notfication",{doc,faculty:"Phòng Sau đại học"})
+    notification.find({faculty:"Phòng Sau đại học"}).sort({createdAt:-1}).exec((err, result)=>{
+        notification.find({faculty:"Phòng Sau đại học"}).sort({createdAt:-1}).limit(10).exec((err,doc)=>{
+        res.render("department-notfication",{doc,faculty:"Phòng Sau đại học",result,pathname:"PhongSauDaiHoc"})
+    })
+})
+})
+router.get('/PhongSauDaiHoc/notification/:number',checkAuthen,(req,res)=>{
+    var {number}=req.params
+    console.log(number);
+    var skip = 10*(number-1)
+    notification.find({faculty:"Phòng Sau đại học"}).sort({createdAt:-1}).exec((err, result)=>{
+        notification.find({faculty:"Phòng Sau đại học"}).sort({createdAt:-1}).skip(skip).limit(10).exec((err,doc)=>{
+            res.render("department-notfication",{doc,result,faculty:"Phòng Sau đại học",pathname:"PhongSauDaiHoc"})
+        })
     })
 })
 
 router.get('/PhongDienToanMayTinh',checkAuthen,(req,res)=>{
     
-    notification.find({faculty:"Phòng điện toán và máy tính"},(err,doc)=>{
-        res.render("department-notfication",{doc,faculty:"Phòng điện toán và máy tính"})
+    notification.find({faculty:"Phòng điện toán và máy tính"}).sort({createdAt:-1}).exec((err, result)=>{
+        notification.find({faculty:"Phòng điện toán và máy tính"}).sort({createdAt:-1}).limit(10).exec((err,doc)=>{
+        res.render("department-notfication",{doc,faculty:"Phòng điện toán và máy tính",result,pathname:"PhongDienToanMayTinh"})
+    })
+})
+})
+router.get('/PhongDienToanMayTinh/notification/:number',checkAuthen,(req,res)=>{
+    var {number}=req.params
+    console.log(number);
+    var skip = 10*(number-1)
+    notification.find({faculty:"Phòng điện toán và máy tính"}).sort({createdAt:-1}).exec((err, result)=>{
+        notification.find({faculty:"Phòng điện toán và máy tính"}).sort({createdAt:-1}).skip(skip).limit(10).exec((err,doc)=>{
+            res.render("department-notfication",{doc,result,faculty:"Phòng điện toán và máy tính",pathname:"PhongDienToanMayTinh"})
+        })
     })
 })
 
 router.get('/PhongKhaoThi',checkAuthen,(req,res)=>{
     
-    notification.find({faculty:"Phòng khảo thí và kiểm định chất lượng"},(err,doc)=>{
-        res.render("department-notfication",{doc,faculty:"Phòng khảo thí và kiểm định chất lượng"})
+    notification.find({faculty:"Phòng khảo thí và kiểm định chất lượng"}).sort({createdAt:-1}).exec((err, result)=>{
+        notification.find({faculty:"Phòng khảo thí và kiểm định chất lượng"}).sort({createdAt:-1}).limit(10).exec((err,doc)=>{
+        res.render("department-notfication",{doc,faculty:"Phòng khảo thí và kiểm định chất lượng",result,pathname:"PhongKhaoThi"})
+    })
+})
+})
+router.get('/PhongKhaoThi/notification/:number',checkAuthen,(req,res)=>{
+    var {number}=req.params
+    console.log(number);
+    var skip = 10*(number-1)
+    notification.find({faculty:"Phòng khảo thí và kiểm định chất lượng"}).sort({createdAt:-1}).exec((err, result)=>{
+        notification.find({faculty:"Phòng khảo thí và kiểm định chất lượng"}).sort({createdAt:-1}).skip(skip).limit(10).exec((err,doc)=>{
+            res.render("department-notfication",{doc,result,faculty:"Phòng khảo thí và kiểm định chất lượng",pathname:"PhongKhaoThi"})
+        })
     })
 })
 
 router.get('/PhongTaiChinh',checkAuthen,(req,res)=>{
     
-    notification.find({faculty:"Phòng tài chính"},(err,doc)=>{
-        res.render("department-notfication",{doc,faculty:"Phòng tài chính"})
+    notification.find({faculty:"Phòng tài chính"}).sort({createdAt:-1}).exec((err, result)=>{
+        notification.find({faculty:"Phòng tài chính"}).sort({createdAt:-1}).limit(10).exec((err,doc)=>{
+        res.render("department-notfication",{doc,faculty:"Phòng tài chính",result,pathname:"PhongTaiChinh"})
+    })
+})
+})
+router.get('/PhongTaiChinh/notification/:number',checkAuthen,(req,res)=>{
+    var {number}=req.params
+    console.log(number);
+    var skip = 10*(number-1)
+    notification.find({faculty:"Phòng tài chính"}).sort({createdAt:-1}).exec((err, result)=>{
+        notification.find({faculty:"Phòng tài chính"}).sort({createdAt:-1}).skip(skip).limit(10).exec((err,doc)=>{
+            res.render("department-notfication",{doc,result,faculty:"Phòng tài chính",pathname:"PhongTaiChinh"})
+        })
     })
 })
 
 router.get('/PhongLC',checkAuthen,(req,res)=>{
     
-    notification.find({faculty:"TDT Creative Language Center"},(err,doc)=>{
-        res.render("department-notfication",{doc,faculty:"TDT Creative Language Center"})
+    notification.find({faculty:"TDT Creative Language Center"}).sort({createdAt:-1}).exec((err, result)=>{
+        notification.find({faculty:"TDT Creative Language Center"}).sort({createdAt:-1}).limit(10).exec((err,doc)=>{
+        res.render("department-notfication",{doc,faculty:"TDT Creative Language Center",result,pathname:"PhongLC"})
     })
+})
+})
+router.get('/PhongLC/notification/:number',checkAuthen,(req,res)=>{
+    var {number}=req.params
+    console.log(number);
+    var skip = 10*(number-1)
+    notification.find({faculty:"TDT Creative Language Center"}).sort({createdAt:-1}).exec((err, result)=>{
+        notification.find({faculty:"TDT Creative Language Center"}).sort({createdAt:-1}).skip(skip).limit(10).exec((err,doc)=>{
+            res.render("department-notfication",{doc,result,faculty:"TDT Creative Language Center",pathname:"PhongLC"})
+        })  
+    })
+    
 })
 
 router.get('/notification/:number',(req,res)=>{

@@ -18,8 +18,8 @@
     <link rel="stylesheet" href= "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="icon" href="/assets/img/favicons/favicon.ico">
     <link rel="canonical" href="https://icons.getbootstrap.com/icons/image/">
-    <!--link dể upload ảnh bằng ajax-->
-  
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
 
     <script src="/public/main.js"></script>
     <link href="/public/stylesheets.css" rel="stylesheet">
@@ -29,12 +29,14 @@
     <!--navbar-->
    <%-include("header")%>
       <!--navbar-->
-
-   
+    
+      
       <!--main-->
       <main role="main" class="container">
         <!--Đăng tin-->
-        
+        <div id="alertNoti" >
+      
+        </div>
         <div class="d-flex align-items-center p-3 my-3 text-black-50 bg-primary rounded box-shadow">
           <div class="p-3">
        
@@ -116,6 +118,10 @@
         </div>
         <!--media objects (dòng trạng thái)-->
         <div class="container" id="scroll">
+
+        
+
+
           <div class="container-fluid container-fluid p-0">
             <div class="row">
               <div class="col-12 col-lg-8 listCard" id="listCard">
@@ -211,7 +217,7 @@
                              <!--<hr>-->
                       
                         <!--kết thúc-->
-
+                       
                         <%if(locals.doc){%>
                        <!--post laf i-->
                           <%for(var i=0;i<doc.length;i++){%>

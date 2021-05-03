@@ -8,12 +8,13 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
     <link rel="stylesheet" href= "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="icon" href="/assets/img/favicons/favicon.ico">
     <link rel="canonical" href="https://icons.getbootstrap.com/icons/image/">
     <script src="/public/main.js"></script>
     <link href="/public/stylesheets.css" rel="stylesheet">
+
 </head>
 <body>
     <%-include("header")%>
@@ -54,19 +55,19 @@
                                             <div class="form-floating">
                                             <div class="department-select" >
                                                 <h5>Vui lòng chọn Phòng/ Khoa</h5>
-                                                <select class="form-select"name ="faculty">
+                                                <select class="form-select"name ="faculty" id="selectFaculty">
                                                     <option>..Choose</option>
                                                     <%for(var i=0; i<info.faculty.length; i++){%>
                                                   
-                                                    <option><%=locals.info.faculty[i]%></option>
+                                                    <option value="<%=locals.info.faculty[i]%>"><%=locals.info.faculty[i]%></option>
                                                   <%}%>
                                                 </select>
                                             </div>
                                             </div>
                                             <!--title thông báo-->
                                             <div class="form-group">
-                                                <label for="message-text" class="col-form-label">title:</label>
-                                                <textarea class="form-control" id="title-text" name="titleText"></textarea>
+                                                <label for="message-text" class="col-form-label" >title:</label>
+                                                <textarea class="form-control" id="title-text"name="titleText"></textarea>
                                             </div>
                                         <!--nội dung thông báo-->
                                         <div class="form-group">
@@ -86,7 +87,7 @@
                                         </div>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="submit" class="btn btn-danger">Posted</button>
+                                            <button type="submit" class="btn btn-danger" onClick="postNoti()">Posted</button>
                                           </div>
                                 
                                     </form>
@@ -121,7 +122,35 @@
             </div>
         
        <% })%>
- 
+       <nav aria-label="Page navigation">
+        <ul class="pagination">
+          <li class="page-item">
+            <a class="page-link" href="#" aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+    
+
+          <%if(locals.docs){%>
+       
+              <%if(Number(docs.length/10)>parseInt(docs.length/10)){%>
+                <%for( var i =0; i<=(Number(docs.length)/10);i++){%>
+                <li class="page-item"><a class="page-link" href="/createNotification/<%=Number(i)+1%>"><%=Number(i)+1%></a></li>
+                <%}%>
+              <%}else if(Number(docs.length/10)===parseInt(docs.length/10)){%>
+                <%for( var i =0; i<(Number(docs.length)/10);i++){%>
+                  <li class="page-item"><a class="page-link" href="/createNotification/<%=Number(i)+1%>"><%=Number(i)+1%></a></li>
+                <%}%>
+                <%}%>
+                
+          <%}%>
+          <li class="page-item">
+            <a class="page-link" href="#" aria-label="Next">
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
 
         <!-- The Modal -->
         <div class="modal" id="myModalUpdate">

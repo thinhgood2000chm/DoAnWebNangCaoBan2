@@ -11,6 +11,8 @@ const client = new OAuth2Client(CLIENT_ID);
 const checkAuthen = require('../middleWare/checkAuthenGG');
 const notification = require('../models/notification');
 
+
+
 exports.loginGG= (req,res)=>{
     let token = req.body.token
     //console.log(token);
@@ -126,7 +128,7 @@ exports.signup=(req,res)=>{
             })
             newAccount.save()
             .then(()=>{
-                res.redirect('/login')
+                res.redirect('/')
             })
             .catch(e=>console.log(e))
     

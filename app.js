@@ -5,6 +5,7 @@ const cookieParser = require("cookie-parser")
 const mongoose= require("mongoose")
 const morgan = require("morgan")
 const fetch = require("node-fetch")
+const socketIo = require("socket.io")
 const app = express()
 
 //khai bao cua gg 
@@ -39,8 +40,16 @@ db.once('open',()=>{
     console.log(" database  da duoc ket noi");
 })
 app.use(morgan('dev'))
-app.listen(3000,(req,res)=>{
-    console.log("server is running on port 3000");
-}) 
+const httpServer=app.listen(3000, ()=>{
+    console.log("server is running on port 3000")
+})
 
+const io= socketIo(httpServer)
 
+io.on("connection",client=>{
+    console.log("client was connected");
+    client.on('info',data=>{// cách viết của es6
+        //console.log("data nhận từ client",data);
+        client.broadcast.emit('dataWhenFPostNoti', data)
+    })
+})
