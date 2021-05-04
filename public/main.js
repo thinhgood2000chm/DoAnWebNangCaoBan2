@@ -6,18 +6,60 @@ let socket
   socket.on('connect',()=>{
   console.log("đã kết nối socket thành công id= ",socket.id)
   socket.on("dataWhenFPostNoti",(data)=>{
-    /*var facultyAlert = document.getElementById("facultyAlert")
-    var messNoti= document.getElementById("messNoti")
-    messNoti.innerHTML=data.titlePostNoti
-    //console.log(data);
-    facultyAlert.innerHTML=data.faculty
-    var onlineNotification = document.getElementById("online-notification")
-    onlineNotification.classList.toggle('show')*/
+  
+    var pathname=''
+    if(data.faculty=='Phòng Công tác học sinh sinh viên (CTHSSV)'){
+      pathname= 'CTHSSV'
+    }else if(data.faculty=='Khoa Công nghệ thông tin'){
+      pathname= 'KhoaCntt'
+    }else if(data.faculty=='Trung tâm tin học'){
+      pathname= 'TTTH'
+    }else if(data.faculty=='Trung tâm đào tạo phát triển xã hội (SDTC)'){
+      pathname= 'SDTC'
+    }else if(data.faculty=='Trung tâm phát triển Khoa học quản lý và Ứng dụng công nghệ (ATEM)'){
+      pathname= 'ATEM'
+    }else if(data.faculty=='Trung tâm hợp tác doanh nghiệp và cựu sinh viên'){
+      pathname= 'TTHTDN'
+    }else if(data.faculty=='Trung tâm ngoại ngữ - tin học – bồi dưỡng văn hóa'){
+      pathname= 'TTNNTH'
+    }else if(data.faculty=='Viện chính sách kinh tế và kinh doanh'){
+      pathname= 'VCS'
+    }else if(data.faculty=='Khoa luật'){
+      pathname= 'KhoaLuat'
+    }else if(data.faculty=='Khoa Mỹ thuật công nghiệp'){
+      pathname= 'KhoaMyThuatCongNgiep'
+    }else if(data.faculty=='Khoa Điện-điện tử'){
+      pathname= 'KhoaDien'
+    }else if(data.faculty=='Khoa Quản trị kinh doanh'){
+      pathname= 'KhoaQTKD'
+    }else if(data.faculty=='Khoa Môi trường và bảo hộ lao động'){
+      pathname= 'KhoaMoiTruong'
+    }else if(data.faculty=='Khoa Lao động công đoàn'){
+      pathname= 'KhoaLDCD'
+    }else if(data.faculty=='Khoa giáo dục quốc tế'){
+      pathname= 'KhoaGDQT'
+    }else if(data.faculty=='Khoa Tài chính ngân hàng'){
+      pathname= 'KhoaTCNH'
+    }else if(data.faculty=='Phòng Đại học'){
+      pathname= 'PhongDaiHoc'
+    }else if(data.faculty=='Phòng Sau đại học'){
+      pathname= 'PhongSauDaiHoc'
+    }else if(data.faculty=='Phòng điện toán và máy tính'){
+      pathname= 'PhongDienToanMayTinh'
+    }else if(data.faculty=='Phòng khảo thí và kiểm định chất lượng'){
+      pathname= 'PhongKhaoThi'
+    }else if(data.faculty=='Phòng tài chính'){
+      pathname= 'PhongTaiChinh'
+    }else if(data.faculty=='TDT Creative Language Center'){
+      pathname= 'PhongLC'
+    }
+    
+    console.log("pathname",pathname);
     $('#alertNoti').append(`   
     <div id="snackbar" class="alert alert-success" >
       
 
-    <strong id="facultyAlert"><a href="/">${data.faculty}</strong> vừa đăng thông báo : <strong id="messNoti">${data.titlePostNoti}</strong>
+    <strong id="facultyAlert"><a id="aLinkNoti"href="/${pathname}/notification/1">${data.faculty}</strong> vừa đăng thông báo : <strong id="messNoti">${data.titlePostNoti}</strong>
     </div>
     `)
   })

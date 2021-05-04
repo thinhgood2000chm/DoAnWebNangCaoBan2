@@ -485,3 +485,8 @@ overflow: hidden; overflow-wrap: break-word; height: 50px;
     from {bottom: 30px; opacity: 1;}
     to {bottom: 0; opacity: 0;}
   }
+
+  #aLinkNoti{
+    text-decoration :none;
+    color: black
+  }
