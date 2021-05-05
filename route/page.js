@@ -218,14 +218,14 @@ router.get("/profile/:email",(req,res)=>{
     var email= req.params.email
     console.log( email);
     if(email.includes("@student.tdtu.edu.vn")){
-        post.find({email},(err,docs)=>{
+        post.find({email}).sort({createdAt:-1}).limit(10).exec((err,docs)=>{
             accountStudent.findOne({email},(err,doc)=>{
                 res.render('profile',{doc,docs})
             })
         })
     }
     else {
-        post.find({email},(err,docs)=>{
+        post.find({email}).sort({createdAt:-1}).limit(10).exec((err,docs)=>{
             accountF.findOne(email,(err,doc)=>{
                 res.render('profile',{doc,docs})
             })
@@ -240,6 +240,17 @@ router.get('/notification',checkAuthen,(req,res)=>{
         notification.find({}).sort({createdAt:-1}).limit(10).exec((err, doc)=>{// dòng dưới này dùng đểload 10 data
             res.render('department-notfication',{doc,docs})
         })
+    })
+})
+
+router.get('/detailNotify/:id',(req,res)=>{
+    var id= req.params.id
+    console.log(id);
+    notification.findOne({_id:id},(err,result)=>{
+        console.log(result.faculty);
+        //console.log("result",result.faculty);
+        console.log("result2",result.image[1]);
+        res.render("notification-detail",{result})
     })
 })
 

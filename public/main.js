@@ -457,7 +457,7 @@ $(document).ready(function(){
                                     <input type="hidden" value="${json.data[i].comment[z].emailUComment}" class="emailUCommentId">
                                 </p>
                                 <a href="#comment" data-index="${i}" data-id="${json.data[i].comment[z]._id}"data-comment="${json.data[i].comment[z].content}" data-userCurrent="${json.data[i].comment[z].emailUComment}" class="text-comment updateComment">chỉnh sửa</a>
-                                <a  data-id="${json.data[i]._id}"data-idComment="${json.data[i].comment[z]._id}" class="text-comment deleteComment" data-userCurrent="${json.data[i].comment[z].emailUComment}">xóa</a>
+                                <a onclick = "deleteComment(this)" data-id="${json.data[i]._id}"data-idComment="${json.data[i].comment[z]._id}" class="text-comment deleteComment" data-userCurrent="${json.data[i].comment[z].emailUComment}">xóa</a>
                             </div>
                         </div>
                          `)

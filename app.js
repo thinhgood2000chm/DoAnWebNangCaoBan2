@@ -40,7 +40,7 @@ db.once('open',()=>{
     console.log(" database  da duoc ket noi");
 })
 app.use(morgan('dev'))
-const httpServer=app.listen(3000, ()=>{
+const httpServer=app.listen(process.env.PORT||3000, ()=>{
     console.log("server is running on port 3000")
 })
 

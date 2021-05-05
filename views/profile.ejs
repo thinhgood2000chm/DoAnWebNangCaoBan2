@@ -212,7 +212,7 @@
                                                 <input type="hidden" value="<%=c.emailUComment%>" class="emailUCommentId">
                                               </p>
                                               <a href="#comment" data-index="<%=i%>" data-id="<%=c._id%>"data-comment="<%=c.content%>" data-userCurrent="<%=c.emailUComment%>" class="text-comment updateComment">chỉnh sửa</a>
-                                              <a  data-id="<%=docs[i]._id%>"data-idComment="<%=c._id%>" class="text-comment deleteComment" data-userCurrent="<%=c.emailUComment%>">xóa</a>
+                                              <a onclick = "deleteComment(this)" data-id="<%=docs[i]._id%>"data-idComment="<%=c._id%>" class="text-comment deleteComment" data-userCurrent="<%=c.emailUComment%>">xóa</a>
                                         </div>
                                        
                                     </div>

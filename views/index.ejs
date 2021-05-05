@@ -124,7 +124,7 @@
 
           <div class="container-fluid container-fluid p-0">
             <div class="row">
-              <div class="col-12 col-lg-8 listCard" id="listCard">
+              <div class="col-16 col-lg-12 listCard" id="listCard">
                 <div id="parentOfCard"></div>
                   <!--<div class="card">
                       <div class="card-body h-100">-->
@@ -229,7 +229,7 @@
                                     <img src="<%=doc[i].imageUser%>" width="56" height="56" class="rounded-circle mr-3" alt="Ashley Briggs">
                                     <div class="media-body" >
                                       <div id="addComment-<%=doc[i]._id%>">
-                                        <p class="mb-2"><strong><a href="profile/<%=doc[i].email%>"> <%=doc[i].name%></a></strong></p>
+                                        <p class="mb-2"><strong><a href="/profile/<%=doc[i].email%>"> <%=doc[i].name%></a></strong></p>
                                         <p><%=doc[i].message%></p>
                                           <!--hình ảnh được upload-->
                                         <div class="row no-gutters mt-1">
@@ -328,6 +328,7 @@
                                 </div>
                               </div>
                             </div>
+                            
                           <%}}else{%>
                             <div class="card">
                               <div class="card-body h-100">
@@ -418,8 +419,9 @@
                     
                           <!--hết trang tin-->
                       </div>
-                      
-                      <div class="col-12 col-lg-8" >
+
+               
+                      <div class="col-16 col-lg-12" >
                       <div class="media-body">
                         <img src="https://cdn1.iconfinder.com/data/icons/animals-95/300/cat-delete-animal-pet-wild-domestic-256.png" width="56" height="56" class="mr-3" alt="Ashley Briggs">
                         <h5 class="text-center lh-100">You have watched all the news</h5>
@@ -434,13 +436,7 @@
               </div>
               
 
-          
-        <div class="d-flex align-items-center p-3 my-3 text-black-50 bg-primary rounded box-shadow">
-          <h6 class="mb-0 text-white lh-100">CatSocial </h6>
-          <img class="mr-3" src="https://cdn1.iconfinder.com/data/icons/animals-95/300/cat-circle-animal-pet-wild-domestic-256.png" alt="" width="50" height="50">
-        </div>
-  
-
+            
     
       
   </body>

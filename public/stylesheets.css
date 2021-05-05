@@ -490,3 +490,18 @@ overflow: hidden; overflow-wrap: break-word; height: 50px;
     text-decoration :none;
     color: black
   }
+
+  /* style cua chi tiết thoogn báo*/
+
+.icon-notification{
+    float: right;
+}
+
+.imgNoti{
+  height: 50%;
+  width: 50%;
+  margin-top: 10;
+}
+.titleNoti{
+  text-align: center  ;
+}

@@ -552,11 +552,14 @@ exports.updateNoti=(req,res)=>{
     images= req.files
     var image=[]
     var pathImage=[]
-    for(var i=0;i<images.length;i++){
-        pathImage=`/public/upload/${images[i].originalname}`
-        fs.renameSync(images[i].path, pathImage)
+
+    for(var i =0;i<images.length;i++){
+        pathImage=`public/upload/${images[i].originalname}`
+        fs.renameSync(images[i].path,pathImage)
         image.push(pathImage.slice(6))
     }
+
+ 
     data={
         image: image,
         faculty: faculty,
