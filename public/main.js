@@ -61,7 +61,7 @@ let socket
 
     <strong id="facultyAlert"><a id="aLinkNoti"href="/${pathname}/notification/1">${data.faculty}</strong> vừa đăng thông báo : <strong id="messNoti">${data.titlePostNoti}</strong>
     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-    <span aria-hidden="true">&times;</span>
+    <span aria-hidden="true">&times;</span></button>
     </div>
     `)
   })
