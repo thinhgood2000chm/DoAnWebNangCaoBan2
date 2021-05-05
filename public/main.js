@@ -57,9 +57,11 @@ let socket
     console.log("pathname",pathname);
     $('#alertNoti').append(`   
     <div id="snackbar" class="alert alert-success" >
-      
+
 
     <strong id="facultyAlert"><a id="aLinkNoti"href="/${pathname}/notification/1">${data.faculty}</strong> vừa đăng thông báo : <strong id="messNoti">${data.titlePostNoti}</strong>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
     </div>
     `)
   })
