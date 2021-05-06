@@ -25,7 +25,7 @@
             <h1 class="h3 mb-3">Settings</h1>
 
             <div class="row">
-                <div class="col-md-3 col-xl-2">
+               <!-- <div class="col-md-3 col-xl-2">
 
                     <div class="card">
                         <div class="card-header">
@@ -33,7 +33,7 @@
                         </div>
 
                         <div class="list-group list-group-flush" role="tablist">
-                            <a class="list-group-item list-group-item-action active" id="linkOfChangeProfile"data-toggle="list" href="#account" role="tab" aria-selected="true">
+                            <a class="list-group-item list-group-item-action" id="linkOfChangeProfile"data-toggle="list" href="#account" role="tab" aria-selected="true">
                             Account
                             </a>
                             <a class="list-group-item list-group-item-action" id="linlkChangePass" data-toggle="list" href="#password" role="tab" aria-selected="false">
@@ -41,11 +41,13 @@
                             </a>
                         </div>
                     </div>
-                </div>
+                </div>-->
+
 
                 <div class="col-md-9 col-xl-10">
-                    <div class="tab-content">
-                        <div class="tab-pane fade active show" id="account" role="tabpanel">
+               
+                    <% if(locals.doc.email.includes("@student.tdtu.edu.vn")){%>
+                        <div class="tab-pane" id="account">
                             <!--Phần setting tài khoàn public info-->
                             <div class="card">
                                 <div class="card-header">
@@ -130,7 +132,9 @@
                             </div>
 
                         </div>
-                        <div class="tab-pane fade" id="password" role="tabpanel">
+           <%}else{%>
+
+                        <div class="tab-pane" id="password" >
                             <div class="card">
                                 <div class="card-body">
                                     <h5 class="card-title">Password</h5>
@@ -156,7 +160,9 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    <%}%>
+            
+              
                 </div>
             </div>
 

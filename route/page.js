@@ -69,6 +69,9 @@ router.get('/signup',(req,res)=>{
     //res.render("signup")
 })
 router.get("/login",(req,res)=>{
+    if(req.cookies['session-token'] !==undefined || req.cookies.account!== undefined){
+        res.redirect('/')
+    }else 
     res.render("login")
 })
 
