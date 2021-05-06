@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>CatSocial</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+    <link href="/public/stylesheets.css" rel="stylesheet">
+    <script src="/public/main.js"></script>
+  
+</head>
+<body class="text-center bg-dark">
+    <main class="form-signin bg-light">
+        <h2 class="text-login"><a href="#">CatSocial</a></h2>
+        <img class="mr-4" src="https://cdn1.iconfinder.com/data/icons/animals-95/300/cat-circle-animal-pet-wild-domestic-256.png" alt="" width="70" height="70">
+        <h1 class="h3 mb-3 fw-normal">Please sign up</h1>
+
+        <div class="body-login">
+          <form action="/signup" method="post" class="container" >
+          
+          
+            <div class="form-floating">
+                <input type="email" placeholder="username@example.com" id="email" name="email" required>
+            </div>
+        
+            <div class="form-floating">
+                <input type="password" placeholder="Enter Password" id="password" name="password" required>
+            </div>
+            <div class="form-floating">
+                <input type="password" placeholder="Enter Password confirm" id="passwordComfirm" name="passwordComfirm" required>
+            </div>
+            <div class="form-floating">
+                <div class="multiselect">
+                    <h5>Vui lòng chọn Phòng/Khoa</h5>
+                    <div class="selectBox" id="showCheckboxes">
+                      <select id="selectCheckBox">
+                        <option>Select an option</option>
+                      </select>
+                    <div class="overSelect"></div>
+                    </div>
+                    <div id="checkboxes">
+                      <label for="1">
+                        <input type="checkbox" name="faculty" class ="faculty" id="CTHSSV" value="Phòng Công tác học sinh sinh viên (CTHSSV)"/>Phòng Công tác học sinh sinh viên (CTHSSV)
+                      </label>
+                      <label for="2">
+                        <input type="checkbox" name="faculty" class ="faculty" id="PDH" value="Phòng Đại học"/>Phòng Đại học</label>
+                      <label for="3">
+                        <input type="checkbox" name="faculty" class ="faculty" id="PSDH" value="Phòng Sau đại học"/>Phòng Sau đại học
+                      </label>
+                      <label for="4">
+                        <input type="checkbox" name="faculty" class ="faculty" id="DTMT" value="Phòng điện toán và máy tính"/>Phòng điện toán và máy tính
+                      </label>
+                      <label for="5">
+                          <input type="checkbox" name="faculty" class ="faculty" id="KTKD" value="Phòng khảo thí và kiểm định chất lượng"/>Phòng khảo thí và kiểm định chất lượng</label>
+                      <label for="6">
+                          <input type="checkbox" name="faculty" class ="faculty" id="PTC" value="Phòng tài chính" />Phòng tài chính</label>
+                      <label for="7">
+                          <input type="checkbox" name="faculty" class ="faculty" id="CLC" value="TDT Creative Language Center" />TDT Creative Language Center</label>
+                      <label for="8">
+                          <input type="checkbox" name="faculty" class ="faculty" id="TTTH" value="Trung tâm tin học" />Trung tâm tin học</label>
+                      <label for="9">
+                          <input type="checkbox" name="faculty" class ="faculty" id="SDTC" value="Trung tâm đào tạo phát triển xã hội (SDTC)"/>Trung tâm đào tạo phát triển xã hội (SDTC)</label>
+                      <label for="10">
+                          <input type="checkbox" name="faculty" class ="faculty" id="ATEM" value="Trung tâm phát triển Khoa học quản lý và Ứng dụng công nghệ (ATEM)"/>Trung tâm phát triển Khoa học quản lý và Ứng dụng công nghệ (ATEM)
+                      </label>
+                      <label for="11">
+                          <input type="checkbox" name="faculty" class ="faculty" id="TTHTDN" value="Trung tâm hợp tác doanh nghiệp và cựu sinh viên" />Trung tâm hợp tác doanh nghiệp và cựu sinh viên
+                      </label>
+                      <label for="12">
+                        <input type="checkbox" name="faculty"  class ="faculty"id="TTNGTH" value="Trung tâm ngoại ngữ - tin học – bồi dưỡng văn hóa"/>Trung tâm ngoại ngữ - tin học – bồi dưỡng văn hóa
+                      </label>
+                      <label for="13">
+                        <input type="checkbox" name="faculty" class ="faculty" id="VCSKT" value="Viện chính sách kinh tế và kinh doanh"/>Viện chính sách kinh tế và kinh doanh
+                      </label>
+                      <label for="14">
+                        <input type="checkbox" name="faculty" class ="faculty" id="CNTT" value="Khoa Công nghệ thông tin" />Khoa Công nghệ thông tin</label>
+                      <label for="15">
+                        <input type="checkbox" name="faculty" class ="faculty" id="QTKD" value="Khoa Quản trị kinh doanh"/>Khoa Quản trị kinh doanh</label>
+                      <label for="16">
+                        <input type="checkbox" name="faculty" class ="faculty" id="MTCN" value="Khoa Mỹ thuật công nghiệp" />Khoa Mỹ thuật công nghiệp</label>
+                      <label for="17">
+                        <input type="checkbox" name="faculty" class ="faculty" id="LUAT" value="Khoa luật"/>Khoa luật</label>
+                      <label for="18">
+                          <input type="checkbox" name="faculty" class ="faculty" id="DDT" value="Khoa Điện-điện tử"/>Khoa Điện-điện tử</label>
+                      <label for="19">
+                          <input type="checkbox" name="faculty" class ="faculty" id="KMT" value="Khoa Môi trường và bảo hộ lao động"/>Khoa Môi trường và bảo hộ lao động</label>
+                      <label for="20">
+                          <input type="checkbox" name="faculty" class ="faculty" id="LDCD" value="Khoa Lao động công đoàn"/>Khoa Lao động công đoàn</label>
+                      <label for="21">
+                          <input type="checkbox" name="faculty" class ="faculty" id="TCNH" value="Khoa Tài chính ngân hàng"/>Khoa Tài chính ngân hàng</label>
+                      <label for="22">
+                          <input type="checkbox" name="faculty" class ="faculty" id="GDQT" value="Khoa giáo dục quốc tế"/>Khoa giáo dục quốc tế</label>
+                 
+                    </div>
+                  </div>
+           
+            </div>
+            
+           
+         
+            <button id="btnSignUp"class="btn btn-lg btn-block btn-primary mb-3">
+                Sign up
+            </button>            
+            <hr>
+            <div class="text-center">
+                <small class="text-muted text-center">
+                  Already have an account? <a href="/login">Log in</a>.
+                </small>
+            </div>
+            
+          </form>
+        </div>
+    </main>  
+</body>
+</html>

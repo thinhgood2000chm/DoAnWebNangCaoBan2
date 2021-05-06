@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CatSocial</title>   <title>CatSocial</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href= "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="/public/main.js"></script>
+
+    <link href="/public/stylesheets.css" rel="stylesheet">
+</head>  
+<%-include("header")%>
+<body class=" bg-dark">
+
+    <main role="main">
+        <div class="container ">
+          <input type="hidden" value="<%=doc.email%>" id="hiddenEmailOfPost">
+          <input type="hidden" value="<%=doc.picture%>" id="hiddenPicture">
+          <input type="hidden" value="<%=doc.fullname%>" id="hiddenFullname">
+          <input type="hidden" value="<%=docs.picture%>" id="hiddenpicture">
+         
+          <!--modal delete-->
+          <div id="confirmDelete" class="modal fade">
+            <div class=" modal-dialog ">
+              <div class="modal-content">
+              
+                <!-- Modal Header -->
+                <div class="modal-header">
+                  <h4 class="modal-title">Xóa bài viết</h4>
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                
+                <!-- Modal body -->
+                <div class="modal-body">
+                  Bạn có chắc rằng muốn xóa bài viết này?
+                </div>
+                
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                  <button data-id="???" type="button" class="btn btn-danger" id="modalBtnDelete"> Xóa</button><!--data-id ở đây dùng để gửi lên server đối với modal-->
+                  <button type="button" class="btn btn-dark" data-dismiss="modal">Đóng</button>
+                </div>
+                
+              </div>
+            </div>
+          </div>
+
+          
+            <div class="card bg-light listCard" id="listCard">
+                <div class="card-body h-100">
+                    <div class="header">
+                      
+
+                        <!-- Image -->
+                        <img src="http://getwallpapers.com/wallpaper/full/f/3/a/807159-download-funny-cats-wallpapers-1920x1200-meizu.jpg" class="header-img-top" alt="..." width="100%" height="100%">
+                
+                        <div class="container-fluid">
+                
+                          <!-- Body -->
+                          <div class="header-body mt-n5 mt-md-n6">
+                            <div class="row align-items-end">
+                          
+                              <div class="col-auto">
+                
+                                <!-- Avatar -->
+                                <div class="avatar avatar-xxl header-avatar-top">
+                                  <img src="<%=doc.picture%>" width="256"  hight="256" alt="..." class="avatar-img rounded-circle border border-4 border-body">
+                                </div>
+                
+                              </div>
+                              <div class="col mb-3 ml-n3 ml-md-n2">
+                             
+                                <!-- Pretitle -->
+                            
+                
+                                <!-- Title -->
+                                <h1 class="header-title">
+                                  <%=doc.fullname%>
+                                </h1>
+                                <h6 class="header-pretitle">
+                                  Class: <%=doc.faculty%>
+                                </h6>
+                            
+                              </div>
+                              <div class="col-12 col-md-auto mt-2 mt-md-0 mb-md-3">
+                
+                                <!-- Button -->
+                                <a href="#!" class="btn btn-primary d-block d-md-inline-block lift">
+                                  Follow
+                                </a>
+                                <a href="#!" class="btn btn-primary d-block d-md-inline-block lift">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-square-dots-fill" viewBox="0 0 16 16">
+                                        <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-2.5a1 1 0 0 0-.8.4l-1.9 2.533a1 1 0 0 1-1.6 0L5.3 12.4a1 1 0 0 0-.8-.4H2a2 2 0 0 1-2-2V2zm5 4a1 1 0 1 0-2 0 1 1 0 0 0 2 0zm4 0a1 1 0 1 0-2 0 1 1 0 0 0 2 0zm3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/>
+                                    </svg> Message
+                                </a>
+                
+                              </div>
+                            </div> <!-- / .row -->
+                            <div class="row align-items-center">
+                              <div class="col">
+                
+                                <!-- Nav -->
+                                <ul class="nav nav-tabs nav-overflow header-tabs">
+                                  <li class="nav-item">
+                                    <a href="profile-posts.html" class="nav-link active">
+                                      Posts
+                                    </a>
+                                  </li>
+                                  <li class="nav-item">
+                                    <a href="profile-groups.html" class="nav-link">
+                                      Groups
+                                    </a>
+                                  </li>
+                                  <li class="nav-item">
+                                    <a href="profile-projects.html" class="nav-link">
+                                      Projects
+                                    </a>
+                                  </li>
+                                  <li class="nav-item">
+                                    <a href="profile-files.html" class="nav-link">
+                                      Files
+                                    </a>
+                                  </li>
+                                  <li class="nav-item">
+                                    <a href="profile-subscribers.html" class="nav-link">
+                                      Follow
+                                    </a>
+                                  </li>
+                                </ul>
+                
+                              </div>
+                            </div>
+                          </div> <!-- / .header-body -->
+                        
+                        </div>
+                      </div>
+
+                </div>
+                <%for(var i = 0;i<docs.length;i++){%>
+                 
+                    <div class="card" id="<%=docs[i]._id%>">
+                      <div class="cart-header">
+                      <div class="card-actions float-right">
+                        <div class="dropdown show">
+                            <a href="#" data-toggle="dropdown" data-display="static">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-horizontal align-middle"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
+                            </a>
+
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <a class="dropdown-item btnUpdate" data-id="<%=docs[i]._id%>" data-name="<%=docs[i].name%>" 
+                                   data-imageuser = "<%=docs[i].imageUser%>" data-message="<%=docs[i].message%>"data-toggle="modal" data-target="#myModal">chỉnh sửa</a>
+                                <a class="dropdown-item btnDelete" data-id="<%=docs[i]._id%>">xóa</a>
+                             
+                            </div>
+                        </div>
+                    </div>
+                  </div>
+                        <div class="card-body h-100" id="">
+                            <div class="media">
+                              
+                                <img src="<%=docs[i].imageUser%>" width="56" height="56" class="rounded-circle mr-3" alt="Ashley Briggs">
+                                <div class="media-body">
+                                  <div id="addComment-<%=docs[i]._id%>">
+                                    <p class="mb-2"><strong><%=docs[i].name%></strong></p>
+                                    <div class="<%=docs[i]._id%>">  <!--vij tris 0-->
+                                    <div class="<%=docs[i]._id%>"><!--vij tris 1-->
+                                    <p><%=docs[i].message%></p>
+                                      <!--hình ảnh được upload-->
+                                    <div class="row no-gutters mt-1">
+                                      <%for(var j =0 ; j < docs[i].image.length ; j++){%>
+                                        <div class="col-6">
+                                            <img src="<%=docs[i].image[j]%>" class="img-fluid pr-1" alt="Unsplash" >
+                                        </div>
+                                        <%}%>
+                                        <div class="col-6">
+                                          <%if(docs[i].videoUpload!=="embed/"){%>
+                                          <iframe width="400" height="300"
+                                             src="<%=docs[i].videoUpload%>">
+                                          </iframe>
+                                          <%}%>
+                                           
+                                        </div>
+                                    </div>
+        
+                                    <small class="text-muted"><%=docs[i].updatedAt%></small><br><!--time real dòng trạng thái-->
+                                    </div>
+                                    </div>
+                                    <!--nút like-->
+                                    <a href="#" class="btn btn-sm btn-danger mt-1"><i class="fa fa-heart-o"></i>Like</a>
+                                    
+                                    <!--nút bình luận-->
+                                    <a href="#comment" class="btn btn-sm btn-danger mt-1"><i class="fa fa-comments-o"></i> comment</a>
+                                    <!--dòng bình luận-->
+                                    <%docs[i].comment.forEach(c=>{%>
+                                    <div class="media mt-3" id="<%=c._id%>">
+                                    
+                                        <a class="pr-2" href="#">
+                                        <img src="<%=c.imageUserComment%>" width="36" height="36" class="rounded-circle mr-2" alt="Stacie Hall">
+                                        </a>
+                                        
+                                        <div class="media-body UpdateDelete">
+                                            <p class="text-muted textComment">
+                                                <strong><%=c.nameUserComment%></strong>: <%=c.content%>
+                                                <input type="hidden" value="<%=c.emailUComment%>" class="emailUCommentId">
+                                              </p>
+                                              <a href="#comment" data-index="<%=i%>" data-id="<%=c._id%>"data-comment="<%=c.content%>" data-userCurrent="<%=c.emailUComment%>" class="text-comment updateComment">chỉnh sửa</a>
+                                              <a onclick = "deleteComment(this)" data-id="<%=docs[i]._id%>"data-idComment="<%=c._id%>" class="text-comment deleteComment" data-userCurrent="<%=c.emailUComment%>">xóa</a>
+                                        </div>
+                                       
+                                    </div>
+                                    <%})%>
+                                  </div>
+                                    <hr>
+                                    <!--dòng comment line trang tin-->
+                                    <div class="row">
+                                      <div class="col-auto">
+                    
+                                        <!-- Avatar -->
+                                        <div class="avatar avatar-sm">
+                                          <img src="<%=doc.picture%>" width="36" height="36" class="rounded-circle mr-2" alt="Stacie Hall">
+                                        </div>
+                    
+                                      </div>
+                                      <div class="col ml-n2">
+                    
+                                        <div class="mt-1" id="parentComment">
+                                          <label class="sr-only">Leave a comment...</label>
+                                          <textarea data-id ="<%=docs[i]._id%>" id="comment"class="form-control form-control-flush classComment" data-toggle="autosize" rows="1" placeholder="Leave a comment" ></textarea>
+                                     
+                                        </div>
+                                        
+                                    
+                                      </div>
+                                      
+                                      <div class="col-auto align-self-end">
+                    
+                                        <!-- Icons input file phần bình luân -->
+                                        <div class="input-container mb-2">
+                                          <button class="btn btn-primary float-left" data-id ="<%=docs[i]._id%>" onclick="commentPost(this)"><i class="fa fa-arrow-right"></i></button>
+
+                                          <!-- <a class="text-reset mr-3" href="#!" type="file" data-toggle="tooltip" title="" data-original-title="Add photo">
+                                            <i class="fa fa-camera"></i>
+                                          </a>
+                                          <a class="text-reset mr-3" href="#!" data-toggle="tooltip" title="" data-original-title="Attach file">
+                                            <i class="fa fa-paperclip"></i>
+                                          </a> -->
+                                          
+                                        </div>
+                    
+                                      </div>
+                                    </div>
+                                </div>
+                               
+                            </div>
+        
+                        
+                            <!--hết trang tin-->
+                           
+                        </div>
+                        
+                    </div>
+                    
+                    <%}%>
+                  
+                </div>
+                <div class="media-body">
+                  <img src="https://cdn1.iconfinder.com/data/icons/animals-95/300/cat-delete-animal-pet-wild-domestic-256.png" width="56" height="56" class="mr-3" alt="Ashley Briggs">
+                  <h5 class="text-center lh-100">You have watched all the news</h5>
+                  
+                </div>
+                <hr>
+                </div>
+
+                <!--modal update-->
+               
+                <div class="modal fade" id="myModal">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                    
+                      <!-- Modal Header -->
+                      <div class="modal-header">
+                        <h4 class="modal-title">Your Post</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                      </div>
+                      
+                      <!-- Modal body -->
+                      <div class="modal-body">
+                        <form>
+                          <!------------------------------------------->
+                          <input type="hidden" value="" id="hiddenEmailOfPost">
+                          <input type="hidden" value="" id="hiddenPicture">
+                          <!---=---------------------------------------------->
+                          <div class="form-group">
+                            <label for="recipient-name" class="col-form-label">Recipient:</label>
+                            <input type="text" class="form-control" id="recipient-name" value="">
+                          </div>
+                          <div class="form-group">
+                            <label for="message-text" class="col-form-label">Message:</label>
+                            <textarea class="form-control" id="message-text" ></textarea>
+                          </div>
+                          <!--Mục input hình ảnh, file, video-->
+                          <div>
+                            <div class="input-group">
+                              <div>
+                                <i class="bi bi-file-earmark-richtext"></i>
+                                <label for="image_uploads">Choose images to upload (PNG, JPG, JPEG)</label>
+                                <input class="fa fa-image icon" type="file" id="image_uploads" name="image_uploads" accept=".jpg, .jpeg, .png" multiple aria-hidden="true">
+                              </div>
+                              <div>
+                                <label for="file_uploads">Choose files to upload</label>
+                                <input class="fa fa-file icon" type="file" id="file_uploads"   multiple aria-hidden="true">
+     
+                              </div>
+                                
+                              <div class="preview">
+                            </div>
+                          </div>
+                          
+                        </form>
+                      </div>
+                      
+                      <!-- Modal footer -->
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" data-id="" data-imaguser ="" id="btnChange">Update</button>
+                      </div>
+            
+                </div>
+              </div>
+            </div>
+     
+    </main>
+    
+</body>
+</html>
