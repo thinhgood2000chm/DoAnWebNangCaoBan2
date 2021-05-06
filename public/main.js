@@ -290,12 +290,13 @@ function onSignIn(googleUser) {
     console.log('Signed in as: ' + xhr.responseText);
     if(xhr.responseText=="success"){
         signOut();
-        location.assign('/')
+        console.log("da vao dang nhap thanh cong ");
+        location.assign('https://do-an-web-nc-mxh.herokuapp.com/')
     }
     else 
     { 
         signOut();
-        console.log("da vao day");
+        console.log("da vao dang nhap khong thanh cong ");
         location.assign('/login')
         
     }
