@@ -154,6 +154,11 @@
                                             <label for="inputPasswordNew2">Verify password</label>
                                             <input type="password" name ="newPasswordConfirm" class="form-control" id="inputPasswordNew2">
                                         </div>
+										   <%if(locals.message) {%>
+                                            <div class="alert alert-danger">
+                                                <%= message %>    
+                                            </div>
+                                            <%}%>
                                         <button type="submit" class="btn btn-primary">Save changes</button>
                                     </form>
 
