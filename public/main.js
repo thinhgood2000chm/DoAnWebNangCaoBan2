@@ -136,7 +136,7 @@ function closeNav() {
      }
      contentComment[i].value=""
      $.ajax({
-      url: 'http://localhost:3000/commentPost',
+      url: 'https://do-an-web-nc-mxh.herokuapp.com/commentPost',
       type: 'POST',
       dataType: 'JSON',
       data:data
@@ -259,7 +259,7 @@ function closeNav() {
   var userCurrentInComment= event.getAttribute("data-userCurrent")
   console.log("data lays dduwocj sau khi bam xoa",id, idComment, userCurrentInComment);
   $.ajax({
-    url:"http://localhost:3000/deleteComment",
+    url:"https://do-an-web-nc-mxh.herokuapp.com/deleteComment",
     type:"POST",
     dataType:"JSON",
     data:{
@@ -333,7 +333,7 @@ $(document).ready(function(){
             hiddenpicture: hiddenpicture,
             pathname:window.location.pathname
           }
-          fetch('http://localhost:3000/loadWindowScroll',{
+          fetch('https://do-an-web-nc-mxh.herokuapp.com/loadWindowScroll',{
             method: "POST",
             headers:{
               'content-type':'application/json'
@@ -546,7 +546,7 @@ $(document).ready(function(){
         $('#myModal').hide();
         $('.modal-backdrop').hide();
         $.ajax({
-            url: 'http://localhost:3000/insertPost/',
+            url: 'https://do-an-web-nc-mxh.herokuapp.com/insertPost/',
             type: 'POST',
             dataType: 'JSON',
             enctype:"multipart/form-data",
@@ -761,7 +761,7 @@ $(document).ready(function(){
       var id=btn.dataset.id
      // console.log(id);
     $.ajax({
-      url: 'http://localhost:3000/deletePost',
+      url: 'https://do-an-web-nc-mxh.herokuapp.com/deletePost',
       type: 'POST',
       data: {
         id:JSON.stringify(id)
@@ -812,7 +812,7 @@ $("#btnChange").click(e=>{
   $('#myModal').hide();
   $('.modal-backdrop').hide();
   $.ajax({
-    url: 'http://localhost:3000/updatePost',
+    url: 'https://do-an-web-nc-mxh.herokuapp.com/updatePost',
     type: 'POST',
     dataType: 'JSON',
     enctype:"multipart/form-data",
@@ -894,7 +894,7 @@ $("#btnChange").click(e=>{
       var btn = e.target
       var id = btn.dataset.id
       console.log(id);
-      fetch('http://localhost:3000/deleteNoti',{
+      fetch('https://do-an-web-nc-mxh.herokuapp.com/deleteNoti',{
         method:"post",
         headers:{
           'content-type':'application/json'
