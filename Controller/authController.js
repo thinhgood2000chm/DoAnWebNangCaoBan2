@@ -237,14 +237,22 @@ exports.changeProfile1=(req,res)=>{
 // đổi mật khẩu
 exports.changePassword=(req,res)=>{
     var{emailHidden, password, newPassword, newPasswordConfirm}= req.body;
+    var email = req.cookies.account// 2 cách lấy  cookie 1 giống bên  if 2 là dùng . giống ở đây
+    console.log("email:",email);
+    accountF.findOne({email: email},(err,doc)=>{
+    
+ 
     if(!password){
         console.log("vui longf nhaapj mk");
+        res.render("edit-account",{doc,message:"vui lòng nhập mật khẩu cũ"})
     }
     else if(!newPassword){
         console.log("vui lòng nhập mk mới");
+        res.render("edit-account",{doc,message:"vui lòng nhập mật khẩu mới"})
     }
     else if(!newPasswordConfirm){
         console.log("vui lòng nhập lại mk");
+        res.render("edit-account",{doc,message:"vui lòng nhập lại mật khẩu"})
     }
     else{
         accountF.findOne({email:emailHidden})
@@ -257,6 +265,7 @@ exports.changePassword=(req,res)=>{
                 }
                 else if(!result){
                     console.log("mật khẩu không trùng khớp");
+                    res.render("edit-account",{doc,message:"mật khẩu không trùng khớp"})
                 }
                 if(result){// true/ false
                     bcrypt.hash(newPassword,10,(error, hashedPass)=>{
@@ -283,6 +292,7 @@ exports.changePassword=(req,res)=>{
         })
         .catch(e=>console.log(e))
     }
+    })
    // })
     }
 // tạo bài viết ( thêm dữ liệu vào database)
