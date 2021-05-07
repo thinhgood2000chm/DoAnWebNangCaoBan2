@@ -326,27 +326,29 @@ exports.insertPost=(req,res)=>{
     newPost.save()
    
         //console.log(" thêm bài viết thành công")
-        .then(()=>{
-            console.log(" them data thanh cong");
+        .then((data)=>{
+            console.log(" them data thanh cong", data);
+            res.setHeader('Content-Type', 'application/json');
+            res.send({
+                code: 0, 
+            
+                data: {
+                    id:data._id,
+                    email: hiddenEmailOfPost,
+                    name: nameUser,
+                    image:JSON.stringify(image),
+                    message:messageText,
+                    imageUser: hiddenPicture,
+                    videoUpload:videoUploadNew
+                 
+        
+                }
+            });
         })
     
     .catch(e=>console.log(e))
-    
-    res.setHeader('Content-Type', 'application/json');
-    res.send({
-        code: 0, 
-    
-        data: {
-            email: hiddenEmailOfPost,
-            name: nameUser,
-            image:JSON.stringify(image),
-            message:messageText,
-            imageUser: hiddenPicture,
-            videoUpload:videoUploadNew
-         
+  
 
-        }
-    });
 
 
     }

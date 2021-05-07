@@ -515,7 +515,7 @@ $(document).ready(function(){
   
    
 // thêm bài viết mới
-    $("#btnPosted").click((e)=>{
+       $("#btnPosted").click((e)=>{
         
         e.preventDefault();
         
@@ -547,7 +547,7 @@ $(document).ready(function(){
         $('#myModal').hide();
         $('.modal-backdrop').hide();
         $.ajax({
-            url: 'https://do-an-web-nc-mxh.herokuapp.com/insertPost/',
+            url: 'http://localhost:3000/insertPost/',
             type: 'POST',
             dataType: 'JSON',
             enctype:"multipart/form-data",
@@ -576,6 +576,8 @@ $(document).ready(function(){
                 setAttributes(imageUser,{"src":ketqua.data.imageUser,"class":"rounded-circle mr-3","width":"56", "height":"56"})
                 parentMedia.appendChild(imageUser)
 
+                var divAddCommentId = document.createElement("div")
+                setAttributes(divAddCommentId,{"id":"addComment-"+ketqua.data.id})
                 // thiết lập bên trong của thẻ media-body
                 //thời gian tạo bài viết
                 // tên người đăng mới
@@ -587,12 +589,14 @@ $(document).ready(function(){
               
                 strongTag.appendChild(node)
                 ptag.appendChild(strongTag)
-                parentMediaBody.appendChild(ptag)
+                //parentMediaBody.appendChild(ptag)
+                divAddCommentId.appendChild(ptag)
                 // mess mới đăng
                 var p2 = document.createElement("p")
                 var nodeMess = document.createTextNode(ketqua.data.message);
                 p2.appendChild(nodeMess)
-                parentMediaBody.appendChild(p2)
+                //parentMediaBody.appendChild(p2)
+                divAddCommentId.appendChild(p2)
                 
                 // hình ảnh sau khi đăng 127
                 imageRecieveFromServer = JSON.parse(ketqua.data.image)
@@ -606,7 +610,8 @@ $(document).ready(function(){
                     setAttributes(imageUpload,{"src":imageRecieveFromServer[i],"class":"img-fluid pr-1"})
                     divTagChild.appendChild(imageUpload)
                     divTagsubParentImage.appendChild(divTagChild)
-                    parentMediaBody.appendChild(divTagsubParentImage)
+                    //parentMediaBody.appendChild(divTagsubParentImage)
+                    divAddCommentId.appendChild(divTagsubParentImage)
                     }
                   var divOfvideo = document.createElement("div")
                   setAttributes(divOfvideo,{"class":"col-6"})
@@ -620,16 +625,19 @@ $(document).ready(function(){
                   divOfvideo.appendChild(iframe)
                   }
                   divTagsubParentImage.appendChild(divOfvideo)
-                  parentMediaBody.appendChild(divTagsubParentImage)
+                  //parentMediaBody.appendChild(divTagsubParentImage)
+                  divAddCommentId.appendChild(divTagsubParentImage)
                 //thời gian tạo bài đăng
                 var smallTag = document.createElement("small")
                 setAttributes(smallTag,{"class":"text-muted"})
                 var nodeSmallTimeCreate = document.createTextNode("now")
                 smallTag.appendChild(nodeSmallTimeCreate)
-                parentMediaBody.appendChild(smallTag)
+                //parentMediaBody.appendChild(smallTag)
+                divAddCommentId.appendChild(smallTag)
 
                 var br = document.createElement("br")
-                parentMediaBody.appendChild(br)
+                //parentMediaBody.appendChild(br)
+                divAddCommentId.appendChild(br)
                 //nút like 
                 var aTag = document.createElement("a")
                 var nodeATag = document.createTextNode("Like")
@@ -640,7 +648,8 @@ $(document).ready(function(){
          
                 aTag.appendChild(iTagIconLike)
                 aTag.appendChild(nodeATag)
-                parentMediaBody.appendChild(aTag)
+                //parentMediaBody.appendChild(aTag)
+                divAddCommentId.appendChild(aTag)
                 
                 // khoảng cách 
           
@@ -654,7 +663,8 @@ $(document).ready(function(){
                 setAttributes(iTagIconComment,{ "class":"fa fa-comments-o"})
                 aTagCommentButton.appendChild(iTagIconComment)
                 aTagCommentButton.appendChild(aTagNodeCommentButton)
-                parentMediaBody.appendChild(aTagCommentButton)
+                //parentMediaBody.appendChild(aTagCommentButton)
+                divAddCommentId.appendChild(aTagCommentButton)
                 
                 //dòng bình luận
                 /*var mediaComment= document.getElementById("mediaComment")
@@ -668,7 +678,8 @@ $(document).ready(function(){
 
                 // khung binh luận
                 var hr = document.createElement("hr")
-                parentMediaBody.appendChild(hr)
+                //parentMediaBody.appendChild(hr)
+                divAddCommentId.appendChild(hr)
                 
                 //div nay dòng 164
                 //div nayf div tổng chir đưng sau parentMediaBody
@@ -686,7 +697,8 @@ $(document).ready(function(){
                 divTag.appendChild(imageUserInComment)
                 divTagsubParent.appendChild(divTag)
                 divTagParent.appendChild(divTagsubParent)
-                parentMediaBody.appendChild(divTagParent)
+                //parentMediaBody.appendChild(divTagParent)
+                divAddCommentId.appendChild(divTagParent)
 
                 // set khung input nhập comment
                 //div dòng 173
@@ -698,14 +710,15 @@ $(document).ready(function(){
                 setAttributes(label,{"class":"sr-only"})
                 var nodeTextLabel = document.createTextNode("Leave a commnent")
                 var textareaCommentInput= document.createElement("textarea")
-                setAttributes(textareaCommentInput,{"class":"form-control form-control-flush", "data-toggle":"autosize", "rows":"1", "placeholder":"Leave a comment","id":"styleInputComment"})
+                setAttributes(textareaCommentInput,{"data-id":ketqua.data.id,"class":"form-control form-control-flush classComment", "data-toggle":"autosize", "rows":"1", "placeholder":"Leave a comment","id":"comment"})
                 
                 label.appendChild(nodeTextLabel)
                 formInputComment.appendChild(label)
                 formInputComment.appendChild(textareaCommentInput)
                 divTagsubParentCommentInput.appendChild(formInputComment)
                 divTagParent.appendChild(divTagsubParentCommentInput)
-                parentMediaBody.appendChild(divTagParent)
+                //parentMediaBody.appendChild(divTagParent)
+                divAddCommentId.appendChild(divTagParent)
 
                 //div dòng 184
                 var divTagsubParentIconComment= document.createElement("div")
@@ -713,7 +726,7 @@ $(document).ready(function(){
                 var divtagicon= document.createElement("div")
                 setAttributes(divtagicon,{"class":"input-container mb-2"})
                 // icon mays anhr
-                var aTagIconCamera = document.createElement("a")
+               /* var aTagIconCamera = document.createElement("a")
                 setAttributes(aTagIconCamera,{"class":"text-reset mr-3", "href":"#!", "type":"file", "data-toggle":"tooltip" ,"title":"", "data-original-title":"Add photo"})
                 var iTagIconCamera= document.createElement("i")
                 setAttributes(iTagIconCamera,{"class":"fa fa-camera"})
@@ -727,12 +740,19 @@ $(document).ready(function(){
                 aTagIconPaperclip.appendChild(iTagIconPaperclip)
                 
                 divtagicon.appendChild(aTagIconCamera)
-                divtagicon.appendChild(aTagIconPaperclip)
+                divtagicon.appendChild(aTagIconPaperclip)*/
+                var buttonComment = document.createElement("button")
+                setAttributes(buttonComment,{"class":"btn btn-primary float-left", "data-id":ketqua.data.id, "onclick":"commentPost(this)"})
+                var iTagIconSend= document.createElement("i")
+                setAttributes(iTagIconSend,{"class":"fa fa-arrow-right"})
+                buttonComment.appendChild(iTagIconSend)
+                divtagicon.appendChild(buttonComment)
                 divTagsubParentIconComment.appendChild(divtagicon)
                 divTagParent.appendChild(divTagsubParentIconComment)
-                parentMediaBody.appendChild(divTagParent)
+                //parentMediaBody.appendChild(divTagParent)
+                divAddCommentId.appendChild(divTagParent)
 
-
+                parentMediaBody.appendChild(divAddCommentId)
                 parentMedia.appendChild(parentMediaBody)
                 cardBody.appendChild(parentMedia)
                 card.appendChild(cardBody)
