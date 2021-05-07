@@ -15,7 +15,7 @@ const client = new OAuth2Client(CLIENT_ID);
 router.get("/",checkAuthen,(req,res)=>{
     let user = req.user
   
-    post.find({}).sort({createdAt:-1}).limit(10).exec((err, doc)=>{
+    post.find({}).sort({createdAt:-1}).limit(10).exec((err, docs)=>{
         // sort ở đây lấy theo thời gian tạo đi từ tạo sau thì chạy lên đầu ( thời gian tạo gân nhất thì suất hiện đầu tiên ) là trừ 1 , giới hạn là 10 bái
         if(err)
             console.log(err);
@@ -35,10 +35,10 @@ router.get("/",checkAuthen,(req,res)=>{
                 }
                 verify().then(()=>{
                     console.log(user.email);
-                    accountStudent.findOne({email: user.email},(err, docs)=>{
+                    accountStudent.findOne({email: user.email},(err, doc)=>{
                         //console.log(doc);
                         if(doc.length===0){
-                            res.render('index',{docs})
+                            res.render('index',{doc})
                         }
                         else {
                         res.render('index',{doc,docs})
@@ -49,7 +49,7 @@ router.get("/",checkAuthen,(req,res)=>{
             }
             else {
                 let email = req.cookies.account;
-                accountF.findOne({email:email},(err, docs)=>{
+                accountF.findOne({email:email},(err, doc)=>{
                     res.render('index',{doc,docs})
                 })
         }
@@ -176,11 +176,11 @@ router.get('/createNotification',checkAuthen,(req,res)=>{
     if(token){
         var email = req.cookies.account
         console.log("email",email);
-        accountF.findOne({email: email},(err, info)=>{
+        accountF.findOne({email: email},(err, doc)=>{
             notification.find({email:email}).exec((err, docs)=>{
                 notification.find({email:email}).limit(10).sort({createdAt:-1}).exec((err,infoNoti)=>{
-                console.log(info.faculty);
-                res.render('create-notfication',{info, infoNoti,docs})
+               
+                res.render('create-notfication',{doc, infoNoti,docs})
             })
         })
          
