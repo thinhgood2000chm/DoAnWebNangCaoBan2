@@ -547,7 +547,7 @@ $(document).ready(function(){
         $('#myModal').hide();
         $('.modal-backdrop').hide();
         $.ajax({
-            url: 'http://localhost:3000/insertPost/',
+            url: 'https://do-an-web-nc-mxh.herokuapp.com/insertPost/',
             type: 'POST',
             dataType: 'JSON',
             enctype:"multipart/form-data",
