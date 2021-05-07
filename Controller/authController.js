@@ -10,7 +10,7 @@ const CLIENT_ID='100847206415-rbdoqmgsbdvlik3s3nmukildi3mbpivg.apps.googleuserco
 const client = new OAuth2Client(CLIENT_ID);
 const checkAuthen = require('../middleWare/checkAuthenGG');
 const notification = require('../models/notification');
-
+const URL = require('url')
 
 
 exports.loginGG= (req,res)=>{
@@ -590,7 +590,7 @@ exports.updateNoti=(req,res)=>{
 exports.loadWindowScroll= (req,res)=>{
 
     var {start,hiddenpicture, pathname}= req.body
-   
+   console.log("pathname:", pathname);
     skip = Number(start)*10
     console.log(skip);
   
@@ -621,7 +621,8 @@ exports.loadWindowScroll= (req,res)=>{
             })
         }
     }
-    else{
+ 
+    else if(pathname==='/'){
 
         post.find({}).sort({createdAt:-1}).skip(skip).limit(10).exec((err, doc)=>{
             if(!doc){
@@ -637,4 +638,11 @@ exports.loadWindowScroll= (req,res)=>{
             }
         })
     }
+    else {
+        var email =pathname.slice(9)
+        //console.log(email);
+        post.find({email}).sort({createdAt:-1}).skip(skip).limit(10).exec((err, doc)=>{
+            return res.json({code:0, data:doc,data2:{hiddenpicture,hiddenpicture}})
+       })
+     }
 }

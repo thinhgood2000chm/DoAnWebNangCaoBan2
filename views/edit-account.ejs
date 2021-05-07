@@ -45,7 +45,7 @@
 
 
                 <div class="col-md-9 col-xl-10">
-               
+   
                     <% if(locals.doc.email.includes("@student.tdtu.edu.vn")){%>
                         <div class="tab-pane" id="account">
                             <!--Phần setting tài khoàn public info-->
@@ -154,7 +154,7 @@
                                             <label for="inputPasswordNew2">Verify password</label>
                                             <input type="password" name ="newPasswordConfirm" class="form-control" id="inputPasswordNew2">
                                         </div>
-										   <%if(locals.message) {%>
+                                        <%if(locals.message) {%>
                                             <div class="alert alert-danger">
                                                 <%= message %>    
                                             </div>

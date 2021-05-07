@@ -51,15 +51,15 @@
                             <div class="modal-body">
                                    
                                         <!--phần chủ đề-->
-                                            <input type="hidden" name="email" value="<%=info.email%>">
+                                            <input type="hidden" name="email" value="<%=doc.email%>">
                                             <div class="form-floating">
                                             <div class="department-select" >
                                                 <h5>Vui lòng chọn Phòng/ Khoa</h5>
                                                 <select class="form-select"name ="faculty" id="selectFaculty">
                                                     <option>..Choose</option>
-                                                    <%for(var i=0; i<info.faculty.length; i++){%>
+                                                    <%for(var i=0; i<doc.faculty.length; i++){%>
                                                   
-                                                    <option value="<%=locals.info.faculty[i]%>"><%=locals.info.faculty[i]%></option>
+                                                    <option value="<%=locals.doc.faculty[i]%>"><%=locals.doc.faculty[i]%></option>
                                                   <%}%>
                                                 </select>
                                             </div>
@@ -169,15 +169,15 @@
                                     <!--phần chủ đề-->
                                     
                                 <input type="hidden" name="id"value="" id="idUpdateNoti">
-                                        <input type="hidden" name="email" value="<%=info.email%>">
+                                        <input type="hidden" name="email" value="<%=doc.email%>">
                                         <div class="form-floating">
                                         <div class="department-select" >
                                             <h5>Vui lòng chọn Phòng/ Khoa</h5>
                                             <select class="form-select"name ="faculty">
                                                 <option>..Choose</option>
-                                                <%for(var i=0; i<info.faculty.length; i++){%>
+                                                <%for(var i=0; i<doc.faculty.length; i++){%>
                                               
-                                                <option><%=locals.info.faculty[i]%></option>
+                                                <option><%=locals.doc.faculty[i]%></option>
                                               <%}%>
                                             </select>
                                         </div>
