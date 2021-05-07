@@ -291,7 +291,7 @@ function onSignIn(googleUser) {
   if(xhr.responseText=="success"){
       signOut();
       console.log("da vao dang nhap thanh cong ");
-      location.assign('https://do-an-web-nc-mxh.herokuapp.com/')
+      location.assign('https://do-an-web-nc-mxh.herokuapp.com')
   }
   else 
   { 
