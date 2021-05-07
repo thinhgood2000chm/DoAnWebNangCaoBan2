@@ -125,7 +125,7 @@ router.get('/profile',checkAuthen,(req,res)=>{
     }
     else {     let email = req.cookies.account;
         accountF.findOne({email:email},(err, doc)=>{
-            post.find({email:email},(error,docs)=>{
+            post.find({email:email}).sort({createdAt:-1}).limit(10).exec((error,docs)=>{
                 // console.log("doc,",docs.image.length);
                  if(error){
                      console.log(error);
@@ -219,17 +219,18 @@ router.get('/createNotification/:number',checkAuthen,(req,res)=>{
 // xem thông tin profile 
 router.get("/profile/:email",(req,res)=>{
     var email= req.params.email
-    console.log( email);
+    console.log( "email láy từ params",email);
     if(email.includes("@student.tdtu.edu.vn")){
-        post.find({email}).sort({createdAt:-1}).limit(10).exec((err,docs)=>{
-            accountStudent.findOne({email},(err,doc)=>{
+        post.find({email: email}).sort({createdAt:-1}).limit(10).exec((err,docs)=>{
+            console.log(docs);
+            accountStudent.findOne({email:email},(err,doc)=>{
                 res.render('profile',{doc,docs})
             })
         })
     }
     else {
-        post.find({email}).sort({createdAt:-1}).limit(10).exec((err,docs)=>{
-            accountF.findOne(email,(err,doc)=>{
+        post.find({email: email}).sort({createdAt:-1}).limit(10).exec((err,docs)=>{
+            accountF.findOne({email:email},(err,doc)=>{
                 res.render('profile',{doc,docs})
             })
         })
