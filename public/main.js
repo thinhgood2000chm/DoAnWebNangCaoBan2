@@ -802,9 +802,10 @@ $('.btnUpdate').click(e=>{
   var name= btn.dataset.name
   var imageUser = btn.dataset.imageuser// chỗ này nếu truyền vào imageUser thì trong targer cũng thành imageuser
   var message = btn.dataset.message
-  
+  var video = btn.dataset.video
   $("#recipient-name").val(name)
   $("#message-text").html(message)
+  $("#videoUpload").html(video)
   $("#btnChange").attr("data-id", id)
   $("#btnChange").attr("data-imageuser",imageUser )
 })
@@ -816,12 +817,14 @@ $("#btnChange").click(e=>{
   //var imageUser = btn.dataset.imageuser
   //var name=document.getElementById("recipient-name").value
   var message=document.getElementById("message-text").value
+  var video=document.getElementById("videoUpload").value
   //console.log( message, id);
   var inputImage = document.getElementById("image_uploads")    
         // ảnh người dùng update lên
   var file = inputImage.files;
   var formData = new FormData();
   formData.append("message",message)
+  formData.append("videoUpload",video)
   formData.append("id",id)
   for (var i =0;i<=file.length;i++){
     formData.append("file",file[i])
@@ -846,6 +849,7 @@ $("#btnChange").click(e=>{
     updatedMessage = ketqua.data.message
     updatedImage= ketqua.data.image
     id= ketqua.data.id
+    video = ketqua.data.videoUploadNew
     //console.log(id,updatedMessage, updatedImage);
     document.getElementsByClassName(id)[1].remove()
 
@@ -877,6 +881,19 @@ $("#btnChange").click(e=>{
         divId.appendChild(divTagsubParentImage)
     
         }
+        var divOfvideo = document.createElement("div")
+        setAttributes(divOfvideo,{"class":"col-6"})
+
+        console.log(ketqua.data.videoUpload);
+        if(video !=='embed/'){
+        
+        var iframe= document.createElement("iframe")
+        setAttributes(iframe,{"width":"400", "height":"300","src":video})
+        
+        divOfvideo.appendChild(iframe)
+        }
+        divTagsubParentImage.appendChild(divOfvideo)
+        divId.appendChild(divTagsubParentImage)
             // thời gian cập nhật 
         var smallTag = document.createElement("small")
         setAttributes(smallTag,{"class":"text-muted"})

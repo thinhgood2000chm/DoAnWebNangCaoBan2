@@ -156,7 +156,7 @@
 
                             <div class="dropdown-menu dropdown-menu-right">
                                 <a class="dropdown-item btnUpdate" data-id="<%=docs[i]._id%>" data-name="<%=docs[i].name%>" 
-                                   data-imageuser = "<%=docs[i].imageUser%>" data-message="<%=docs[i].message%>"data-toggle="modal" data-target="#myModal">chỉnh sửa</a>
+                                   data-imageuser = "<%=docs[i].imageUser%>" data-message="<%=docs[i].message%>" data-video="<%=docs[i].videoUpload%>"data-toggle="modal" data-target="#myModal">chỉnh sửa</a>
                                 <a class="dropdown-item btnDelete" data-id="<%=docs[i]._id%>">xóa</a>
                              
                             </div>
@@ -315,8 +315,8 @@
                                 <input class="fa fa-image icon" type="file" id="image_uploads" name="image_uploads" accept=".jpg, .jpeg, .png" multiple aria-hidden="true">
                               </div>
                               <div>
-                                <label for="file_uploads">Choose files to upload</label>
-                                <input class="fa fa-file icon" type="file" id="file_uploads"   multiple aria-hidden="true">
+                                <label for="file_uploads">paste link video on youtube to upload</label>
+                                <textarea class="form-controln"  id="videoUpload"  ></textarea>
      
                               </div>
                                 

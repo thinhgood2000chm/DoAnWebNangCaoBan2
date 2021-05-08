@@ -304,7 +304,7 @@ exports.changePassword=(req,res)=>{
 exports.insertPost=async(req,res)=>{
 
     var {hiddenPicture, nameUser,hiddenEmailOfPost, messageText,videoUpload}= req.body
-    console.log("cái đang cân",nameUser,messageText,hiddenEmailOfPost);
+    //console.log("cái đang cân",nameUser,messageText,hiddenEmailOfPost);
     images = req.files;// file đối với single , files đối với multi
     videoUploadNew =videoUpload.replace(videoUpload.slice(24,32),"embed/") 
     console.log("videoUploadNew",videoUploadNew);
@@ -396,11 +396,16 @@ exports.deletePost=(req,res)=>{
     })
 }
 exports.updatePost=async(req,res)=>{
-    var {id, message}= req.body
+    var {id, message,videoUpload}= req.body
  
-    console.log( id, message);
+    console.log( id, message,videoUpload );
     images = req.files;// file đối với single , files đối với multi
-    
+    if(videoUpload.includes("watch")){
+        console.log("da vao includes");
+        videoUploadNew =videoUpload.replace(videoUpload.slice(24,32),"embed/") 
+    }
+    else 
+    videoUploadNew=videoUpload
     var pathImage=[]
     var image=[]
     await Promise.all(images.map(async(file)=>{
@@ -416,7 +421,9 @@ exports.updatePost=async(req,res)=>{
     }*/
     data={
         message: message,
-        image: image
+        image: image,
+        videoUpload:videoUploadNew
+
     }
     post.findOneAndUpdate({_id:id},{$set:data})
     .then(()=>{
@@ -430,7 +437,8 @@ exports.updatePost=async(req,res)=>{
         data:{
             id:id,
             message: message,
-            image: image// ở đây ko chuyển qua stirngify nên qua bên mainjs ko cần json.parse
+            image: image,// ở đây ko chuyển qua stirngify nên qua bên mainjs ko cần json.parse
+            videoUploadNew:videoUploadNew
         }
     })
 }
