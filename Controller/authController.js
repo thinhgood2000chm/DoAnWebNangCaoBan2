@@ -10,8 +10,8 @@ const CLIENT_ID='100847206415-rbdoqmgsbdvlik3s3nmukildi3mbpivg.apps.googleuserco
 const client = new OAuth2Client(CLIENT_ID);
 const checkAuthen = require('../middleWare/checkAuthenGG');
 const notification = require('../models/notification');
-const URL = require('url')
 
+const {cloudinary} = require('../middleWare/cloudinary')
 
 exports.loginGG= (req,res)=>{
     let token = req.body.token
@@ -208,15 +208,20 @@ exports.changeProfile2= (req, res)=>{
 
 }
 
-exports.changeProfile1=(req,res)=>{
+exports.changeProfile1=async(req,res)=>{
 
     images = req.file;
     console.log("images",images);
     if(images!==undefined){
+        var imageLink = await cloudinary.uploader.upload(req.file.path)
+        var image = imageLink.url
+        /*
         pathImage= `public/upload/${images.originalname}`
     // console.log(image);
         fs.renameSync(images.path,pathImage)
         var image = pathImage.slice(6)
+        */
+       
     }
     var {email,username, biography} = req.body
     console.log(username, biography, email);
@@ -296,7 +301,7 @@ exports.changePassword=(req,res)=>{
    // })
     }
 // tạo bài viết ( thêm dữ liệu vào database)
-exports.insertPost=(req,res)=>{
+exports.insertPost=async(req,res)=>{
 
     var {hiddenPicture, nameUser,hiddenEmailOfPost, messageText,videoUpload}= req.body
     console.log("cái đang cân",nameUser,messageText,hiddenEmailOfPost);
@@ -306,13 +311,33 @@ exports.insertPost=(req,res)=>{
     //console.log("image",images);
     var pathImage=[]
     var image=[]
+    
+   /* for(var i =0;i<images.length;i++){
+        cloudinary.uploader.upload(req.files[i].path,(err,result)=>{
+            console.log("ket qya anh upload cloudi",result);
+            image.push(result.url)
+
+            })
+           
+    }*/
+
+    await Promise.all(images.map(async(file)=>{
+        console.log("cho m can nè ", req.files[0]);
+        const cloud= await cloudinary.uploader.upload(file.path)
+        image.push(cloud.url)
+    }))
+   // console.log("image", image);
+    /*cloudinary.api.resources((err,imageLink)=>{
+        console.log("imageLink",imageLink);
+       //imageLink.forE
+    })*/
     //console.log(images.length);
-    for(var i =0;i<images.length;i++){
+   /* for(var i =0;i<images.length;i++){
         //console.log(images[i].originalname);
         pathImage=`public/upload/${images[i].originalname}`
         fs.renameSync(images[i].path,pathImage)
         image.push(pathImage.slice(6))
-    }
+    }*/
 
     let newPost = new post({
         imageUser: hiddenPicture,
@@ -370,7 +395,7 @@ exports.deletePost=(req,res)=>{
         }
     })
 }
-exports.updatePost=(req,res)=>{
+exports.updatePost=async(req,res)=>{
     var {id, message}= req.body
  
     console.log( id, message);
@@ -378,11 +403,17 @@ exports.updatePost=(req,res)=>{
     
     var pathImage=[]
     var image=[]
+    await Promise.all(images.map(async(file)=>{
+        //console.log("cho m can nè ", req.files[0]);
+        const cloud= await cloudinary.uploader.upload(file.path)
+        image.push(cloud.url)
+    }))
+/*
     for(var i =0;i<images.length;i++){
         pathImage=`public/upload/${images[i].originalname}`
         fs.renameSync(images[i].path,pathImage)
         image.push(pathImage.slice(6))
-    }
+    }*/
     data={
         message: message,
         image: image
@@ -417,14 +448,30 @@ exports.commentPost=(req,res)=>{
         content: comment,
     }
     post.findByIdAndUpdate(id,{$push:{comment:dataPush}})
-    .then(()=>{
+    .then((data)=>{
+           //console.log("data id cua cái mới comment", data.comment[doc.comment.length-1]._id);
         console.log("comment thành công");
+        /*console.log(data);
+        commentId=data.comment[data.comment.length-1]._id // lấy id cua comment vừa mới được ghi vào ( vị trí của cmt mới luôn luôn nằm ở cuối )
+        res.setHeader("Content-Type","application/json")
+        res.send({
+            code:0,
+            data:{
+            commentId: commentId,
+                emailUComment: emailUserComment,
+                imageUserComment: imageUserComment,
+                nameUserComment: nameUserComment,
+                content: comment,
+                id:id
+           }
+       })*/
+     
     })
     .catch(e=>console.log(e))
 
     post.findById(id)
     .then((doc)=>{
-        console.log("doc.comment[doc.comment.length]._id",doc.comment[doc.comment.length-1]._id);
+        //console.log("doc.comment[doc.comment.length]._id",doc.comment[doc.comment.length-1]._id);
  
        commentId=doc.comment[doc.comment.length-1]._id
        res.setHeader("Content-Type","application/json")
@@ -512,19 +559,25 @@ exports.deleteComment= (req,res)=>{
 }
 
 // đăng thông báo của từng khoa
-exports.createNotify=(req,res)=>{
+exports.createNotify=async(req,res)=>{
     var{faculty,messageText,email,titleText}= req.body
 
     images = req.files;
     var pathImage=[]
     var image=[]
     //console.log(images.length);
+    /*
     for(var i =0;i<images.length;i++){
         //console.log(images[i].originalname);
         pathImage=`public/upload/${images[i].originalname}`
         fs.renameSync(images[i].path,pathImage)
         image.push(pathImage.slice(6))
-    }
+    }*/
+    await Promise.all(images.map(async(file)=>{
+        //console.log("cho m can nè ", req.files[0]);
+        const cloud= await cloudinary.uploader.upload(file.path)
+        image.push(cloud.url)
+    }))
     let newNotify= notification({
         faculty:faculty , 
         title:titleText  ,
@@ -558,18 +611,24 @@ exports.deleteNoti= (req,res)=>{
 }
 
 // update thông báo của phòng khoa
-exports.updateNoti=(req,res)=>{
+exports.updateNoti=async(req,res)=>{
     var {id,titleTextUpdate, messageTextUpdate,faculty}= req.body
     console.log(id,titleTextUpdate, messageTextUpdate,faculty);
     images= req.files
     var image=[]
     var pathImage=[]
 
+    /*
     for(var i =0;i<images.length;i++){
         pathImage=`public/upload/${images[i].originalname}`
         fs.renameSync(images[i].path,pathImage)
         image.push(pathImage.slice(6))
-    }
+    }*/
+    await Promise.all(images.map(async(file)=>{
+        //console.log("cho m can nè ", req.files[0]);
+        const cloud= await cloudinary.uploader.upload(file.path)
+        image.push(cloud.url)
+    }))
 
  
     data={
