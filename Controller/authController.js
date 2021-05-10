@@ -212,24 +212,34 @@ exports.changeProfile1=async(req,res)=>{
 
     images = req.file;
     console.log("images",images);
+    var {email,username, biography} = req.body
+    console.log(username, biography, email);
+    var updateData
     if(images!==undefined){
         var imageLink = await cloudinary.uploader.upload(req.file.path)
         var image = imageLink.url
-        /*
+        /* // lưu local
         pathImage= `public/upload/${images.originalname}`
     // console.log(image);
         fs.renameSync(images.path,pathImage)
         var image = pathImage.slice(6)
-        */
+        */  
+        updateData = {
+            fullname: username, 
+            picture : image,
+            biography:biography
+        }
        
     }
-    var {email,username, biography} = req.body
-    console.log(username, biography, email);
-    let updateData = {
-        fullname: username, 
-        picture : image,
-        biography:biography
+    else if( images==undefined){
+        updateData = {
+            fullname: username, 
+            //picture : image,
+            biography:biography
+        }
     }
+
+ 
     accountStudent.findOneAndUpdate({email:email},{$set:updateData})
     .then(()=>{
         console.log(" cập nhật trên thành công ");
@@ -306,7 +316,18 @@ exports.insertPost=async(req,res)=>{
     var {hiddenPicture, nameUser,hiddenEmailOfPost, messageText,videoUpload}= req.body
     //console.log("cái đang cân",nameUser,messageText,hiddenEmailOfPost);
     images = req.files;// file đối với single , files đối với multi
-    videoUploadNew =videoUpload.replace(videoUpload.slice(24,32),"embed/") 
+    var pathVideo = 'https://www.youtube.com/embed/'
+    var video_id = videoUpload.slice(32)
+   // console.log("video_id",video_id);
+   //lấy id của youtube ( vì một số id có thêm chuỗi kí tự = sẽ ko tách thủ công được )
+    var ampersandPosition = video_id.indexOf('&');
+    if(ampersandPosition != -1) {
+        video_id = video_id.substring(0, ampersandPosition);
+        //console.log("id video",video_id);
+    }
+  
+    //videoUploadNew =videoUpload.replace(videoUpload.slice(24,32),"embed/") 
+    var videoUploadNew = pathVideo+ video_id
     console.log("videoUploadNew",videoUploadNew);
     //console.log("image",images);
     var pathImage=[]
@@ -402,7 +423,18 @@ exports.updatePost=async(req,res)=>{
     images = req.files;// file đối với single , files đối với multi
     if(videoUpload.includes("watch")){
         console.log("da vao includes");
-        videoUploadNew =videoUpload.replace(videoUpload.slice(24,32),"embed/") 
+        var pathVideo = 'https://www.youtube.com/embed/'
+        var video_id = videoUpload.slice(32)
+       // console.log("video_id",video_id);
+       //lấy id của youtube ( vì một số id có thêm chuỗi kí tự = sẽ ko tách thủ công được )
+        var ampersandPosition = video_id.indexOf('&');
+        if(ampersandPosition != -1) {
+            video_id = video_id.substring(0, ampersandPosition);
+            //console.log("id video",video_id);
+        }
+      
+        //videoUploadNew =videoUpload.replace(videoUpload.slice(24,32),"embed/") 
+        var videoUploadNew = pathVideo+ video_id
     }
     else 
     videoUploadNew=videoUpload
