@@ -554,7 +554,6 @@ $(document).ready(function(){
             processData: false,
             data: formData
         }).done(function(ketqua) {
-          var post =[]
            // console.log("ketqua",ketqua.data);
             if(ketqua.code===0){
                 console.log(" da vao day ");
@@ -616,7 +615,7 @@ $(document).ready(function(){
                   setAttributes(divOfvideo,{"class":"col-6"})
 
                   console.log(ketqua.data.videoUpload);
-                  if(ketqua.data.videoUpload !=='embed/'){
+                  if(ketqua.data.videoUpload !=='https://www.youtube.com/embed/'){
                   
                   var iframe= document.createElement("iframe")
                   setAttributes(iframe,{"width":"400", "height":"300","src":ketqua.data.videoUpload})
@@ -755,9 +754,8 @@ $(document).ready(function(){
                 parentMedia.appendChild(parentMediaBody)
                 cardBody.appendChild(parentMedia)
                 card.appendChild(cardBody)
-                parentOfCard.appendChild(card)
-                  post.push(parentOfCard)
-                  console.log(parentOfCard);
+                parentOfCard.prepend(card)
+               
             }
           
         });
