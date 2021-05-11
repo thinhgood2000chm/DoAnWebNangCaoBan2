@@ -73,11 +73,11 @@
                       <input type="hidden" value="<%=doc.email%>" id="hiddenEmailOfPost">
                       <input type="hidden" value="<%=doc.picture%>" id="hiddenPicture">
                       <input type="hidden" value="<%=doc.fullname%>" id="hiddenFullname">
-                      <input type="hidden" value="<%=doc.picture%>" id="hiddenpicture">
+                    
                       <!---=---------------------------------------------->
                       <div class="form-group">
                         <label for="recipient-name" class="col-form-label">Recipient:</label>
-                        <input type="text" class="form-control" id="recipient-name" value="<%=doc.fullname%>">
+                        <input type="text" class="form-control" id="recipient-name" value="<%=doc.fullname%>" disabled>
                       </div>
                       <div class="form-group">
                         <label for="message-text" class="col-form-label">Message:</label>
@@ -102,6 +102,7 @@
                       </div>
                       
                     </form>
+                    <div id="alertMess"></div>
                   </div>
                   
                   <!-- Modal footer -->
@@ -133,7 +134,7 @@
                         <%if(locals.docs){%>
                        <!--post laf i-->
                           <%for(var i=0;i<docs.length;i++){%>
-                          <div class="card" >
+                          <div class="card"  id="<%=docs[i]._id%>">
                             <div class="card-body h-100">
                                 <div class="media">
                                   <input type = "hidden" id="idNews" value="<%=docs[i]._id%>">

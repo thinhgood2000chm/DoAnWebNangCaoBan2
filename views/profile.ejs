@@ -25,7 +25,7 @@
           <input type="hidden" value="<%=doc.email%>" id="hiddenEmailOfPost">
           <input type="hidden" value="<%=doc.picture%>" id="hiddenPicture">
           <input type="hidden" value="<%=doc.fullname%>" id="hiddenFullname">
-          <input type="hidden" value="<%=docs.picture%>" id="hiddenpicture">
+         
          
           <!--modal delete-->
           <div id="confirmDelete" class="modal fade">
@@ -155,9 +155,9 @@
                             </a>
 
                             <div class="dropdown-menu dropdown-menu-right">
-                                <a class="dropdown-item btnUpdate" data-id="<%=docs[i]._id%>" data-name="<%=docs[i].name%>" 
+                                <a class="dropdown-item btnUpdate" onclick ="updateLink(this)"data-id="<%=docs[i]._id%>" data-name="<%=docs[i].name%>" 
                                    data-imageuser = "<%=docs[i].imageUser%>" data-message="<%=docs[i].message%>" data-video="<%=docs[i].videoUpload%>"data-toggle="modal" data-target="#myModal">chỉnh sửa</a>
-                                <a class="dropdown-item btnDelete" data-id="<%=docs[i]._id%>">xóa</a>
+                                <a class="dropdown-item btnDelete" data-id="<%=docs[i]._id%>" onclick="deletePost(this)" data-toggle="confirmDelete" data-target="#confirmDelete">xóa</a>
                              
                             </div>
                         </div>
@@ -295,8 +295,8 @@
                       <div class="modal-body">
                         <form>
                           <!------------------------------------------->
-                          <input type="hidden" value="" id="hiddenEmailOfPost">
-                          <input type="hidden" value="" id="hiddenPicture">
+                          <!--<input type="hidden" value="" id="hiddenEmailOfPost">
+                          <input type="hidden" value="<%=doc.picture%>" id="hiddenPicture">-->
                           <!---=---------------------------------------------->
                           <div class="form-group">
                             <label for="recipient-name" class="col-form-label">Recipient:</label>
@@ -330,7 +330,7 @@
                       <!-- Modal footer -->
                       <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary" data-id="" data-imaguser ="" id="btnChange">Update</button>
+                        <button type="submit" class="btn btn-primary" data-id="" data-imaguser ="" id="btnChange"onclick="btnChange(this)">Update</button>
                       </div>
             
                 </div>

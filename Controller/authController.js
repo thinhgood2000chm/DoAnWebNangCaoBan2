@@ -435,6 +435,9 @@ exports.updatePost=async(req,res)=>{
       
         //videoUploadNew =videoUpload.replace(videoUpload.slice(24,32),"embed/") 
         var videoUploadNew = pathVideo+ video_id
+    }else if(!videoUpload){
+        var pathVideo = 'https://www.youtube.com/embed/'
+        videoUploadNew=pathVideo
     }
     else 
     videoUploadNew=videoUpload

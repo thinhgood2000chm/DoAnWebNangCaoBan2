@@ -67,6 +67,137 @@ let socket
   })
   })
 
+
+ function deletePost(e){
+    //e.preventDefault();
+    $("#confirmDelete").modal("show")
+    var id =e.getAttribute("data-id")
+    document.getElementById("modalBtnDelete").setAttribute('data-id',id)
+    //$("#modalBtnDelete").attr('data-id',id)
+    //console.log(id);
+  }
+function updateLink(e){
+    var id = e.getAttribute("data-id")
+  
+    var name= e.getAttribute("data-name")
+    var imageUser =e.getAttribute("data-imageuser")// chỗ này nếu truyền vào imageUser thì trong targer cũng thành imageuser
+    var message = e.getAttribute("data-message")
+    var video = e.getAttribute("data-video")
+    console.log("id, imageUser,message, video",id, imageUser,message, video );
+    document.getElementById("recipient-name").value=name
+    document.getElementById("message-text").innerHTML=message
+    document.getElementById("videoUpload").innerHTML=video
+    document.getElementById("btnChange").setAttribute('data-id',id)
+    document.getElementById("btnChange").setAttribute("data-imageuser",imageUser)
+    
+    /*$("#recipient-name").val(name)
+    $("#message-text").html(message)
+    $("#videoUpload").html(video)
+    $("#btnChange").attr("data-id", id)
+    $("#btnChange").attr("data-imageuser",imageUser )*/
+  }
+
+  // thay đổi bài biết
+function btnChange(e){
+//$("#btnChange").click(e=>{
+  var btn = e.target
+  var id = e.getAttribute("data-id")
+  var message=document.getElementById("message-text").value
+  var video=document.getElementById("videoUpload").value
+  //console.log( message, id);
+  var inputImage = document.getElementById("image_uploads")    
+        // ảnh người dùng update lên
+  var file = inputImage.files;
+  console.log("id,message,video,file",id,message,video,file);
+  var formData = new FormData();
+  formData.append("message",message)
+  formData.append("videoUpload",video)
+  formData.append("id",id)
+  for (var i =0;i<=file.length;i++){
+    formData.append("file",file[i])
+  }
+  for (var value of formData.values()) {
+      console.log("value",value);
+  }
+
+  $('#myModal').hide();
+  $('.modal-backdrop').hide();
+  $.ajax({
+    url: 'http://localhost:3000/updatePost',
+    type: 'POST',
+    dataType: 'JSON',
+    enctype:"multipart/form-data",
+    contentType: false,
+    processData: false,
+    data: formData
+  
+}).done(ketqua=>{
+  if(ketqua.code===0){
+    updatedMessage = ketqua.data.message
+    updatedImage= ketqua.data.image
+    id= ketqua.data.id
+    console.log("id sau khi nhân data update", id)
+    video = ketqua.data.videoUploadNew
+    //console.log(id,updatedMessage, updatedImage);
+    document.getElementsByClassName(id)[1].remove()
+
+    // vì class có thể lấy nhiều nên sẽ tạo thành mảng và lấy cái đầu tiên vì trong mảng chỉ có 1 phần tử giống id truyền vào
+    var divParentOfcontentUpdate= document.getElementsByClassName(id)[0]
+    //console.log("divParentOfcontentUpdate",divParentOfcontentUpdate);
+      // mess mới update
+ 
+    var divId = document.createElement("div")// div này dùng để remove() nếu cập nhật lại lần nữa
+    setAttributes(divId,{"id":id})
+    var p2 = document.createElement("p")
+    var nodeMess = document.createTextNode(updatedMessage);
+    p2.appendChild(nodeMess)
+    divId.appendChild(p2)
+    divParentOfcontentUpdate.appendChild(divId)
+
+    //hình ảnh sau khi update
+   
+    //console.log("imageRecieveFromServer",updatedImage);
+    var divTagsubParentImage =document.createElement("div")
+    setAttributes(divTagsubParentImage,{"class":"row no-gutters mt-1"})
+ 
+    for(var i=0;i<updatedImage.length;i++){
+        var divTagChild= document.createElement("div")
+        setAttributes(divTagChild,{"class":"col-6"})
+        var imageUpload= document.createElement("img")
+        setAttributes(imageUpload,{"src":updatedImage[i],"class":"img-fluid pr-1"})
+        divTagChild.appendChild(imageUpload)
+        divTagsubParentImage.appendChild(divTagChild)
+        divId.appendChild(divTagsubParentImage)
+    
+        }
+      
+        var divOfvideo = document.createElement("div")
+        setAttributes(divOfvideo,{"class":"col-6"})
+
+      
+        if(video !=='https://www.youtube.com/embed/'){
+        
+          var iframe= document.createElement("iframe")
+          setAttributes(iframe,{"width":"400", "height":"300","src":video})
+          
+          divOfvideo.appendChild(iframe)
+        }
+        divTagsubParentImage.appendChild(divOfvideo)
+        divId.appendChild(divTagsubParentImage)
+            // thời gian cập nhật 
+        var smallTag = document.createElement("small")
+        setAttributes(smallTag,{"class":"text-muted"})
+        var nodeSmallTimeCreate = document.createTextNode("now")
+        smallTag.appendChild(nodeSmallTimeCreate)
+        divId.appendChild(smallTag)
+        var br = document.createElement("br")
+        divId.appendChild(br)
+  }
+    
+
+})
+}
+
   function postNoti(){
     var faculty = document.getElementById("selectFaculty").value
     var titlePostNoti = document.getElementById("title-text").value
@@ -326,8 +457,8 @@ $(document).ready(function(){
           console.log($('#listCard').height() );
           start = start +1
           console.log("start sau khi cộng",start);
-          console.log(window.location);
-          var hiddenpicture = document.getElementById("hiddenpicture").value
+          
+          var hiddenpicture = document.getElementById("hiddenPicture").value
           var data= {
             start:start, 
             hiddenpicture: hiddenpicture,
@@ -350,16 +481,35 @@ $(document).ready(function(){
                   console.log(`${json.data[i].email}`);
                   console.log("da vao i ");
                        var htmlLoad=$(
-                         `<div class="card" >
+                         `<div class="card"  id="${json.data[i]._id}">
+                         <div class="cart-header">
+                         <div class="card-actions float-right">
+                           <div class="dropdown show">
+                               <a href="#" data-toggle="dropdown" data-display="static">
+                               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-horizontal align-middle"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
+                               </a>
+   
+                               <div class="dropdown-menu dropdown-menu-right">
+                                   <a class="dropdown-item btnUpdate" onclick ="updateLink(this)" data-id="${json.data[i]._id}" data-name="${json.data[i].name}" 
+                                      data-imageuser = "${json.data[i].imageUser}" data-message="${json.data[i].message}" data-video="${json.data[i].videoUpload}"data-toggle="modal" data-target="#myModal">chỉnh sửa</a>
+                                   <a class="dropdown-item btnDelete" data-id="${json.data[i]._id}"  onclick="deletePost(this)"data-toggle="confirmDelete" data-target="#confirmDelete">xóa</a>
+                                
+                               </div>
+                           </div>
+                       </div>
+                     </div>
+
                           <div class="card-body h-100">
                            <div class="media">
-                           <input type = "hidden" id="idNews" value="${json.data[i._id]}">
+                           <input type = "hidden" id="idNews" value="${json.data[i]._id}">
                            
                                <img src="${json.data[i].imageUser}" width="56" height="56" class="rounded-circle mr-3" alt="Ashley Briggs">
                                <div class="media-body" >
                                <div id="addComment-${json.data[i]._id}">
                                
                                    <p class="mb-2"><strong><a href="profile/${json.data[i].email}">${json.data[i].name}</a></strong></p>
+                                   <div class="${json.data[i]._id}">  <!--vij tris 0-->
+                                   <div class="${json.data[i]._id}">
                                    <p>${json.data[i].message}</p>
                                      <!--hình ảnh được upload-->
                                    <div class="row no-gutters mt-1">
@@ -368,10 +518,17 @@ $(document).ready(function(){
                                 
     
                                        </div>
+
+                                       <div class="col-6" id= "video-${json.data[i]._id}">
+                                       
+                                       </div>
                                  
                                    </div>
            
                                    <small class="text-muted">${json.data[i].updatedAt}</small><br><!--time real dòng trạng thái-->
+                                   </div>
+                                   </div>
+                                   
                                    <!--nút like-->
                                    <a href="#" class="btn btn-sm btn-danger mt-1"><i class="fa fa-heart-o"></i>Like</a>
                                    
@@ -437,10 +594,21 @@ $(document).ready(function(){
                        for(var j =0;j<json.data[i].image.length;j++){
                         console.log('i,j',i,j);
                         console.log(`${json.data[i].image[j]}`);
-                         ChildeJ=$(`<img src="${json.data[i].image[j]}" class="img-fluid pr-1" alt="Unsplash" >`)
+                         var ChildeJ=$(`<img src="${json.data[i].image[j]}" class="img-fluid pr-1" alt="Unsplash" >`)
                          $(`#img-${json.data[i]._id}`).append(ChildeJ) 
                          
                        }
+                     
+                       if(json.data[i].videoUpload!=="https://www.youtube.com/embed/"){
+                         console.log("da vao embed");
+                          videoChild=$(`   
+                           <iframe width="400" height="300"
+                              src="${json.data[i].videoUpload}"
+                           </iframe>`)
+                      
+                         $(`#img-${json.data[i]._id}`).append(videoChild) 
+                       }
+                 
                       
                        
                        for(var z =0;z<json.data[i].comment.length;z++){
@@ -526,9 +694,16 @@ $(document).ready(function(){
         var hiddenEmailOfPost= document.getElementById("hiddenEmailOfPost").value
         var videoUpload= document.getElementById("videoUpload").value
         var inputImage = document.getElementById("image_uploads") 
-        
+    
         // ảnh người dùng đăng lên
         var file = inputImage.files;
+        console.log("messageText,videoUpload,file",messageText,videoUpload);
+        if(!messageText &&!videoUpload && file.length===0){
+          $("#alertMess").append(`  
+          <div class="alert alert-danger">
+            vui lòng nhập dữ liệu
+          </div>`)
+        }else{
         var formData = new FormData();
         formData.append("nameUser",nameUser)
         formData.append("hiddenPicture",hiddenPicture)
@@ -759,19 +934,13 @@ $(document).ready(function(){
             }
           
         });
+      }
+    
         
     });
+  
     // xóa bài viết
-    $(".btnDelete").click(e=>{
-      e.preventDefault();
-      $("#confirmDelete").modal("show")
-      var btn = e.target
-      var id=btn.dataset.id
-      $("#modalBtnDelete").attr('data-id',id)
-      //console.log(id);
-
-    
-    })
+  
     $("#modalBtnDelete").click(e=>{
       $("#confirmDelete").modal("hide")
       
@@ -792,118 +961,9 @@ $(document).ready(function(){
       })
     })
 
-$('.btnUpdate').click(e=>{
-  var btn = e.target
-  console.log(e);
-  var id = btn.dataset.id
-  var name= btn.dataset.name
-  var imageUser = btn.dataset.imageuser// chỗ này nếu truyền vào imageUser thì trong targer cũng thành imageuser
-  var message = btn.dataset.message
-  var video = btn.dataset.video
-  $("#recipient-name").val(name)
-  $("#message-text").html(message)
-  $("#videoUpload").html(video)
-  $("#btnChange").attr("data-id", id)
-  $("#btnChange").attr("data-imageuser",imageUser )
-})
 
-// thay đổi bài biết
-$("#btnChange").click(e=>{
-  var btn = e.target
-  var id = btn.dataset.id
-  //var imageUser = btn.dataset.imageuser
-  //var name=document.getElementById("recipient-name").value
-  var message=document.getElementById("message-text").value
-  var video=document.getElementById("videoUpload").value
-  //console.log( message, id);
-  var inputImage = document.getElementById("image_uploads")    
-        // ảnh người dùng update lên
-  var file = inputImage.files;
-  var formData = new FormData();
-  formData.append("message",message)
-  formData.append("videoUpload",video)
-  formData.append("id",id)
-  for (var i =0;i<=file.length;i++){
-    formData.append("file",file[i])
-  }
-  for (var value of formData.values()) {
-      console.log("value",value);
-  }
 
-  $('#myModal').hide();
-  $('.modal-backdrop').hide();
-  $.ajax({
-    url: 'http://localhost:3000/updatePost',
-    type: 'POST',
-    dataType: 'JSON',
-    enctype:"multipart/form-data",
-    contentType: false,
-    processData: false,
-    data: formData
-  
-}).done(ketqua=>{
-  if(ketqua.code===0){
-    updatedMessage = ketqua.data.message
-    updatedImage= ketqua.data.image
-    id= ketqua.data.id
-    video = ketqua.data.videoUploadNew
-    //console.log(id,updatedMessage, updatedImage);
-    document.getElementsByClassName(id)[1].remove()
 
-    // vì class có thể lấy nhiều nên sẽ tạo thành mảng và lấy cái đầu tiên vì trong mảng chỉ có 1 phần tử giống id truyền vào
-    var divParentOfcontentUpdate= document.getElementsByClassName(id)[0]
-    //console.log("divParentOfcontentUpdate",divParentOfcontentUpdate);
-      // mess mới update
- 
-    var divId = document.createElement("div")// div này dùng để remove() nếu cập nhật lại lần nữa
-    setAttributes(divId,{"id":id})
-    var p2 = document.createElement("p")
-    var nodeMess = document.createTextNode(updatedMessage);
-    p2.appendChild(nodeMess)
-    divId.appendChild(p2)
-    divParentOfcontentUpdate.appendChild(divId)
-
-    //hình ảnh sau khi update
-   
-    //console.log("imageRecieveFromServer",updatedImage);
-    var divTagsubParentImage =document.createElement("div")
-    setAttributes(divTagsubParentImage,{"class":"row no-gutters mt-1"})
-    for(var i=0;i<updatedImage.length;i++){
-        var divTagChild= document.createElement("div")
-        setAttributes(divTagChild,{"class":"col-6"})
-        var imageUpload= document.createElement("img")
-        setAttributes(imageUpload,{"src":updatedImage[i],"class":"img-fluid pr-1"})
-        divTagChild.appendChild(imageUpload)
-        divTagsubParentImage.appendChild(divTagChild)
-        divId.appendChild(divTagsubParentImage)
-    
-        }
-        var divOfvideo = document.createElement("div")
-        setAttributes(divOfvideo,{"class":"col-6"})
-
-        console.log(ketqua.data.videoUpload);
-        if(video !=='embed/'){
-        
-        var iframe= document.createElement("iframe")
-        setAttributes(iframe,{"width":"400", "height":"300","src":video})
-        
-        divOfvideo.appendChild(iframe)
-        }
-        divTagsubParentImage.appendChild(divOfvideo)
-        divId.appendChild(divTagsubParentImage)
-            // thời gian cập nhật 
-        var smallTag = document.createElement("small")
-        setAttributes(smallTag,{"class":"text-muted"})
-        var nodeSmallTimeCreate = document.createTextNode("now")
-        smallTag.appendChild(nodeSmallTimeCreate)
-        divId.appendChild(smallTag)
-        var br = document.createElement("br")
-        divId.appendChild(br)
-  }
-    
-
-})
-})
 
 
 
