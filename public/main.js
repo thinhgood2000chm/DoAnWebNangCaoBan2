@@ -70,7 +70,7 @@ let socket
 
  function deletePost(e){
     //e.preventDefault();
-    $("#confirmDelete").modal("show")
+    //$("#confirmDelete").modal("show")
     var id =e.getAttribute("data-id")
     document.getElementById("modalBtnDelete").setAttribute('data-id',id)
     //$("#modalBtnDelete").attr('data-id',id)
@@ -100,7 +100,7 @@ function updateLink(e){
   // thay đổi bài biết
 function btnChange(e){
 //$("#btnChange").click(e=>{
-  var btn = e.target
+  //var btn = e.target
   var id = e.getAttribute("data-id")
   var message=document.getElementById("message-text").value
   var video=document.getElementById("videoUpload").value
@@ -482,22 +482,9 @@ $(document).ready(function(){
                   console.log("da vao i ");
                        var htmlLoad=$(
                          `<div class="card"  id="${json.data[i]._id}">
-                         <div class="cart-header">
-                         <div class="card-actions float-right">
-                           <div class="dropdown show">
-                               <a href="#" data-toggle="dropdown" data-display="static">
-                               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-horizontal align-middle"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
-                               </a>
-   
-                               <div class="dropdown-menu dropdown-menu-right">
-                                   <a class="dropdown-item btnUpdate" onclick ="updateLink(this)" data-id="${json.data[i]._id}" data-name="${json.data[i].name}" 
-                                      data-imageuser = "${json.data[i].imageUser}" data-message="${json.data[i].message}" data-video="${json.data[i].videoUpload}"data-toggle="modal" data-target="#myModal">chỉnh sửa</a>
-                                   <a class="dropdown-item btnDelete" data-id="${json.data[i]._id}"  onclick="deletePost(this)"data-toggle="confirmDelete" data-target="#confirmDelete">xóa</a>
-                                
-                               </div>
-                           </div>
-                       </div>
-                     </div>
+                         <div class="cart-header" id="cardHeader">
+                      
+                        </div>
 
                           <div class="card-body h-100">
                            <div class="media">
@@ -590,6 +577,25 @@ $(document).ready(function(){
                          </div>
                        </div>`)
                        $(".listCard").append(htmlLoad)   
+
+                       if(json.data[i].email===json.data2.email){
+                         var menuHeaderCard = $(`   
+                        <div class="card-actions float-right">
+                         <div class="dropdown show">
+                             <a href="#" data-toggle="dropdown" data-display="static">
+                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-horizontal align-middle"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
+                             </a>
+  
+                             <div class="dropdown-menu dropdown-menu-right">
+                                 <a class="dropdown-item btnUpdate" onclick ="updateLink(this)" data-id="${json.data[i]._id}" data-name="${json.data[i].name}" 
+                                    data-imageuser = "${json.data[i].imageUser}" data-message="${json.data[i].message}" data-video="${json.data[i].videoUpload}"data-toggle="modal" data-target="#myModal">chỉnh sửa</a>
+                                 <a class="dropdown-item btnDelete" data-id="${json.data[i]._id}"  onclick="deletePost(this)"data-toggle="modal" data-target="#confirmDelete">xóa</a>
+                              
+                             </div>
+                         </div>
+                        </div>`)
+                        $('#cardHeader').append(menuHeaderCard)
+                       }
 
                        for(var j =0;j<json.data[i].image.length;j++){
                         console.log('i,j',i,j);
@@ -686,14 +692,14 @@ $(document).ready(function(){
         
         e.preventDefault();
         
-        var nameUser =document.getElementById("recipient-name").value
+        var nameUser =document.getElementById("recipient-name1").value
         // đây là ảnh đại diện của người dùng đang đăng bài
         var hiddenPicture = document.getElementById("hiddenPicture").value
         // dòng 119 index.ejs
-        var messageText= document.getElementById("message-text").value
+        var messageText= document.getElementById("message-text1").value
         var hiddenEmailOfPost= document.getElementById("hiddenEmailOfPost").value
-        var videoUpload= document.getElementById("videoUpload").value
-        var inputImage = document.getElementById("image_uploads") 
+        var videoUpload= document.getElementById("videoUpload1").value
+        var inputImage = document.getElementById("image_uploads1") 
     
         // ảnh người dùng đăng lên
         var file = inputImage.files;
@@ -718,7 +724,7 @@ $(document).ready(function(){
             console.log("value",value);
         }
 
-        $('#myModal').hide();
+        $('#myModal1').hide();
         $('.modal-backdrop').hide();
         $.ajax({
             url: 'http://localhost:3000/insertPost/',
@@ -942,7 +948,7 @@ $(document).ready(function(){
     // xóa bài viết
   
     $("#modalBtnDelete").click(e=>{
-      $("#confirmDelete").modal("hide")
+      //$("#confirmDelete").modal("hide")
       
       var btn = e.target
       var id=btn.dataset.id

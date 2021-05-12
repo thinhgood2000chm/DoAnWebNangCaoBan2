@@ -35,13 +35,15 @@ router.get("/",checkAuthen,(req,res)=>{
                 }
                 verify().then(()=>{
                     console.log(user.email);
+                    var email = user.email
+                    console.log("email = user.email", email);
                     accountStudent.findOne({email: user.email},(err, doc)=>{
                         //console.log(doc);
                         if(doc.length===0){
-                            res.render('index',{doc})
+                            res.render('index',{doc,email})
                         }
                         else {
-                        res.render('index',{doc,docs})
+                        res.render('index',{doc,docs,email})
                         }
                     })
                     
@@ -49,8 +51,9 @@ router.get("/",checkAuthen,(req,res)=>{
             }
             else {
                 let email = req.cookies.account;
+                //console.log(email);
                 accountF.findOne({email:email},(err, doc)=>{
-                    res.render('index',{doc,docs})
+                    res.render('index',{doc,docs,email})
                 })
         }
         } 

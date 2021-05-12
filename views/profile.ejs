@@ -45,7 +45,7 @@
                 
                 <!-- Modal footer -->
                 <div class="modal-footer">
-                  <button data-id="???" type="button" class="btn btn-danger" id="modalBtnDelete"> Xóa</button><!--data-id ở đây dùng để gửi lên server đối với modal-->
+                  <button data-id="???" type="button" class="btn btn-danger" id="modalBtnDelete" data-dismiss="modal"> Xóa</button><!--data-id ở đây dùng để gửi lên server đối với modal-->
                   <button type="button" class="btn btn-dark" data-dismiss="modal">Đóng</button>
                 </div>
                 
@@ -157,7 +157,7 @@
                             <div class="dropdown-menu dropdown-menu-right">
                                 <a class="dropdown-item btnUpdate" onclick ="updateLink(this)"data-id="<%=docs[i]._id%>" data-name="<%=docs[i].name%>" 
                                    data-imageuser = "<%=docs[i].imageUser%>" data-message="<%=docs[i].message%>" data-video="<%=docs[i].videoUpload%>"data-toggle="modal" data-target="#myModal">chỉnh sửa</a>
-                                <a class="dropdown-item btnDelete" data-id="<%=docs[i]._id%>" onclick="deletePost(this)" data-toggle="confirmDelete" data-target="#confirmDelete">xóa</a>
+                                <a class="dropdown-item btnDelete" data-id="<%=docs[i]._id%>" onclick="deletePost(this)" data-toggle="modal" data-target="#confirmDelete">xóa</a>
                              
                             </div>
                         </div>

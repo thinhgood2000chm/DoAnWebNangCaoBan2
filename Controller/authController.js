@@ -712,8 +712,9 @@ exports.loadWindowScroll= (req,res)=>{
                  user.email= payload.email;
            }
            verify().then(()=>{
+            var email =  user.email
             post.find({email:user.email}).sort({createdAt:-1}).skip(skip).limit(10).exec((err, doc)=>{
-                return res.json({code:0, data:doc,data2:{hiddenpicture,hiddenpicture}})
+                return res.json({code:0, data:doc,data2:{hiddenpicture,hiddenpicture,email}})
            })
         })
         }
@@ -721,32 +722,63 @@ exports.loadWindowScroll= (req,res)=>{
       
             let email= req.cookies.account;
             post.find({email}).sort({createdAt:-1}).skip(skip).limit(10).exec((err, doc)=>{
-                return res.json({code:0, data:doc,data2:{hiddenpicture,hiddenpicture}})
+                return res.json({code:0, data:doc,data2:{hiddenpicture,hiddenpicture,email}})
             })
         }
     }
  
     else if(pathname==='/'){
-
-        post.find({}).sort({createdAt:-1}).skip(skip).limit(10).exec((err, doc)=>{
-            if(!doc){
-                console.log(" đã vào null");
-                res.json({code:1})
-            }
-        
+        let token = req.cookies['session-token']
+        if(token!==undefined){
+        let user = {}
+         async function verify() {
+             const ticket = await client.verifyIdToken({
+                 idToken: token,
+                 audience: CLIENT_ID,  
+             });
+             const payload = ticket.getPayload();
+                 user.email= payload.email;
+           }
+           verify().then(()=>{
+                var email =  user.email
+                post.find({}).sort({createdAt:-1}).skip(skip).limit(10).exec((err, doc)=>{
+                    if(!doc){
+                        console.log(" đã vào null");
+                        res.json({code:1})
+                    }
+                
+                    else {
+                        console.log(" đã vào đây");
+                    
+                    // console.log(doc);
+                    res.json({code:0, data:doc,data2:{hiddenpicture,hiddenpicture,email}})
+                    }
+                })
+            })
+   
+         }
             else {
-                console.log(" đã vào đây");
-            
-            // console.log(doc);
-            res.json({code:0, data:doc,data2:{hiddenpicture,hiddenpicture}})
+                let email= req.cookies.account;
+                post.find({}).sort({createdAt:-1}).skip(skip).limit(10).exec((err, doc)=>{
+                    if(!doc){
+                        console.log(" đã vào null");
+                        res.json({code:1})
+                    }
+                
+                    else {
+                        console.log(" đã vào đây");
+                    
+                    // console.log(doc);
+                    res.json({code:0, data:doc,data2:{hiddenpicture,hiddenpicture,email}})
+                    }
+                })
             }
-        })
-    }
+        }
     else {
         var email =pathname.slice(9)
         //console.log(email);
         post.find({email}).sort({createdAt:-1}).skip(skip).limit(10).exec((err, doc)=>{
-            return res.json({code:0, data:doc,data2:{hiddenpicture,hiddenpicture}})
+            return res.json({code:0, data:doc,data2:{hiddenpicture,hiddenpicture,email}})
        })
      }
 }
