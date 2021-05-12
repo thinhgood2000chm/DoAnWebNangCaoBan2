@@ -505,3 +505,9 @@ overflow: hidden; overflow-wrap: break-word; height: 50px;
 .titleNoti{
   text-align: center  ;
 }
+
+.faCircle{
+  margin-left: 2px;
+font-size:5px;
+
+}

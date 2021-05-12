@@ -643,9 +643,7 @@ $(document).ready(function(){
                       }
               
                   }
-    
-           
-           
+
           })
    
     }
@@ -741,7 +739,46 @@ $(document).ready(function(){
                 console.log(ketqua.data.videoUpload);
                 var parentOfCard= document.getElementById("parentOfCard")
                 var card = document.createElement('div')
-                setAttributes(card,{"class":"card"})
+                setAttributes(card,{"class":"card", "id":ketqua.data.id})
+
+                // menu 3 chấm 
+                var cardHeader = document.createElement("div")
+                setAttributes(cardHeader,{"class":"cart-header"})
+                var divCartAction = document.createElement("div")
+                setAttributes(divCartAction,{"class":"card-actions float-right"})
+                var divDropdown = document.createElement("div")
+                setAttributes(divDropdown,{"class":"dropdown show"})
+                var aTagDropdown = document.createElement("a")
+                setAttributes(aTagDropdown,{"href":"#" ,"data-toggle":"dropdown", "data-display":"static"})
+          
+                var dotIcon1 = document.createElement("i")
+                setAttributes(dotIcon1,{"class":"fa fa-circle faCircle"})
+                var dotIcon2 = document.createElement("i")
+                setAttributes(dotIcon2,{"class":"fa fa-circle faCircle"})
+                var dotIcon3 = document.createElement("i")
+                setAttributes(dotIcon3,{"class":"fa fa-circle faCircle"})
+                aTagDropdown.appendChild(dotIcon1)
+                aTagDropdown.appendChild(dotIcon2)
+                aTagDropdown.appendChild(dotIcon3)
+
+                var divDropdownMenu =document.createElement("div")
+                setAttributes(divDropdownMenu,{"class":"dropdown-menu dropdown-menu-right"})
+                var aTagDropdownItem= document.createElement("a")
+                setAttributes(aTagDropdownItem,{"class":"dropdown-item btnUpdate", "onclick":"updateLink(this)","data-id":ketqua.data.id, "data-name": ketqua.data.name, "data-imageuser": ketqua.data.imageUser, "data-message":ketqua.data.message, "data-video":ketqua.data.videoUpload,"data-toggle":"modal", "data-target":"#myModal"})
+                aTagDropdownItem.append("chỉnh sửa")
+                var aTagDropdownItemDelete = document.createElement("a")
+                setAttributes(aTagDropdownItemDelete,{"class":"dropdown-item btnDelete", "data-id":ketqua.data.id, "onclick":"deletePost(this)", "data-toggle":"modal", "data-target":"#confirmDelete"})
+                aTagDropdownItemDelete.append("xóa")
+                divDropdownMenu.appendChild(aTagDropdownItem)
+                divDropdownMenu.appendChild(aTagDropdownItemDelete)
+
+                divDropdown.appendChild(aTagDropdown)
+                divDropdown.appendChild(divDropdownMenu)
+                divCartAction.appendChild(divDropdown)
+                cardHeader.appendChild(divCartAction)
+                card.appendChild(cardHeader)
+
+                // body card
                 var cardBody= document.createElement("div")
                 setAttributes(cardBody,{"class":"card-body h-100"})
                 var parentMedia=document.createElement("div")
@@ -760,6 +797,10 @@ $(document).ready(function(){
                 // thiết lập bên trong của thẻ media-body
                 //thời gian tạo bài viết
                 // tên người đăng mới
+                var divP0= document.createElement("div")
+                setAttributes(divP0,{"class":ketqua.data.id})
+                var divP1= document.createElement("div")
+                setAttributes(divP1,{"class":ketqua.data.id})
                 var ptag= document.createElement("p")
                 setAttributes(ptag,{"class":"mb-2", "id":"parentOfStrong"})
             
@@ -775,7 +816,7 @@ $(document).ready(function(){
                 var nodeMess = document.createTextNode(ketqua.data.message);
                 p2.appendChild(nodeMess)
                 //parentMediaBody.appendChild(p2)
-                divAddCommentId.appendChild(p2)
+                divP1.appendChild(p2)
                 
                 // hình ảnh sau khi đăng 127
                 imageRecieveFromServer = JSON.parse(ketqua.data.image)
@@ -790,7 +831,7 @@ $(document).ready(function(){
                     divTagChild.appendChild(imageUpload)
                     divTagsubParentImage.appendChild(divTagChild)
                     //parentMediaBody.appendChild(divTagsubParentImage)
-                    divAddCommentId.appendChild(divTagsubParentImage)
+                    divP1.appendChild(divTagsubParentImage)
                     }
                   var divOfvideo = document.createElement("div")
                   setAttributes(divOfvideo,{"class":"col-6"})
@@ -805,15 +846,16 @@ $(document).ready(function(){
                   }
                   divTagsubParentImage.appendChild(divOfvideo)
                   //parentMediaBody.appendChild(divTagsubParentImage)
-                  divAddCommentId.appendChild(divTagsubParentImage)
+                  divP1.appendChild(divTagsubParentImage)
                 //thời gian tạo bài đăng
                 var smallTag = document.createElement("small")
                 setAttributes(smallTag,{"class":"text-muted"})
                 var nodeSmallTimeCreate = document.createTextNode("now")
                 smallTag.appendChild(nodeSmallTimeCreate)
                 //parentMediaBody.appendChild(smallTag)
-                divAddCommentId.appendChild(smallTag)
-
+                divP1.appendChild(smallTag)
+                  divP0.appendChild(divP1)
+                  divAddCommentId.appendChild(divP0)
                 var br = document.createElement("br")
                 //parentMediaBody.appendChild(br)
                 divAddCommentId.appendChild(br)
