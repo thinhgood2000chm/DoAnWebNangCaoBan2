@@ -30,9 +30,44 @@
    <%-include("header")%>
       <!--navbar-->
     
-      
+            <!------------------------------------------->
+            <input type="hidden" value="<%=doc.email%>" id="hiddenEmailOfPost">
+            <input type="hidden" value="<%=doc.picture%>" id="hiddenPicture">
+            <input type="hidden" value="<%=doc.fullname%>" id="hiddenFullname">
+          
+            <!---=---------------------------------------------->
       <!--main-->
       <main role="main" class="container">
+  <!-- modal delete -->
+           <!--modal delete-->
+           <div id="confirmDelete" class="modal fade">
+            <div class=" modal-dialog ">
+              <div class="modal-content">
+              
+                <!-- Modal Header -->
+                <div class="modal-header">
+                  <h4 class="modal-title">Xóa bài viết</h4>
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                
+                <!-- Modal body -->
+                <div class="modal-body">
+                  Bạn có chắc rằng muốn xóa bài viết này?
+                </div>
+                
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                  <button data-id="???" type="button" class="btn btn-danger" id="modalBtnDelete"  data-dismiss="modal"> Xóa</button><!--data-id ở đây dùng để gửi lên server đối với modal-->
+                  <button type="button" class="btn btn-dark" data-dismiss="modal">Đóng</button>
+                </div>
+                
+              </div>
+            </div>
+          </div>
+
+
+
+
         <!--Đăng tin-->
         <div id="alertNoti" >
       
@@ -51,12 +86,12 @@
             <h6 class="mb-0 text-white lh-100">Home</h6>
             <h5>Please write something in this post</h5>
             <!-- Button to Open the Modal -->
-            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal">
+            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal1">
               Post
             </button>
 
             <!-- The Modal -->
-            <div class="modal fade" id="myModal">
+            <div class="modal fade" id="myModal1">
               <div class="modal-dialog">
                 <div class="modal-content">
                 
@@ -69,19 +104,14 @@
                   <!-- Modal body -->
                   <div class="modal-body">
                     <form>
-                      <!------------------------------------------->
-                      <input type="hidden" value="<%=doc.email%>" id="hiddenEmailOfPost">
-                      <input type="hidden" value="<%=doc.picture%>" id="hiddenPicture">
-                      <input type="hidden" value="<%=doc.fullname%>" id="hiddenFullname">
-                      <input type="hidden" value="<%=doc.picture%>" id="hiddenpicture">
-                      <!---=---------------------------------------------->
+                
                       <div class="form-group">
                         <label for="recipient-name" class="col-form-label">Recipient:</label>
-                        <input type="text" class="form-control" id="recipient-name" value="<%=doc.fullname%>">
+                        <input type="text" class="form-control" id="recipient-name1" value="<%=doc.fullname%>" disabled>
                       </div>
                       <div class="form-group">
                         <label for="message-text" class="col-form-label">Message:</label>
-                        <textarea class="form-control" id="message-text" ></textarea>
+                        <textarea class="form-control" id="message-text1" ></textarea>
                       </div>
                       <!--Mục input hình ảnh, file, video-->
                       <div>
@@ -89,11 +119,11 @@
                           <div>
                             <i class="bi bi-file-earmark-richtext"></i>
                             <label for="image_uploads">Choose images to upload (PNG, JPG, JPEG)</label>
-                            <input class="fa fa-image icon" type="file" id="image_uploads" name="image_uploads" accept=".jpg, .jpeg, .png" multiple aria-hidden="true">
+                            <input class="fa fa-image icon" type="file" id="image_uploads1" name="image_uploads" accept=".jpg, .jpeg, .png" multiple aria-hidden="true">
                           </div>
                           <div>
                             <label for="file_uploads">paste link video on youtube to upload</label>
-                            <textarea class="form-controln"  id="videoUpload"  ></textarea>
+                            <textarea class="form-controln"  id="videoUpload1"  ></textarea>
  
                           </div>
                             
@@ -102,6 +132,7 @@
                       </div>
                       
                     </form>
+                    <div id="alertMess"></div>
                   </div>
                   
                   <!-- Modal footer -->
@@ -133,7 +164,27 @@
                         <%if(locals.docs){%>
                        <!--post laf i-->
                           <%for(var i=0;i<docs.length;i++){%>
-                          <div class="card" >
+                          <div class="card"  id="<%=docs[i]._id%>">
+                            <%if(docs[i].email === locals.email){%>
+                            <div class="cart-header">
+                              <div class="card-actions float-right">
+                                <div class="dropdown show">
+                                    <a href="#" data-toggle="dropdown" data-display="static">
+                                   <!-- <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-horizontal align-middle"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>-->
+                                    <i class="fa fa-circle faCircle"></i><i class="fa fa-circle faCircle"></i><i class="fa fa-circle faCircle"></i>
+                                    </a>
+        
+                                    <div class="dropdown-menu dropdown-menu-right">
+                                        <a class="dropdown-item btnUpdate" onclick ="updateLink(this)"data-id="<%=docs[i]._id%>" data-name="<%=docs[i].name%>" 
+                                           data-imageuser = "<%=docs[i].imageUser%>" data-message="<%=docs[i].message%>" data-video="<%=docs[i].videoUpload%>"data-toggle="modal" data-target="#myModal">chỉnh sửa</a>
+                                        <a class="dropdown-item btnDelete" data-id="<%=docs[i]._id%>" onclick="deletePost(this)" data-toggle="modal" data-target="#confirmDelete">xóa</a>
+                                     
+                                    </div>
+                                </div>
+                            </div>
+                          </div>
+                          <%}%>
+
                             <div class="card-body h-100">
                                 <div class="media">
                                   <input type = "hidden" id="idNews" value="<%=docs[i]._id%>">
@@ -142,6 +193,8 @@
                                     <div class="media-body" >
                                       <div id="addComment-<%=docs[i]._id%>">
                                         <p class="mb-2"><strong><a href="/profile/<%=docs[i].email%>"> <%=docs[i].name%></a></strong></p>
+                                        <div class="<%=docs[i]._id%>">  <!--vij tris 0-->
+                                        <div class="<%=docs[i]._id%>"><!--vij tris 1-->
                                         <p><%=docs[i].message%></p>
                                           <!--hình ảnh được upload-->
                                         <div class="row no-gutters mt-1">
@@ -150,6 +203,7 @@
                                                 <img src="<%=docs[i].image[j]%>" class="img-fluid pr-1" alt="Unsplash" >
                                             </div>
                                         <%}%>
+                                            <!--video upload-->
                                         <div class="col-6">
                                           <%if(docs[i].videoUpload!=="https://www.youtube.com/embed/"){%>
                                           <iframe width="400" height="300"
@@ -158,14 +212,12 @@
                                         <%}%>
                                         </div>
                                         </div>
-                                        <!--video upload-->
-                                        <div class="row no-gutters mt-1">
-                                         
-                                        
-                                       
-                                        </div>
+                                    
+                                
             
                                         <small class="text-muted"><%=docs[i].updatedAt%></small><br><!--time real dòng trạng thái-->
+                                        </div>
+                                        </div>
                                         <!--nút like-->
                                         <a href="#" class="btn btn-sm btn-danger mt-1"><i class="fa fa-heart-o"></i>Like</a>
                                         
@@ -347,9 +399,64 @@
                  
               </div>
               
-
+              <!--update modal-->
+              <div class="modal fade" id="myModal">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                  
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                      <h4 class="modal-title">Your Post</h4>
+                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                      <form>
+                        <!------------------------------------------->
+                        <!--<input type="hidden" value="" id="hiddenEmailOfPost">
+                        <input type="hidden" value="<%=doc.picture%>" id="hiddenPicture">-->
+                        <!---=---------------------------------------------->
+                        <div class="form-group">
+                          <label for="recipient-name" class="col-form-label">Recipient:</label>
+                          <input type="text" class="form-control" id="recipient-name" value="">
+                        </div>
+                        <div class="form-group">
+                          <label for="message-text" class="col-form-label">Message:</label>
+                          <textarea class="form-control" id="message-text" ></textarea>
+                        </div>
+                        <!--Mục input hình ảnh, file, video-->
+                        <div>
+                          <div class="input-group">
+                            <div>
+                              <i class="bi bi-file-earmark-richtext"></i>
+                              <label for="image_uploads">Choose images to upload (PNG, JPG, JPEG)</label>
+                              <input class="fa fa-image icon" type="file" id="image_uploads" name="image_uploads" accept=".jpg, .jpeg, .png" multiple aria-hidden="true">
+                            </div>
+                            <div>
+                              <label for="file_uploads">paste link video on youtube to upload</label>
+                              <textarea class="form-controln"  id="videoUpload"  ></textarea>
+   
+                            </div>
+                              
+                            <div class="preview">
+                          </div>
+                        </div>
+                        
+                      </form>
+                    </div>
+                    
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                      <button type="submit" class="btn btn-primary" data-id="" data-imaguser ="" id="btnChange"onclick="btnChange(this)">Update</button>
+                    </div>
+          
+              </div>
+            </div>
+          </div>
             
-    
+        
       
   </body>
   

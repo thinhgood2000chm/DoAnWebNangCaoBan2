@@ -249,7 +249,6 @@ exports.changeProfile1=async(req,res)=>{
 }
 
 
-
 // đổi mật khẩu
 exports.changePassword=(req,res)=>{
     var{emailHidden, password, newPassword, newPasswordConfirm}= req.body;
@@ -329,7 +328,7 @@ exports.insertPost=async(req,res)=>{
   
     //videoUploadNew =videoUpload.replace(videoUpload.slice(24,32),"embed/") 
     var videoUploadNew = pathVideo+ video_id
-	console.log("videoUploadNew",videoUploadNew);
+    console.log("videoUploadNew",videoUploadNew);
     //console.log("image",images);
     var pathImage=[]
     var image=[]
@@ -423,18 +422,22 @@ exports.updatePost=async(req,res)=>{
     console.log( id, message,videoUpload );
     images = req.files;// file đối với single , files đối với multi
     if(videoUpload.includes("watch")){
-		var pathVideo = 'https://www.youtube.com/embed/'
-		var video_id = videoUpload.slice(32)
-	   // console.log("video_id",video_id);
-	   //lấy id của youtube ( vì một số id có thêm chuỗi kí tự = sẽ ko tách thủ công được )
-		var ampersandPosition = video_id.indexOf('&');
-		if(ampersandPosition != -1) {
-			video_id = video_id.substring(0, ampersandPosition);
-			//console.log("id video",video_id);
-		}
-	  
-		//videoUploadNew =videoUpload.replace(videoUpload.slice(24,32),"embed/") 
-		var videoUploadNew = pathVideo+ video_id
+        console.log("da vao includes");
+        var pathVideo = 'https://www.youtube.com/embed/'
+        var video_id = videoUpload.slice(32)
+       // console.log("video_id",video_id);
+       //lấy id của youtube ( vì một số id có thêm chuỗi kí tự = sẽ ko tách thủ công được )
+        var ampersandPosition = video_id.indexOf('&');
+        if(ampersandPosition != -1) {
+            video_id = video_id.substring(0, ampersandPosition);
+            //console.log("id video",video_id);
+        }
+      
+        //videoUploadNew =videoUpload.replace(videoUpload.slice(24,32),"embed/") 
+        var videoUploadNew = pathVideo+ video_id
+    }else if(!videoUpload){
+        var pathVideo = 'https://www.youtube.com/embed/'
+        videoUploadNew=pathVideo
     }
     else 
     videoUploadNew=videoUpload
@@ -709,8 +712,9 @@ exports.loadWindowScroll= (req,res)=>{
                  user.email= payload.email;
            }
            verify().then(()=>{
+            var email =  user.email
             post.find({email:user.email}).sort({createdAt:-1}).skip(skip).limit(10).exec((err, doc)=>{
-                return res.json({code:0, data:doc,data2:{hiddenpicture,hiddenpicture}})
+                return res.json({code:0, data:doc,data2:{hiddenpicture,hiddenpicture,email}})
            })
         })
         }
@@ -718,32 +722,63 @@ exports.loadWindowScroll= (req,res)=>{
       
             let email= req.cookies.account;
             post.find({email}).sort({createdAt:-1}).skip(skip).limit(10).exec((err, doc)=>{
-                return res.json({code:0, data:doc,data2:{hiddenpicture,hiddenpicture}})
+                return res.json({code:0, data:doc,data2:{hiddenpicture,hiddenpicture,email}})
             })
         }
     }
  
     else if(pathname==='/'){
-
-        post.find({}).sort({createdAt:-1}).skip(skip).limit(10).exec((err, doc)=>{
-            if(!doc){
-                console.log(" đã vào null");
-                res.json({code:1})
-            }
-        
+        let token = req.cookies['session-token']
+        if(token!==undefined){
+        let user = {}
+         async function verify() {
+             const ticket = await client.verifyIdToken({
+                 idToken: token,
+                 audience: CLIENT_ID,  
+             });
+             const payload = ticket.getPayload();
+                 user.email= payload.email;
+           }
+           verify().then(()=>{
+                var email =  user.email
+                post.find({}).sort({createdAt:-1}).skip(skip).limit(10).exec((err, doc)=>{
+                    if(!doc){
+                        console.log(" đã vào null");
+                        res.json({code:1})
+                    }
+                
+                    else {
+                        console.log(" đã vào đây");
+                    
+                    // console.log(doc);
+                    res.json({code:0, data:doc,data2:{hiddenpicture,hiddenpicture,email}})
+                    }
+                })
+            })
+   
+         }
             else {
-                console.log(" đã vào đây");
-            
-            // console.log(doc);
-            res.json({code:0, data:doc,data2:{hiddenpicture,hiddenpicture}})
+                let email= req.cookies.account;
+                post.find({}).sort({createdAt:-1}).skip(skip).limit(10).exec((err, doc)=>{
+                    if(!doc){
+                        console.log(" đã vào null");
+                        res.json({code:1})
+                    }
+                
+                    else {
+                        console.log(" đã vào đây");
+                    
+                    // console.log(doc);
+                    res.json({code:0, data:doc,data2:{hiddenpicture,hiddenpicture,email}})
+                    }
+                })
             }
-        })
-    }
+        }
     else {
         var email =pathname.slice(9)
         //console.log(email);
         post.find({email}).sort({createdAt:-1}).skip(skip).limit(10).exec((err, doc)=>{
-            return res.json({code:0, data:doc,data2:{hiddenpicture,hiddenpicture}})
+            return res.json({code:0, data:doc,data2:{hiddenpicture,hiddenpicture,email}})
        })
      }
 }

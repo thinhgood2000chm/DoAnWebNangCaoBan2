@@ -1,4 +1,5 @@
 
+
 let socket 
 
   console.log("server  đã sẵn sàng hoạt dộng")
@@ -66,6 +67,137 @@ let socket
     `)
   })
   })
+
+
+ function deletePost(e){
+    //e.preventDefault();
+    //$("#confirmDelete").modal("show")
+    var id =e.getAttribute("data-id")
+    document.getElementById("modalBtnDelete").setAttribute('data-id',id)
+    //$("#modalBtnDelete").attr('data-id',id)
+    //console.log(id);
+  }
+function updateLink(e){
+    var id = e.getAttribute("data-id")
+  
+    var name= e.getAttribute("data-name")
+    var imageUser =e.getAttribute("data-imageuser")// chỗ này nếu truyền vào imageUser thì trong targer cũng thành imageuser
+    var message = e.getAttribute("data-message")
+    var video = e.getAttribute("data-video")
+    console.log("id, imageUser,message, video",id, imageUser,message, video );
+    document.getElementById("recipient-name").value=name
+    document.getElementById("message-text").innerHTML=message
+    document.getElementById("videoUpload").innerHTML=video
+    document.getElementById("btnChange").setAttribute('data-id',id)
+    document.getElementById("btnChange").setAttribute("data-imageuser",imageUser)
+    
+    /*$("#recipient-name").val(name)
+    $("#message-text").html(message)
+    $("#videoUpload").html(video)
+    $("#btnChange").attr("data-id", id)
+    $("#btnChange").attr("data-imageuser",imageUser )*/
+  }
+
+  // thay đổi bài biết
+function btnChange(e){
+//$("#btnChange").click(e=>{
+  //var btn = e.target
+  var id = e.getAttribute("data-id")
+  var message=document.getElementById("message-text").value
+  var video=document.getElementById("videoUpload").value
+  //console.log( message, id);
+  var inputImage = document.getElementById("image_uploads")    
+        // ảnh người dùng update lên
+  var file = inputImage.files;
+  console.log("id,message,video,file",id,message,video,file);
+  var formData = new FormData();
+  formData.append("message",message)
+  formData.append("videoUpload",video)
+  formData.append("id",id)
+  for (var i =0;i<=file.length;i++){
+    formData.append("file",file[i])
+  }
+  for (var value of formData.values()) {
+      console.log("value",value);
+  }
+
+  $('#myModal').hide();
+  $('.modal-backdrop').hide();
+  $.ajax({
+    url: 'https://do-an-web-nc-mxh.herokuapp.com/updatePost',
+    type: 'POST',
+    dataType: 'JSON',
+    enctype:"multipart/form-data",
+    contentType: false,
+    processData: false,
+    data: formData
+  
+}).done(ketqua=>{
+  if(ketqua.code===0){
+    updatedMessage = ketqua.data.message
+    updatedImage= ketqua.data.image
+    id= ketqua.data.id
+    console.log("id sau khi nhân data update", id)
+    video = ketqua.data.videoUploadNew
+    //console.log(id,updatedMessage, updatedImage);
+    document.getElementsByClassName(id)[1].remove()
+
+    // vì class có thể lấy nhiều nên sẽ tạo thành mảng và lấy cái đầu tiên vì trong mảng chỉ có 1 phần tử giống id truyền vào
+    var divParentOfcontentUpdate= document.getElementsByClassName(id)[0]
+    //console.log("divParentOfcontentUpdate",divParentOfcontentUpdate);
+      // mess mới update
+ 
+    var divId = document.createElement("div")// div này dùng để remove() nếu cập nhật lại lần nữa
+    setAttributes(divId,{"id":id})
+    var p2 = document.createElement("p")
+    var nodeMess = document.createTextNode(updatedMessage);
+    p2.appendChild(nodeMess)
+    divId.appendChild(p2)
+    divParentOfcontentUpdate.appendChild(divId)
+
+    //hình ảnh sau khi update
+   
+    //console.log("imageRecieveFromServer",updatedImage);
+    var divTagsubParentImage =document.createElement("div")
+    setAttributes(divTagsubParentImage,{"class":"row no-gutters mt-1"})
+ 
+    for(var i=0;i<updatedImage.length;i++){
+        var divTagChild= document.createElement("div")
+        setAttributes(divTagChild,{"class":"col-6"})
+        var imageUpload= document.createElement("img")
+        setAttributes(imageUpload,{"src":updatedImage[i],"class":"img-fluid pr-1"})
+        divTagChild.appendChild(imageUpload)
+        divTagsubParentImage.appendChild(divTagChild)
+        divId.appendChild(divTagsubParentImage)
+    
+        }
+      
+        var divOfvideo = document.createElement("div")
+        setAttributes(divOfvideo,{"class":"col-6"})
+
+      
+        if(video !=='https://www.youtube.com/embed/'){
+        
+          var iframe= document.createElement("iframe")
+          setAttributes(iframe,{"width":"400", "height":"300","src":video})
+          
+          divOfvideo.appendChild(iframe)
+        }
+        divTagsubParentImage.appendChild(divOfvideo)
+        divId.appendChild(divTagsubParentImage)
+            // thời gian cập nhật 
+        var smallTag = document.createElement("small")
+        setAttributes(smallTag,{"class":"text-muted"})
+        var nodeSmallTimeCreate = document.createTextNode("now")
+        smallTag.appendChild(nodeSmallTimeCreate)
+        divId.appendChild(smallTag)
+        var br = document.createElement("br")
+        divId.appendChild(br)
+  }
+    
+
+})
+}
 
   function postNoti(){
     var faculty = document.getElementById("selectFaculty").value
@@ -290,13 +422,12 @@ function onSignIn(googleUser) {
     console.log('Signed in as: ' + xhr.responseText);
     if(xhr.responseText=="success"){
         signOut();
-        console.log("da vao dang nhap thanh cong ");
-        location.assign('https://do-an-web-nc-mxh.herokuapp.com/')
+        location.assign('/')
     }
     else 
     { 
         signOut();
-        console.log("da vao dang nhap khong thanh cong ");
+        console.log("da vao day");
         location.assign('/login')
         
     }
@@ -327,8 +458,8 @@ $(document).ready(function(){
           console.log($('#listCard').height() );
           start = start +1
           console.log("start sau khi cộng",start);
-          console.log(window.location);
-          var hiddenpicture = document.getElementById("hiddenpicture").value
+          
+          var hiddenpicture = document.getElementById("hiddenPicture").value
           var data= {
             start:start, 
             hiddenpicture: hiddenpicture,
@@ -351,16 +482,22 @@ $(document).ready(function(){
                   console.log(`${json.data[i].email}`);
                   console.log("da vao i ");
                        var htmlLoad=$(
-                         `<div class="card" >
+                         `<div class="card"  id="${json.data[i]._id}">
+                         <div class="cart-header" id="cardHeader">
+                      
+                        </div>
+
                           <div class="card-body h-100">
                            <div class="media">
-                           <input type = "hidden" id="idNews" value="${json.data[i._id]}">
+                           <input type = "hidden" id="idNews" value="${json.data[i]._id}">
                            
                                <img src="${json.data[i].imageUser}" width="56" height="56" class="rounded-circle mr-3" alt="Ashley Briggs">
                                <div class="media-body" >
                                <div id="addComment-${json.data[i]._id}">
                                
                                    <p class="mb-2"><strong><a href="profile/${json.data[i].email}">${json.data[i].name}</a></strong></p>
+                                   <div class="${json.data[i]._id}">  <!--vij tris 0-->
+                                   <div class="${json.data[i]._id}">
                                    <p>${json.data[i].message}</p>
                                      <!--hình ảnh được upload-->
                                    <div class="row no-gutters mt-1">
@@ -369,10 +506,17 @@ $(document).ready(function(){
                                 
     
                                        </div>
+
+                                       <div class="col-6" id= "video-${json.data[i]._id}">
+                                       
+                                       </div>
                                  
                                    </div>
            
                                    <small class="text-muted">${json.data[i].updatedAt}</small><br><!--time real dòng trạng thái-->
+                                   </div>
+                                   </div>
+                                   
                                    <!--nút like-->
                                    <a href="#" class="btn btn-sm btn-danger mt-1"><i class="fa fa-heart-o"></i>Like</a>
                                    
@@ -435,13 +579,43 @@ $(document).ready(function(){
                        </div>`)
                        $(".listCard").append(htmlLoad)   
 
+                       if(json.data[i].email===json.data2.email){
+                         var menuHeaderCard = $(`   
+                        <div class="card-actions float-right">
+                         <div class="dropdown show">
+                             <a href="#" data-toggle="dropdown" data-display="static">
+                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-horizontal align-middle"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
+                             </a>
+  
+                             <div class="dropdown-menu dropdown-menu-right">
+                                 <a class="dropdown-item btnUpdate" onclick ="updateLink(this)" data-id="${json.data[i]._id}" data-name="${json.data[i].name}" 
+                                    data-imageuser = "${json.data[i].imageUser}" data-message="${json.data[i].message}" data-video="${json.data[i].videoUpload}"data-toggle="modal" data-target="#myModal">chỉnh sửa</a>
+                                 <a class="dropdown-item btnDelete" data-id="${json.data[i]._id}"  onclick="deletePost(this)"data-toggle="modal" data-target="#confirmDelete">xóa</a>
+                              
+                             </div>
+                         </div>
+                        </div>`)
+                        $('#cardHeader').append(menuHeaderCard)
+                       }
+
                        for(var j =0;j<json.data[i].image.length;j++){
                         console.log('i,j',i,j);
                         console.log(`${json.data[i].image[j]}`);
-                         ChildeJ=$(`<img src="${json.data[i].image[j]}" class="img-fluid pr-1" alt="Unsplash" >`)
+                         var ChildeJ=$(`<img src="${json.data[i].image[j]}" class="img-fluid pr-1" alt="Unsplash" >`)
                          $(`#img-${json.data[i]._id}`).append(ChildeJ) 
                          
                        }
+                     
+                       if(json.data[i].videoUpload!=="https://www.youtube.com/embed/"){
+                         console.log("da vao embed");
+                          videoChild=$(`   
+                           <iframe width="400" height="300"
+                              src="${json.data[i].videoUpload}"
+                           </iframe>`)
+                      
+                         $(`#img-${json.data[i]._id}`).append(videoChild) 
+                       }
+                 
                       
                        
                        for(var z =0;z<json.data[i].comment.length;z++){
@@ -470,9 +644,7 @@ $(document).ready(function(){
                       }
               
                   }
-    
-           
-           
+
           })
    
     }
@@ -515,21 +687,28 @@ $(document).ready(function(){
   
    
 // thêm bài viết mới
-       $("#btnPosted").click((e)=>{
+    $("#btnPosted").click((e)=>{
         
         e.preventDefault();
         
-        var nameUser =document.getElementById("recipient-name").value
+        var nameUser =document.getElementById("recipient-name1").value
         // đây là ảnh đại diện của người dùng đang đăng bài
         var hiddenPicture = document.getElementById("hiddenPicture").value
         // dòng 119 index.ejs
-        var messageText= document.getElementById("message-text").value
+        var messageText= document.getElementById("message-text1").value
         var hiddenEmailOfPost= document.getElementById("hiddenEmailOfPost").value
-        var videoUpload= document.getElementById("videoUpload").value
-        var inputImage = document.getElementById("image_uploads") 
-        
+        var videoUpload= document.getElementById("videoUpload1").value
+        var inputImage = document.getElementById("image_uploads1") 
+    
         // ảnh người dùng đăng lên
         var file = inputImage.files;
+        console.log("messageText,videoUpload,file",messageText,videoUpload);
+        if(!messageText &&!videoUpload && file.length===0){
+          $("#alertMess").append(`  
+          <div class="alert alert-danger">
+            vui lòng nhập dữ liệu
+          </div>`)
+        }else{
         var formData = new FormData();
         formData.append("nameUser",nameUser)
         formData.append("hiddenPicture",hiddenPicture)
@@ -544,7 +723,7 @@ $(document).ready(function(){
             console.log("value",value);
         }
 
-        $('#myModal').hide();
+        $('#myModal1').hide();
         $('.modal-backdrop').hide();
         $.ajax({
             url: 'https://do-an-web-nc-mxh.herokuapp.com/insertPost/',
@@ -555,14 +734,52 @@ $(document).ready(function(){
             processData: false,
             data: formData
         }).done(function(ketqua) {
-  
            // console.log("ketqua",ketqua.data);
             if(ketqua.code===0){
                 console.log(" da vao day ");
                 console.log(ketqua.data.videoUpload);
                 var parentOfCard= document.getElementById("parentOfCard")
                 var card = document.createElement('div')
-                setAttributes(card,{"class":"card"})
+                setAttributes(card,{"class":"card", "id":ketqua.data.id})
+
+                // menu 3 chấm 
+                var cardHeader = document.createElement("div")
+                setAttributes(cardHeader,{"class":"cart-header"})
+                var divCartAction = document.createElement("div")
+                setAttributes(divCartAction,{"class":"card-actions float-right"})
+                var divDropdown = document.createElement("div")
+                setAttributes(divDropdown,{"class":"dropdown show"})
+                var aTagDropdown = document.createElement("a")
+                setAttributes(aTagDropdown,{"href":"#" ,"data-toggle":"dropdown", "data-display":"static"})
+          
+                var dotIcon1 = document.createElement("i")
+                setAttributes(dotIcon1,{"class":"fa fa-circle faCircle"})
+                var dotIcon2 = document.createElement("i")
+                setAttributes(dotIcon2,{"class":"fa fa-circle faCircle"})
+                var dotIcon3 = document.createElement("i")
+                setAttributes(dotIcon3,{"class":"fa fa-circle faCircle"})
+                aTagDropdown.appendChild(dotIcon1)
+                aTagDropdown.appendChild(dotIcon2)
+                aTagDropdown.appendChild(dotIcon3)
+
+                var divDropdownMenu =document.createElement("div")
+                setAttributes(divDropdownMenu,{"class":"dropdown-menu dropdown-menu-right"})
+                var aTagDropdownItem= document.createElement("a")
+                setAttributes(aTagDropdownItem,{"class":"dropdown-item btnUpdate", "onclick":"updateLink(this)","data-id":ketqua.data.id, "data-name": ketqua.data.name, "data-imageuser": ketqua.data.imageUser, "data-message":ketqua.data.message, "data-video":ketqua.data.videoUpload,"data-toggle":"modal", "data-target":"#myModal"})
+                aTagDropdownItem.append("chỉnh sửa")
+                var aTagDropdownItemDelete = document.createElement("a")
+                setAttributes(aTagDropdownItemDelete,{"class":"dropdown-item btnDelete", "data-id":ketqua.data.id, "onclick":"deletePost(this)", "data-toggle":"modal", "data-target":"#confirmDelete"})
+                aTagDropdownItemDelete.append("xóa")
+                divDropdownMenu.appendChild(aTagDropdownItem)
+                divDropdownMenu.appendChild(aTagDropdownItemDelete)
+
+                divDropdown.appendChild(aTagDropdown)
+                divDropdown.appendChild(divDropdownMenu)
+                divCartAction.appendChild(divDropdown)
+                cardHeader.appendChild(divCartAction)
+                card.appendChild(cardHeader)
+
+                // body card
                 var cardBody= document.createElement("div")
                 setAttributes(cardBody,{"class":"card-body h-100"})
                 var parentMedia=document.createElement("div")
@@ -581,6 +798,10 @@ $(document).ready(function(){
                 // thiết lập bên trong của thẻ media-body
                 //thời gian tạo bài viết
                 // tên người đăng mới
+                var divP0= document.createElement("div")
+                setAttributes(divP0,{"class":ketqua.data.id})
+                var divP1= document.createElement("div")
+                setAttributes(divP1,{"class":ketqua.data.id})
                 var ptag= document.createElement("p")
                 setAttributes(ptag,{"class":"mb-2", "id":"parentOfStrong"})
             
@@ -596,7 +817,7 @@ $(document).ready(function(){
                 var nodeMess = document.createTextNode(ketqua.data.message);
                 p2.appendChild(nodeMess)
                 //parentMediaBody.appendChild(p2)
-                divAddCommentId.appendChild(p2)
+                divP1.appendChild(p2)
                 
                 // hình ảnh sau khi đăng 127
                 imageRecieveFromServer = JSON.parse(ketqua.data.image)
@@ -611,7 +832,7 @@ $(document).ready(function(){
                     divTagChild.appendChild(imageUpload)
                     divTagsubParentImage.appendChild(divTagChild)
                     //parentMediaBody.appendChild(divTagsubParentImage)
-                    divAddCommentId.appendChild(divTagsubParentImage)
+                    divP1.appendChild(divTagsubParentImage)
                     }
                   var divOfvideo = document.createElement("div")
                   setAttributes(divOfvideo,{"class":"col-6"})
@@ -626,15 +847,16 @@ $(document).ready(function(){
                   }
                   divTagsubParentImage.appendChild(divOfvideo)
                   //parentMediaBody.appendChild(divTagsubParentImage)
-                  divAddCommentId.appendChild(divTagsubParentImage)
+                  divP1.appendChild(divTagsubParentImage)
                 //thời gian tạo bài đăng
                 var smallTag = document.createElement("small")
                 setAttributes(smallTag,{"class":"text-muted"})
                 var nodeSmallTimeCreate = document.createTextNode("now")
                 smallTag.appendChild(nodeSmallTimeCreate)
                 //parentMediaBody.appendChild(smallTag)
-                divAddCommentId.appendChild(smallTag)
-
+                divP1.appendChild(smallTag)
+                  divP0.appendChild(divP1)
+                  divAddCommentId.appendChild(divP0)
                 var br = document.createElement("br")
                 //parentMediaBody.appendChild(br)
                 divAddCommentId.appendChild(br)
@@ -757,25 +979,19 @@ $(document).ready(function(){
                 cardBody.appendChild(parentMedia)
                 card.appendChild(cardBody)
                 parentOfCard.prepend(card)
-                
+               
             }
           
         });
+      }
+    
         
     });
+  
     // xóa bài viết
-    $(".btnDelete").click(e=>{
-      e.preventDefault();
-      $("#confirmDelete").modal("show")
-      var btn = e.target
-      var id=btn.dataset.id
-      $("#modalBtnDelete").attr('data-id',id)
-      //console.log(id);
-
-    
-    })
+  
     $("#modalBtnDelete").click(e=>{
-      $("#confirmDelete").modal("hide")
+      //$("#confirmDelete").modal("hide")
       
       var btn = e.target
       var id=btn.dataset.id
@@ -794,118 +1010,9 @@ $(document).ready(function(){
       })
     })
 
-$('.btnUpdate').click(e=>{
-  var btn = e.target
-  console.log(e);
-  var id = btn.dataset.id
-  var name= btn.dataset.name
-  var imageUser = btn.dataset.imageuser// chỗ này nếu truyền vào imageUser thì trong targer cũng thành imageuser
-  var message = btn.dataset.message
-  var video = btn.dataset.video
-  $("#recipient-name").val(name)
-  $("#message-text").html(message)
-  $("#videoUpload").html(video)
-  $("#btnChange").attr("data-id", id)
-  $("#btnChange").attr("data-imageuser",imageUser )
-})
 
-// thay đổi bài biết
-$("#btnChange").click(e=>{
-  var btn = e.target
-  var id = btn.dataset.id
-  //var imageUser = btn.dataset.imageuser
-  //var name=document.getElementById("recipient-name").value
-  var message=document.getElementById("message-text").value
-  var video=document.getElementById("videoUpload").value
-  //console.log( message, id);
-  var inputImage = document.getElementById("image_uploads")    
-        // ảnh người dùng update lên
-  var file = inputImage.files;
-  var formData = new FormData();
-  formData.append("message",message)
-  formData.append("videoUpload",video)
-  formData.append("id",id)
-  for (var i =0;i<=file.length;i++){
-    formData.append("file",file[i])
-  }
-  for (var value of formData.values()) {
-      console.log("value",value);
-  }
 
-  $('#myModal').hide();
-  $('.modal-backdrop').hide();
-  $.ajax({
-    url: 'https://do-an-web-nc-mxh.herokuapp.com/updatePost',
-    type: 'POST',
-    dataType: 'JSON',
-    enctype:"multipart/form-data",
-    contentType: false,
-    processData: false,
-    data: formData
-  
-}).done(ketqua=>{
-  if(ketqua.code===0){
-    updatedMessage = ketqua.data.message
-    updatedImage= ketqua.data.image
-    id= ketqua.data.id
-    video = ketqua.data.videoUploadNew
-    //console.log(id,updatedMessage, updatedImage);
-    document.getElementsByClassName(id)[1].remove()
 
-    // vì class có thể lấy nhiều nên sẽ tạo thành mảng và lấy cái đầu tiên vì trong mảng chỉ có 1 phần tử giống id truyền vào
-    var divParentOfcontentUpdate= document.getElementsByClassName(id)[0]
-    //console.log("divParentOfcontentUpdate",divParentOfcontentUpdate);
-      // mess mới update
- 
-    var divId = document.createElement("div")// div này dùng để remove() nếu cập nhật lại lần nữa
-    setAttributes(divId,{"id":id})
-    var p2 = document.createElement("p")
-    var nodeMess = document.createTextNode(updatedMessage);
-    p2.appendChild(nodeMess)
-    divId.appendChild(p2)
-    divParentOfcontentUpdate.appendChild(divId)
-
-    //hình ảnh sau khi update
-   
-    //console.log("imageRecieveFromServer",updatedImage);
-    var divTagsubParentImage =document.createElement("div")
-    setAttributes(divTagsubParentImage,{"class":"row no-gutters mt-1"})
-    for(var i=0;i<updatedImage.length;i++){
-        var divTagChild= document.createElement("div")
-        setAttributes(divTagChild,{"class":"col-6"})
-        var imageUpload= document.createElement("img")
-        setAttributes(imageUpload,{"src":updatedImage[i],"class":"img-fluid pr-1"})
-        divTagChild.appendChild(imageUpload)
-        divTagsubParentImage.appendChild(divTagChild)
-        divId.appendChild(divTagsubParentImage)
-    
-        }
-        var divOfvideo = document.createElement("div")
-        setAttributes(divOfvideo,{"class":"col-6"})
-
-        console.log(ketqua.data.videoUpload);
-        if(video !=='embed/'){
-        
-        var iframe= document.createElement("iframe")
-        setAttributes(iframe,{"width":"400", "height":"300","src":video})
-        
-        divOfvideo.appendChild(iframe)
-        }
-        divTagsubParentImage.appendChild(divOfvideo)
-        divId.appendChild(divTagsubParentImage)
-            // thời gian cập nhật 
-        var smallTag = document.createElement("small")
-        setAttributes(smallTag,{"class":"text-muted"})
-        var nodeSmallTimeCreate = document.createTextNode("now")
-        smallTag.appendChild(nodeSmallTimeCreate)
-        divId.appendChild(smallTag)
-        var br = document.createElement("br")
-        divId.appendChild(br)
-  }
-    
-
-})
-})
 
 
 
@@ -965,7 +1072,7 @@ $("#btnChange").click(e=>{
     })
 
 
- 
+  
    
     // upload thông bao
     $(".btnUpdateNoti").click(e=>{
@@ -987,68 +1094,18 @@ $("#btnChange").click(e=>{
 
     })
 
-    // thiết lập hide show thông báo alert khi khoa đăng bài
-
-    //$("#snackbar").fadeTo(10,0)//ẩn thông báo dưới góc màn hinh
-
-    // thiết lập file edit account ( phân quyền đổi tài khoản hoặc mật khẩu )
-    if( $("#emailOfChaneProfile").val().includes("@student.tdtu.edu.vn")){
+    /*if( $("#emailOfChaneProfile").val().includes("@student.tdtu.edu.vn")){
       var addNewClass = document.getElementById("linlkChangePass")
-      addNewClass.classList.add("disabled")
+     // addNewClass.classList.add("disabled")
     }
     else {
        var addNewClass = document.getElementById("linkOfChangeProfile")
        var addNewClassPass = document.getElementById("linlkChangePass")
        addNewClass.classList.add("disabled")
        addNewClass.classList.remove("active")
+       addNewClass.ariaSelected= "false" 
        addNewClassPass.classList.add("active")
-    }
-   
-
-
-    /*$('#my-button').click(function(){
-        $('#my-file').click();
-    });*/
-
-    // comment bài viêt
-//$(".classComment").keyup(event=>{
- 
-
-
-
-
- /* $(".updateComment").click(e=>{
-    var btn = e.target
-    // console.log(e);
-    var idComment = btn.dataset.id
-    var indexInDB = btn.dataset.index
-    var userCurrentInComment = btn.dataset.usercurrent
-    var content= btn.dataset.comment
-    console.log(indexInDB);
-    var classComment= document.getElementsByClassName("classComment")
-    // vì khi in từ trong db ra in ngược nên class của tin đầu tiên suất hiện sẽ nằm ở vị trí cuối cùng trong db
-    // trong page thì bắt đầu từ 0 nên phải trừ đi 1 nữa mới đủ 
-    indexInpage= classComment.length-1-indexInDB
-    
-    console.log(classComment.length);
-    classComment[indexInpage].value=content*/
-    // lam den găn data vao o bình luận
-
-   /* console.log(idComment,userCurrentInComment,content);
-    data={
-      idComment:idComment,
-      userCurrentInComment:userCurrentInComment,
-      content:content
-    }
-    $.ajax({
-      url: 'http://localhost:3000/updateComment',
-      type: 'POST',
-      dataType: 'JSON',
-      data:data
-    
-      }).done(ketqua=>{
-    })*/
-    
- // })
+       addNewClassPass.ariaSelected= "true"
+    }*/
   
 })
