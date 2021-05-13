@@ -121,6 +121,7 @@
                             <label for="image_uploads">Choose images to upload (PNG, JPG, JPEG)</label>
                             <input class="fa fa-image icon" type="file" id="image_uploads1" name="image_uploads" accept=".jpg, .jpeg, .png" multiple aria-hidden="true">
                           </div>
+
                           <div>
                             <label for="file_uploads">paste link video on youtube to upload</label>
                             <textarea class="form-controln"  id="videoUpload1"  ></textarea>
@@ -224,8 +225,10 @@
                                         <!--nút bình luận-->
                                           <a href="#comment" class="btn btn-sm btn-danger mt-1"><i class="fa fa-comments-o"></i> comment</a>
                                         <!--dòng bình luận-->
-                                        <%docs[i].comment.forEach(c=>{%>
+                                        <%docs[i].comment.forEach((c, index)=>{
+                                          if(index>0){%>
                                           <!-- comment tự động bằng ajax bắt đầu từ chỗ này-->
+
                                         <div class="media mt-3" id="<%=c._id%>">
                                         
                                             <a class="pr-2" href="#">
@@ -243,7 +246,7 @@
                                             </div>
                                         </div>
                                     
-                                        <%})%>
+                                        <%}})%>
                                       </div>
                                         <hr>
                                         <!--dòng comment line trang tin-->
@@ -433,6 +436,8 @@
                               <label for="image_uploads">Choose images to upload (PNG, JPG, JPEG)</label>
                               <input class="fa fa-image icon" type="file" id="image_uploads" name="image_uploads" accept=".jpg, .jpeg, .png" multiple aria-hidden="true">
                             </div>
+                            <input type="checkbox" name="deleteImage" id="deleteImage" value="deleteImage">
+                            <label for="deleteImage"> xóa ảnh</label>
                             <div>
                               <label for="file_uploads">paste link video on youtube to upload</label>
                               <textarea class="form-controln"  id="videoUpload"  ></textarea>
