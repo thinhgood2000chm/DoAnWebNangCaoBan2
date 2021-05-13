@@ -11,7 +11,8 @@ const client = new OAuth2Client(CLIENT_ID);
 const checkAuthen = require('../middleWare/checkAuthenGG');
 const notification = require('../models/notification');
 
-const {cloudinary} = require('../middleWare/cloudinary')
+const {cloudinary} = require('../middleWare/cloudinary');
+const { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } = require('constants');
 
 exports.loginGG= (req,res)=>{
     let token = req.body.token
@@ -359,14 +360,20 @@ exports.insertPost=async(req,res)=>{
         fs.renameSync(images[i].path,pathImage)
         image.push(pathImage.slice(6))
     }*/
-
+   var dataComment =[{
+    emailUComment: "",
+    imageUserComment:"",
+    nameUserComment: "",
+    content:"",
+   }] 
     let newPost = new post({
         imageUser: hiddenPicture,
         image:image,
         email: hiddenEmailOfPost,
         name: nameUser,
         message:messageText,
-        videoUpload:videoUploadNew
+        videoUpload:videoUploadNew,
+        comment :dataComment
 
     })
     newPost.save()
@@ -417,15 +424,14 @@ exports.deletePost=(req,res)=>{
     })
 }
 exports.updatePost=async(req,res)=>{
-    var {id, message,videoUpload}= req.body
+    var {id, message,videoUpload,checkboxDelete}= req.body
  
-    console.log( id, message,videoUpload );
+    console.log( id, message,videoUpload,checkboxDelete );
     images = req.files;// file đối với single , files đối với multi
     if(videoUpload.includes("watch")){
         console.log("da vao includes");
         var pathVideo = 'https://www.youtube.com/embed/'
         var video_id = videoUpload.slice(32)
-       // console.log("video_id",video_id);
        //lấy id của youtube ( vì một số id có thêm chuỗi kí tự = sẽ ko tách thủ công được )
         var ampersandPosition = video_id.indexOf('&');
         if(ampersandPosition != -1) {
@@ -441,25 +447,53 @@ exports.updatePost=async(req,res)=>{
     }
     else 
     videoUploadNew=videoUpload
-    var pathImage=[]
-    var image=[]
-    await Promise.all(images.map(async(file)=>{
-        //console.log("cho m can nè ", req.files[0]);
-        const cloud= await cloudinary.uploader.upload(file.path)
-        image.push(cloud.url)
-    }))
+    //var pathImage=[]
+ 
 /*
     for(var i =0;i<images.length;i++){
         pathImage=`public/upload/${images[i].originalname}`
         fs.renameSync(images[i].path,pathImage)
         image.push(pathImage.slice(6))
     }*/
-    data={
-        message: message,
-        image: image,
-        videoUpload:videoUploadNew
+    var image=[]
+    if(images.length===0 &&checkboxDelete==0){
+        console.log("đi vao if 1 ");
+        imgsrc = await post.findOne({_id:id})
+        for( var i =0;i< imgsrc.image.length;i++){
+            console.log("imgsrc.image",imgsrc.image[i]);
+            image.push(imgsrc.image[i])
+        }
+        console.log("imgae", image);
+        data={
+            message: message,
+            image: image,
+            videoUpload:videoUploadNew
+    
+        }
+    } 
+    else if(images.length>0 &&checkboxDelete==0){
+        console.log("đi vào if 2");
+        await Promise.all(images.map(async(file)=>{
+            const cloud= await cloudinary.uploader.upload(file.path)
+            image.push(cloud.url)
+        }))
+        data={
+            message: message,
+            image: image,
+            videoUpload:videoUploadNew
 
+            }
     }
+    else if(checkboxDelete==1){
+        console.log(" đi vao check ");
+        data={
+            message: message,
+            image: image,
+            videoUpload:videoUploadNew
+
+            }
+    }
+    console.log(data);
     post.findOneAndUpdate({_id:id},{$set:data})
     .then(()=>{
         console.log("update trạng thái thành công");
@@ -492,9 +526,9 @@ exports.commentPost=(req,res)=>{
     }
     post.findByIdAndUpdate(id,{$push:{comment:dataPush}})
     .then((data)=>{
-           //console.log("data id cua cái mới comment", data.comment[doc.comment.length-1]._id);
+           console.log("data id cua cái mới comment", data.comment[data.comment.length-1]._id);
         console.log("comment thành công");
-        /*console.log(data);
+        //console.log(data);
         commentId=data.comment[data.comment.length-1]._id // lấy id cua comment vừa mới được ghi vào ( vị trí của cmt mới luôn luôn nằm ở cuối )
         res.setHeader("Content-Type","application/json")
         res.send({
@@ -507,13 +541,14 @@ exports.commentPost=(req,res)=>{
                 content: comment,
                 id:id
            }
-       })*/
+       })
      
     })
     .catch(e=>console.log(e))
 
-    post.findById(id)
+    /*post.findById(id)
     .then((doc)=>{
+        console.log(doc);
         //console.log("doc.comment[doc.comment.length]._id",doc.comment[doc.comment.length-1]._id);
  
        commentId=doc.comment[doc.comment.length-1]._id
@@ -529,10 +564,7 @@ exports.commentPost=(req,res)=>{
                id:id
            }
        })
-    })
-    
-    //console.log("comment",commentId);
-    //console.log("arrDataIdComment",arrDataIdComment);
+    })*/
   
 }
 

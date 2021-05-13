@@ -1,5 +1,4 @@
 
-
 let socket 
 
   console.log("server  đã sẵn sàng hoạt dộng")
@@ -87,7 +86,9 @@ function updateLink(e){
     console.log("id, imageUser,message, video",id, imageUser,message, video );
     document.getElementById("recipient-name").value=name
     document.getElementById("message-text").innerHTML=message
-    document.getElementById("videoUpload").innerHTML=video
+    if(video !=='https://www.youtube.com/embed/'){
+       document.getElementById("videoUpload").innerHTML=video
+    }
     document.getElementById("btnChange").setAttribute('data-id',id)
     document.getElementById("btnChange").setAttribute("data-imageuser",imageUser)
     
@@ -107,10 +108,16 @@ function btnChange(e){
   var video=document.getElementById("videoUpload").value
   //console.log( message, id);
   var inputImage = document.getElementById("image_uploads")    
+  var checkboxDelete = document.getElementById("deleteImage")
+ 
         // ảnh người dùng update lên
   var file = inputImage.files;
   console.log("id,message,video,file",id,message,video,file);
   var formData = new FormData();
+  if(checkboxDelete.checked === true ){
+    formData.append("checkboxDelete",1)
+  }
+  else  formData.append("checkboxDelete",0)
   formData.append("message",message)
   formData.append("videoUpload",video)
   formData.append("id",id)
@@ -483,7 +490,7 @@ $(document).ready(function(){
                   console.log("da vao i ");
                        var htmlLoad=$(
                          `<div class="card"  id="${json.data[i]._id}">
-                         <div class="cart-header" id="cardHeader">
+                         <div class="cart-header" id="cardHeader-${json.data[i]._id}">
                       
                         </div>
 
@@ -595,7 +602,7 @@ $(document).ready(function(){
                              </div>
                          </div>
                         </div>`)
-                        $('#cardHeader').append(menuHeaderCard)
+                        $(`#cardHeader-${json.data[i]._id}`).append(menuHeaderCard)
                        }
 
                        for(var j =0;j<json.data[i].image.length;j++){
@@ -725,6 +732,7 @@ $(document).ready(function(){
 
         $('#myModal1').hide();
         $('.modal-backdrop').hide();
+       
         $.ajax({
             url: 'https://do-an-web-nc-mxh.herokuapp.com/insertPost/',
             type: 'POST',
@@ -983,6 +991,9 @@ $(document).ready(function(){
             }
           
         });
+        document.getElementById("message-text1").value=""
+        document.getElementById("videoUpload1").value=""
+        inputImage.value=null
       }
     
         
