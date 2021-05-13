@@ -515,7 +515,7 @@ exports.updatePost=async(req,res)=>{
 // comment 
 const arrDataIdComment=[]
 var commentId=""
-exports.commentPost=(req,res)=>{
+exports.commentPost=async(req,res)=>{
     var{id,imageUserComment,emailUserComment,nameUserComment,comment}= req.body
     //console.log(imageUserComment,emailUserComment,nameUserComment,comment);
     dataPush={
@@ -524,8 +524,8 @@ exports.commentPost=(req,res)=>{
         nameUserComment: nameUserComment,
         content: comment,
     }
-    post.findByIdAndUpdate(id,{$push:{comment:dataPush}})
-    .then((data)=>{
+    var commentData = await post.findByIdAndUpdate(id,{$push:{comment:dataPush}})
+    /*.then((data)=>{
            console.log("data id cua cái mới comment", data.comment[data.comment.length-1]._id);
         console.log("comment thành công");
         //console.log(data);
@@ -545,12 +545,12 @@ exports.commentPost=(req,res)=>{
      
     })
     .catch(e=>console.log(e))
-
-    /*post.findById(id)
+    */
+   console.log("commentData",commentData);
+   //console.log("commentData.comment._id",commentData.comment._id);
+    post.findById(id)
     .then((doc)=>{
         console.log(doc);
-        //console.log("doc.comment[doc.comment.length]._id",doc.comment[doc.comment.length-1]._id);
- 
        commentId=doc.comment[doc.comment.length-1]._id
        res.setHeader("Content-Type","application/json")
        res.send({
@@ -564,7 +564,7 @@ exports.commentPost=(req,res)=>{
                id:id
            }
        })
-    })*/
+    })
   
 }
 
