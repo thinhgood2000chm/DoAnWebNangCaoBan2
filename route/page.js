@@ -109,8 +109,8 @@ router.get('/profile',checkAuthen,(req,res)=>{
              user.email= payload.email;
        }
        verify().then(()=>{
-         
-           accountStudent.findOne({email: user.email},(err, doc)=>{
+            var email = user.email
+            accountStudent.findOne({email: user.email},(err, doc)=>{
             //console.log(user.email);
                post.find({email:user.email}).sort({createdAt:-1}).limit(10).exec((error,docs)=>{
                   // console.log("doc,",docs.image.length);
@@ -118,7 +118,7 @@ router.get('/profile',checkAuthen,(req,res)=>{
                        console.log(error);
                    }
                    else 
-                res.render('profile',{doc,docs})
+                res.render('profile',{doc,docs,email})
                })
                //console.log(doc);
               
@@ -134,7 +134,7 @@ router.get('/profile',checkAuthen,(req,res)=>{
                      console.log(error);
                  }
                  else 
-              res.render('profile',{doc,docs})
+              res.render('profile',{doc,docs,email})
              })
         })}
             
