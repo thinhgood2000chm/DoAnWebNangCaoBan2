@@ -77,6 +77,7 @@ let socket
     //console.log(id);
   }
 function updateLink(e){
+    console.log(e);
     var id = e.getAttribute("data-id")
   
     var name= e.getAttribute("data-name")
@@ -128,8 +129,8 @@ function btnChange(e){
       console.log("value",value);
   }
 
-  $('#myModal').hide();
-  $('.modal-backdrop').hide();
+  //$('#myModal').hide();
+  //$('.modal-backdrop').hide();
   $.ajax({
     url: 'http://localhost:3000/updatePost',
     type: 'POST',
@@ -153,9 +154,9 @@ function btnChange(e){
     var divParentOfcontentUpdate= document.getElementsByClassName(id)[0]
     //console.log("divParentOfcontentUpdate",divParentOfcontentUpdate);
       // mess mới update
- 
+  // vì bên trên đã remove đi vị trí 1 nên chỉ còn lại vị trí 0 ==> xóa lần 2 sẽ ko tìm thấy vị trí 1 => tạo thêm 1 cái div nữa bao vi trí 0 cũ => 0=>1 và cái mới thành vị trí 0 
     var divId = document.createElement("div")// div này dùng để remove() nếu cập nhật lại lần nữa
-    setAttributes(divId,{"id":id})
+    setAttributes(divId,{"class":id})
     var p2 = document.createElement("p")
     var nodeMess = document.createTextNode(updatedMessage);
     p2.appendChild(nodeMess)
@@ -730,8 +731,8 @@ $(document).ready(function(){
             console.log("value",value);
         }
 
-        $('#myModal1').hide();
-        $('.modal-backdrop').hide();
+        //$('#myModal1').hide();
+        //$('.modal-backdrop').hide();
        
         $.ajax({
             url: 'http://localhost:3000/insertPost/',
