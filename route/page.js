@@ -240,7 +240,7 @@ router.get("/profile/:email",(req,res)=>{
                     //console.log(user.email);
                         post.find({email: email}).sort({createdAt:-1}).limit(10).exec((err,docs)=>{
                           // console.log("doc,",docs.image.length);
-                           if(error){
+                           if(err){
                                console.log(err);
                            }
                            else 
