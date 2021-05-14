@@ -241,7 +241,7 @@ router.get("/profile/:email",(req,res)=>{
                         post.find({email: email}).sort({createdAt:-1}).limit(10).exec((err,docs)=>{
                           // console.log("doc,",docs.image.length);
                            if(error){
-                               console.log(error);
+                               console.log(err);
                            }
                            else 
                         res.render('profile',{doc,docs,emailCookies})
