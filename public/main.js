@@ -128,8 +128,8 @@ function btnChange(e){
       console.log("value",value);
   }
 
-  $('#myModal').hide();
-  $('.modal-backdrop').hide();
+  //$('#myModal').hide();
+  //$('.modal-backdrop').hide();
   $.ajax({
     url: 'https://do-an-web-nc-mxh.herokuapp.com/updatePost',
     type: 'POST',
@@ -730,8 +730,8 @@ $(document).ready(function(){
             console.log("value",value);
         }
 
-        $('#myModal1').hide();
-        $('.modal-backdrop').hide();
+        //$('#myModal1').hide();
+        //$('.modal-backdrop').hide();
        
         $.ajax({
             url: 'https://do-an-web-nc-mxh.herokuapp.com/insertPost/',

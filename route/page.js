@@ -223,24 +223,47 @@ router.get('/createNotification/:number',checkAuthen,(req,res)=>{
 router.get("/profile/:email",(req,res)=>{
     var email= req.params.email
     console.log( "email láy từ params",email);
-    if(email.includes("@student.tdtu.edu.vn")){
-        post.find({email: email}).sort({createdAt:-1}).limit(10).exec((err,docs)=>{
-            console.log(docs);
-            accountStudent.findOne({email:email},(err,doc)=>{
-                res.render('profile',{doc,docs})
-            })
-        })
-    }
+            let token = req.cookies['session-token']
+            if(token!==undefined){
+            let user = {}
+             async function verify() {
+                 const ticket = await client.verifyIdToken({
+                     idToken: token,
+                     audience: CLIENT_ID,  
+                 });
+                 const payload = ticket.getPayload();
+                     user.email= payload.email;
+               }
+               verify().then(()=>{
+                    var emailCookies = user.email
+                    accountStudent.findOne({email: user.email},(err, doc)=>{
+                    //console.log(user.email);
+                        post.find({email: email}).sort({createdAt:-1}).limit(10).exec((err,docs)=>{
+                          // console.log("doc,",docs.image.length);
+                           if(error){
+                               console.log(error);
+                           }
+                           else 
+                        res.render('profile',{doc,docs,emailCookies})
+                       })
+                       //console.log(doc);
+                      
+                   })
+                  
+               })
+            }
+    
+    
     else {
+        emailCookies = req.cookies.account
         post.find({email: email}).sort({createdAt:-1}).limit(10).exec((err,docs)=>{
-            accountF.findOne({email:email},(err,doc)=>{
+            accountF.findOne({email:emailCookies},(err,doc)=>{
                 res.render('profile',{doc,docs})
             })
         })
     }
     
 })
-
 
 router.get('/notification',checkAuthen,(req,res)=>{
     notification.find({}).sort({createdAt:-1}).exec((err, docs)=>{// dòng trên này dùng để hiển thị có bao nhiêu nút bấm 
