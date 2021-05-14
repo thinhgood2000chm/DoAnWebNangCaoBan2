@@ -147,6 +147,7 @@
                 <%for(var i = 0;i<docs.length;i++){%>
                  
                     <div class="card" id="<%=docs[i]._id%>">
+                      <%if(docs[i].email === locals.email){%>
                       <div class="cart-header">
                       <div class="card-actions float-right">
                         <div class="dropdown show">
@@ -163,6 +164,7 @@
                         </div>
                     </div>
                   </div>
+                  <%}%>
                         <div class="card-body h-100" id="">
                             <div class="media">
                               
@@ -316,8 +318,9 @@
                                 <label for="image_uploads">Choose images to upload (PNG, JPG, JPEG)</label>
                                 <input class="fa fa-image icon" type="file" id="image_uploads" name="image_uploads" accept=".jpg, .jpeg, .png" multiple aria-hidden="true">
                               </div>
-							    <input type="checkbox" name="deleteImage" id="deleteImage" value="deleteImage">
+                              <input type="checkbox" name="deleteImage" id="deleteImage" value="deleteImage">
                               <label for="deleteImage"> xóa ảnh</label>
+
                               <div>
                                 <label for="file_uploads">paste link video on youtube to upload</label>
                                 <textarea class="form-controln"  id="videoUpload"  ></textarea>
