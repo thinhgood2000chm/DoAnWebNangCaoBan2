@@ -617,7 +617,7 @@ $(document).ready(function(){
                        if(json.data[i].videoUpload!=="https://www.youtube.com/embed/"){
                          console.log("da vao embed");
                           videoChild=$(`   
-                           <iframe width="400" height="300"
+                           <iframe width="100%" height="100%"
                               src="${json.data[i].videoUpload}"
                            </iframe>`)
                       
