@@ -205,6 +205,7 @@ function btnChange(e){
 
 })
 document.getElementById("deleteImage").checked= false
+inputImage.value=null
 }
 
   function postNoti(){
