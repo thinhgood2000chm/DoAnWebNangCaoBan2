@@ -204,6 +204,7 @@ function btnChange(e){
     
 
 })
+document.getElementById("deleteImage").checked= false
 }
 
   function postNoti(){
