@@ -186,7 +186,7 @@ function btnChange(e){
         if(video !=='https://www.youtube.com/embed/'){
         
           var iframe= document.createElement("iframe")
-          setAttributes(iframe,{"width":"400", "height":"300","src":video})
+          setAttributes(iframe,{"width":"100%", "height":"100%","src":video})
           
           divOfvideo.appendChild(iframe)
         }
@@ -620,7 +620,7 @@ $(document).ready(function(){
                               src="${json.data[i].videoUpload}"
                            </iframe>`)
                       
-                         $(`#img-${json.data[i]._id}`).append(videoChild) 
+                         $(`#video-${json.data[i]._id}`).append(videoChild) 
                        }
                  
                       
@@ -849,7 +849,7 @@ $(document).ready(function(){
                   if(ketqua.data.videoUpload !=='https://www.youtube.com/embed/'){
                   
                   var iframe= document.createElement("iframe")
-                  setAttributes(iframe,{"width":"400", "height":"300","src":ketqua.data.videoUpload})
+                  setAttributes(iframe,{"width":"100%", "height":"100%","src":ketqua.data.videoUpload})
                   
                   divOfvideo.appendChild(iframe)
                   }
