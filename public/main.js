@@ -187,7 +187,7 @@ function btnChange(e){
         if(video !=='https://www.youtube.com/embed/'){
         
           var iframe= document.createElement("iframe")
-          setAttributes(iframe,{"width":"400", "height":"300","src":video})
+          setAttributes(iframe,{"width":"100%", "height":"100%","src":video})
           
           divOfvideo.appendChild(iframe)
         }
@@ -205,6 +205,8 @@ function btnChange(e){
     
 
 })
+document.getElementById("deleteImage").checked= false
+inputImage.value=null
 }
 
   function postNoti(){
@@ -617,11 +619,11 @@ $(document).ready(function(){
                        if(json.data[i].videoUpload!=="https://www.youtube.com/embed/"){
                          console.log("da vao embed");
                           videoChild=$(`   
-                           <iframe width="400" height="300"
+                           <iframe width="100%" height="100%"
                               src="${json.data[i].videoUpload}"
                            </iframe>`)
                       
-                         $(`#img-${json.data[i]._id}`).append(videoChild) 
+                         $(`#video-${json.data[i]._id}`).append(videoChild) 
                        }
                  
                       
@@ -850,7 +852,7 @@ $(document).ready(function(){
                   if(ketqua.data.videoUpload !=='https://www.youtube.com/embed/'){
                   
                   var iframe= document.createElement("iframe")
-                  setAttributes(iframe,{"width":"400", "height":"300","src":ketqua.data.videoUpload})
+                  setAttributes(iframe,{"width":"100%", "height":"100%","src":ketqua.data.videoUpload})
                   
                   divOfvideo.appendChild(iframe)
                   }

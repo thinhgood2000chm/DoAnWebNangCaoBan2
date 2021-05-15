@@ -236,7 +236,7 @@ router.get("/profile/:email",(req,res)=>{
                }
                verify().then(()=>{
                     var emailCookies = user.email
-                    accountStudent.findOne({email: user.email},(err, doc)=>{
+                    accountStudent.findOne({email: user.email},(error, doc)=>{
                     //console.log(user.email);
                         post.find({email: email}).sort({createdAt:-1}).limit(10).exec((err,docs)=>{
                           // console.log("doc,",docs.image.length);
